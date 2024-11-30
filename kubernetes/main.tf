@@ -37,16 +37,6 @@ resource "lxd_profile" "default" {
   description = "Managed by terraform"
 
   device {
-    name = "eth0"
-    type = "nic"
-
-    properties = {
-      nictype = "bridged"
-      parent  = "br0"
-    }
-  }
-
-  device {
     type = "disk"
     name = "root"
 
@@ -72,6 +62,7 @@ resource "lxd_instance" "kube_instances" {
     lxd_storage_pool.local
   ]
   name  = each.key
+  type = "virtual-machine"
   image = "ubuntu-daily:24.04"
   project = lxd_project.homelab.name
 
@@ -85,7 +76,7 @@ resource "lxd_instance" "kube_instances" {
   }
 
   device {
-    name = "eth0"
+    name = "enp5s0"
     type = "nic"
     properties = {
       nictype   = "bridged"
@@ -113,6 +104,7 @@ resource "lxd_instance" "worker_instances" {
     lxd_storage_pool.local
   ]
   name  = each.key
+  type = "virtual-machine"
   image = "ubuntu-daily:24.04"
   project = lxd_project.homelab.name
 
@@ -126,7 +118,7 @@ resource "lxd_instance" "worker_instances" {
   }
 
   device {
-    name = "eth0"
+    name = "enp5s0"
     type = "nic"
     properties = {
       nictype   = "bridged"

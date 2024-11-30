@@ -1,7 +1,7 @@
 # cloud-init network config for static IP
 version: 2
 ethernets:
-  eth0:
+  enp5s0:
     dhcp4: false
     addresses:
       - ${ip_address}/24

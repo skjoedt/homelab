@@ -3,6 +3,7 @@ users:
   - name: skjoedt
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, sudo
+    shell: /bin/zsh
     ssh_import_id:
       - gh:skjoedt
     lock_passwd: true
@@ -11,3 +12,4 @@ package_update: true
 packages:
   - git
   - ntp
+  - zsh
