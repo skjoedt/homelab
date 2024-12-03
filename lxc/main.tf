@@ -49,9 +49,9 @@ resource "lxd_profile" "default" {
 
 locals {
   kube_instances = {
-    kube-1 = "192.168.68.21"
-    kube-2 = "192.168.68.22"
-    kube-3 = "192.168.68.23"
+    kube-1 = "10.0.0.11"
+    kube-2 = "10.0.0.12"
+    kube-3 = "10.0.0.13"
   }
 }
 
@@ -70,7 +70,7 @@ resource "lxd_instance" "kube_instances" {
     "boot.autostart" = true
     "user.network-config" = templatefile("${path.module}/templates/netplan.yml", {
       ip_address = each.value
-      gateway    = "192.168.68.1"
+      gateway    = "10.0.0.1"
     })
     "user.user-data" = file("${path.module}/templates/user_data.yml")
   }
