@@ -1,3 +1,9 @@
+variable "lxd_password" {
+  type        = string
+  sensitive   = true
+  description = "LXD trust password"
+}
+
 terraform {
   required_providers {
     lxd = {
@@ -7,6 +13,15 @@ terraform {
 }
 
 provider "lxd" {
+  generate_client_certificates = true
+  accept_remote_certificate   = true
+  
+  remote {
+    name     = "myhost"
+    address  = "https://10.0.0.100:443"
+    password = var.lxd_password
+    default  = true
+  }
 }
 
 resource "lxd_project" "homelab" {
@@ -85,7 +100,8 @@ resource "lxd_instance" "kube_instances" {
   }
 
   limits = {
-    cpu = 1
+    cpu = 2
+    memory = "2GB"
   }
 
 }
