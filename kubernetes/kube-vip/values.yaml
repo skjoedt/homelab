@@ -20,10 +20,24 @@ env:
   # Control plane and service handling
   cp_enable: "true"        # Enable control-plane VIP
   svc_enable: "true"       # Enable service LoadBalancer
-  svc_election: "true"     # Enable leader election for services
+  svc_election: "true"     # Enable per-service leader election
   vip_leaderelection: "true"
+  
+  # Enable service controller debug logging
+  log_level: "debug"
+
+# Security context for required capabilities
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+      - NET_RAW
 
 # Service account configuration
 serviceAccount:
   create: true
   name: "kube-vip"
+
+# Ensure pods run on all nodes
+tolerations:
+- operator: Exists
