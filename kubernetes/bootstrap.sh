@@ -6,6 +6,7 @@ set -e
 # Configuration
 CONTROL_PLANE="10.0.0.11"
 WORKER_NODES=("10.0.0.12" "10.0.0.13")
+CONTROL_PLANE_VIP="10.0.0.10"
 SSH_USER="skjoedt"
 K3S_VERSION="v1.31.2+k3s1"
 
@@ -22,7 +23,7 @@ k3sup install \
     --ip "${CONTROL_PLANE}" \
     --user "${SSH_USER}" \
     --k3s-version "${K3S_VERSION}" \
-    --k3s-extra-args "--disable traefik --disable servicelb" \
+    --k3s-extra-args "--disable traefik --disable servicelb --tls-san ${CONTROL_PLANE_VIP}" \
     --context homelab \
     --merge \
     --local-path $HOME/.kube/config
