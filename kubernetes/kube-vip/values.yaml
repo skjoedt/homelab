@@ -1,11 +1,13 @@
 config:
   vip_interface: enp5s0
-  vip_address: "10.0.0.10"
+  vip_address: "10.0.0.10"  # Control plane VIP
   lb_enable: true
   cp_enable: true
   vip_ddns: false
   svc_election: true
   bgp_enable: false
+  # LoadBalancer service IP range
+  cidr_range: "10.0.0.50-10.0.0.100"  # Allocatable range for services
   
 rbac:
   create: true
@@ -16,3 +18,6 @@ controller:
   election: true
   services:
     enable: true
+    # Annotations for services to use kube-vip
+    annotations:
+      "kube-vip.io/loadbalancerIPs": ""  # Can be overridden per service
