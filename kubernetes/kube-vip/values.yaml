@@ -22,9 +22,6 @@ env:
   svc_enable: "true"       # Enable service LoadBalancer
   svc_election: "true"     # Enable leader election for services
   vip_leaderelection: "true"
-  
-  # LoadBalancer IP range
-  cidr_range: "10.0.0.50-10.0.0.99"  # Range for LoadBalancer services
 
 # Service account configuration
 serviceAccount:
