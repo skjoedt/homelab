@@ -1,0 +1,33 @@
+image:
+  repository: ghcr.io/kube-vip/kube-vip
+  pullPolicy: IfNotPresent
+
+# Main kube-vip configuration
+config:
+  address: "10.0.0.10"  # Control plane VIP
+
+# Core environment configuration
+env:
+  # Interface configuration
+  vip_interface: "enp5s0"
+  vip_arp: "true"
+  
+  # Control plane configuration
+  cp_enable: "true"        # Enable control-plane VIP
+  cp_namespace: "kube-system"
+  vip_leaderelection: "true"
+  
+  # Disable service LoadBalancer functionality
+  svc_enable: "false"
+  lb_enable: "false"
+
+# Service account configuration
+serviceAccount:
+  create: true
+  name: "kube-vip"
+
+# Ensure pods run on control plane nodes
+tolerations:
+- key: node-role.kubernetes.io/control-plane
+  operator: Exists
+  effect: NoSchedule

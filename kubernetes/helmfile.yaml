@@ -1,0 +1,41 @@
+repositories:
+  - name: kube-vip
+    url: https://kube-vip.github.io/helm-charts
+  - name: metallb
+    url: https://metallb.github.io/metallb
+
+releases:
+  - name: kube-vip
+    namespace: kube-system
+    createNamespace: false
+    chart: kube-vip/kube-vip
+    version: 0.6.4
+    values:
+      - ./kube-vip/values.yaml
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-k", "./kube-vip/base"]
+
+  - name: metallb
+    namespace: metallb-system
+    createNamespace: true
+    chart: metallb/metallb
+    version: 0.14.3
+    values:
+      - ./metallb/values.yaml
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "bash"
+        args:
+          - -c
+          - |
+            echo "Waiting for MetalLB webhook to be ready..."
+            kubectl wait --namespace metallb-system \
+              --for=condition=ready pod \
+              --selector=app.kubernetes.io/component=webhook \
+              --timeout=90s
+            echo "Applying MetalLB configuration..."
+            kubectl apply -k ./metallb/base
