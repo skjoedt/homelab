@@ -17,10 +17,6 @@ env:
   cp_namespace: "kube-system"
   vip_leaderelection: "true"
   port: "6443"          # Control plane port
-  
-  # Disable service LoadBalancer functionality
-  svc_enable: "false"
-  lb_enable: "false"
 
 # Service account configuration
 serviceAccount:
