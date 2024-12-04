@@ -32,10 +32,11 @@ releases:
         args:
           - -c
           - |
-            echo "Waiting for MetalLB webhook to be ready..."
-            kubectl wait --namespace metallb-system \
-              --for=condition=ready pod \
-              --selector=app.kubernetes.io/component=webhook \
+            echo "Waiting for MetalLB components..."
+            kubectl -n metallb-system wait deployment \
+              --selector=app.kubernetes.io/name=metallb \
+              --for=condition=Available=True \
               --timeout=90s
+            
             echo "Applying MetalLB configuration..."
             kubectl apply -k ./metallb/base

@@ -8,10 +8,10 @@ BLUE='\033[0;34m'
 
 # Configuration
 VIP="10.0.0.10"
-LB_TEST_NAME="vip-test"
+API_PORT="6443"
 NAMESPACE="kube-system"
 
-echo -e "${BLUE}🔍 Starting kube-vip validation...${NC}\n"
+echo -e "${BLUE}🔍 Starting kube-vip control plane validation...${NC}\n"
 
 # Function to check command status
 check_status() {
@@ -43,49 +43,39 @@ for pod in $KUBE_VIP_PODS; do
     fi
 done
 
-# 2. Verify VIP is responding
-echo -e "\nChecking VIP accessibility..."
+# 2. Verify VIP network accessibility
+echo -e "\nChecking control plane VIP network accessibility..."
 ping -c 1 $VIP > /dev/null 2>&1
-check_status "VIP $VIP is responding" "critical"
+check_status "VIP $VIP responds to ping" "critical"
 
-# 3. Test LoadBalancer service creation
-echo -e "\nTesting LoadBalancer service creation..."
-
-# Create test deployment and service
-kubectl create deployment $LB_TEST_NAME --image=nginx:alpine --port=80 > /dev/null 2>&1
-check_status "Created test deployment"
-
-kubectl expose deployment $LB_TEST_NAME --type=LoadBalancer --port=80 > /dev/null 2>&1
-check_status "Exposed service as LoadBalancer"
-
-# Wait for LoadBalancer IP
-echo "Waiting for LoadBalancer IP (timeout: 30s)..."
-for i in {1..6}; do
-    LB_IP=$(kubectl get svc $LB_TEST_NAME -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
-    if [ ! -z "$LB_IP" ]; then
-        echo -e "${GREEN}✓ LoadBalancer IP assigned: $LB_IP${NC}"
-        break
-    fi
-    if [ $i -eq 6 ]; then
-        echo -e "${RED}✗ Timeout waiting for LoadBalancer IP${NC}"
-        exit 1
-    fi
-    sleep 5
-done
-
-# Verify IP is in the configured range
-IFS='.' read -r -a IP_PARTS <<< "$LB_IP"
-LAST_OCTET=${IP_PARTS[3]}
-if [ $LAST_OCTET -ge 50 ] && [ $LAST_OCTET -le 100 ]; then
-    echo -e "${GREEN}✓ LoadBalancer IP ($LB_IP) is within configured range${NC}"
+# 3. Test TCP connectivity to API server port
+echo -e "\nChecking API server port accessibility..."
+if nc -zv $VIP $API_PORT 2>&1 | grep -q "succeeded"; then
+    echo -e "${GREEN}✓ API server port $API_PORT is open${NC}"
 else
-    echo -e "${RED}✗ LoadBalancer IP ($LB_IP) is outside configured range${NC}"
+    echo -e "${RED}✗ Cannot connect to API server port $API_PORT${NC}"
+    exit 1
 fi
 
-# Clean up test resources
-echo -e "\nCleaning up test resources..."
-kubectl delete service $LB_TEST_NAME > /dev/null 2>&1
-kubectl delete deployment $LB_TEST_NAME > /dev/null 2>&1
-check_status "Cleaned up test resources"
+# 4. Verify API server functionality
+echo -e "\nVerifying API server health..."
 
-echo -e "\n${GREEN}✓ Validation completed successfully!${NC}"
+# Create a temporary kubeconfig pointing to the VIP
+TMP_KUBECONFIG=$(mktemp)
+trap "rm -f $TMP_KUBECONFIG" EXIT
+
+# Get the current context's CA certificate and credentials
+KUBECONFIG="$HOME/.kube/config" kubectl config view --raw > "$TMP_KUBECONFIG"
+
+# Update the server address in the temporary kubeconfig
+sed -i "s|server: https://[^:]*:6443|server: https://${VIP}:${API_PORT}|" "$TMP_KUBECONFIG"
+
+# Test API server connectivity using the VIP
+if KUBECONFIG="$TMP_KUBECONFIG" kubectl get --raw '/readyz' &>/dev/null; then
+    echo -e "${GREEN}✓ API server is healthy and accessible through VIP${NC}"
+else
+    echo -e "${RED}✗ API server health check failed through VIP${NC}"
+    exit 1
+fi
+
+echo -e "\n${GREEN}✓ Control plane high availability validation completed successfully!${NC}"

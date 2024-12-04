@@ -1,6 +1,6 @@
 # Homelab Kubernetes Cluster Setup
 
-This guide walks through the process of bootstrapping a K3s cluster and configuring essential components using helmfile.
+This guide walks through the process of bootstrapping a K3s cluster with high availability control plane and load balancing capabilities.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ This guide walks through the process of bootstrapping a K3s cluster and configur
 
 ## 1. Bootstrap K3s Cluster
 
-The bootstrap process automatically installs a lightweight K3s cluster with a designated control plane and worker nodes.
+The bootstrap process sets up a lightweight K3s cluster with high availability:
 
 ```bash
 # Make the bootstrap script executable
@@ -23,90 +23,86 @@ chmod +x kubernetes/bootstrap.sh
 
 The script will:
 1. Install k3sup if not present
-2. Bootstrap the control plane node
+2. Bootstrap the control plane node with VIP support (10.0.0.10)
 3. Join worker nodes to the cluster
 4. Configure your local kubeconfig
+
+> **Important**: The bootstrap process automatically configures the API server certificate to include the VIP address (10.0.0.10) in its SANs list.
 
 Verify the cluster is ready:
 ```bash
 kubectl get nodes -o wide
 ```
 
-## 2. Configure Load Balancing
+## 2. Configure High Availability
 
-We use kube-vip for both control plane high availability and service load balancing.
+Our cluster uses two complementary tools for high availability:
 
-### Install Helmfile
+### Control Plane HA (kube-vip)
+kube-vip provides API server high availability:
+- Control Plane VIP: `10.0.0.10`
+- Access the cluster via `kubectl --server=https://10.0.0.10:6443`
+- Layer 2 mode with ARP for local network compatibility
+
+### Service Load Balancing (MetalLB)
+MetalLB manages external access to services:
+- IP Range: `10.0.0.50-10.0.0.99`
+- Layer 2 mode for simple network integration
+- Automatic IP assignment for LoadBalancer services
+
+### Deploy HA Components
 
 ```bash
-# Install helmfile
+# Install helmfile if not present
 curl -fsSL https://raw.githubusercontent.com/helmfile/helmfile/main/scripts/get-helmfile | bash
 
-# Verify installation
-helmfile --version
-```
-
-### Deploy kube-vip
-
-```bash
+# Deploy kube-vip and MetalLB
 cd kubernetes
 helmfile sync
 ```
 
-Verify the kube-vip deployment:
-```bash
-# Make the validation script executable
-chmod +x kube-vip/validate.sh
+## 3. Verify Installation
 
-# Run validation
-./kube-vip/validate.sh
+Validate the control plane HA:
+```bash
+./kube-vip/validate.sh   # Tests API server availability via VIP
 ```
 
-## Configuration Details
-
-### Virtual IP Addresses
-- Control Plane VIP: `10.0.0.10`
-- LoadBalancer Range: `10.0.0.50-10.0.0.100`
-
-### Network Interface
-- All nodes use `enp5s0` for VIP management
-
-## Testing LoadBalancer Services
-
-Create a test service:
+Test load balancing:
 ```bash
-# Deploy a test nginx instance
-kubectl create deployment nginx --image=nginx
-kubectl expose deployment nginx --type=LoadBalancer --port=80
-
-# Check the assigned IP
-kubectl get svc nginx
+./metallb/validate.sh    # Creates test service and validates IP assignment
 ```
 
 ## Troubleshooting
 
-### Common Issues
-
-1. **VIP Not Responding**
-   ```bash
-   # Check kube-vip pods
-   kubectl get pods -n kube-system -l app.kubernetes.io/name=kube-vip
-   
-   # Check logs
-   kubectl logs -n kube-system -l app.kubernetes.io/name=kube-vip
-   ```
-
-2. **LoadBalancer IP Not Assigned**
-   ```bash
-   # Check service events
-   kubectl describe svc <service-name>
-   ```
-
-### Validation
-
-Run the validation script anytime to verify the setup:
+### Control Plane VIP Issues
+1. Certificate errors when accessing VIP:
 ```bash
-./kube-vip/validate.sh
+# Check the API server certificate SANs
+echo | openssl s_client -connect 10.0.0.10:6443 2>/dev/null | openssl x509 -noout -text | grep DNS
+# If VIP is missing, rerun bootstrap with correct tls-san parameter
+```
+
+2. Connection issues:
+```bash
+# Verify kube-vip pods
+kubectl get pods -n kube-system -l app.kubernetes.io/name=kube-vip
+
+# Check VIP status
+ping 10.0.0.10
+telnet 10.0.0.10 6443
+```
+
+### LoadBalancer Service Issues
+1. Check MetalLB status:
+```bash
+kubectl -n metallb-system get all
+```
+
+2. Verify IP assignment:
+```bash
+kubectl get svc -o wide     # Look for EXTERNAL-IP
+kubectl -n metallb-system logs -l app.kubernetes.io/component=controller
 ```
 
 ## Next Steps
