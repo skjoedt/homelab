@@ -4,4 +4,4 @@ metadata:
   name: kubevip
   namespace: kube-system
 data:
-  cidr-global: "10.0.0.50/24"  # This defines the range for LoadBalancer services
+  range-global: "10.0.0.50-10.0.0.99"  # Using range notation instead of CIDR
