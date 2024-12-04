@@ -8,10 +8,9 @@ BLUE='\033[0;34m'
 
 # Configuration
 VIP="10.0.0.10"
-LB_TEST_NAME="vip-test"
 NAMESPACE="kube-system"
 
-echo -e "${BLUE}🔍 Starting kube-vip validation...${NC}\n"
+echo -e "${BLUE}🔍 Starting kube-vip control plane validation...${NC}\n"
 
 # Function to check command status
 check_status() {
@@ -44,48 +43,13 @@ for pod in $KUBE_VIP_PODS; do
 done
 
 # 2. Verify VIP is responding
-echo -e "\nChecking VIP accessibility..."
+echo -e "\nChecking control plane VIP accessibility..."
 ping -c 1 $VIP > /dev/null 2>&1
-check_status "VIP $VIP is responding" "critical"
+check_status "Control plane VIP $VIP is responding" "critical"
 
-# 3. Test LoadBalancer service creation
-echo -e "\nTesting LoadBalancer service creation..."
+# 3. Verify API server accessibility
+echo -e "\nVerifying API server connection..."
+kubectl --kubeconfig="$HOME/.kube/config" get nodes --request-timeout=5s > /dev/null 2>&1
+check_status "API server is accessible through VIP"
 
-# Create test deployment and service
-kubectl create deployment $LB_TEST_NAME --image=nginx:alpine --port=80 > /dev/null 2>&1
-check_status "Created test deployment"
-
-kubectl expose deployment $LB_TEST_NAME --type=LoadBalancer --port=80 > /dev/null 2>&1
-check_status "Exposed service as LoadBalancer"
-
-# Wait for LoadBalancer IP
-echo "Waiting for LoadBalancer IP (timeout: 30s)..."
-for i in {1..6}; do
-    LB_IP=$(kubectl get svc $LB_TEST_NAME -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
-    if [ ! -z "$LB_IP" ]; then
-        echo -e "${GREEN}✓ LoadBalancer IP assigned: $LB_IP${NC}"
-        break
-    fi
-    if [ $i -eq 6 ]; then
-        echo -e "${RED}✗ Timeout waiting for LoadBalancer IP${NC}"
-        exit 1
-    fi
-    sleep 5
-done
-
-# Verify IP is in the configured range
-IFS='.' read -r -a IP_PARTS <<< "$LB_IP"
-LAST_OCTET=${IP_PARTS[3]}
-if [ $LAST_OCTET -ge 50 ] && [ $LAST_OCTET -le 100 ]; then
-    echo -e "${GREEN}✓ LoadBalancer IP ($LB_IP) is within configured range${NC}"
-else
-    echo -e "${RED}✗ LoadBalancer IP ($LB_IP) is outside configured range${NC}"
-fi
-
-# Clean up test resources
-echo -e "\nCleaning up test resources..."
-kubectl delete service $LB_TEST_NAME > /dev/null 2>&1
-kubectl delete deployment $LB_TEST_NAME > /dev/null 2>&1
-check_status "Cleaned up test resources"
-
-echo -e "\n${GREEN}✓ Validation completed successfully!${NC}"
+echo -e "\n${GREEN}✓ Control plane high availability validation completed successfully!${NC}"
