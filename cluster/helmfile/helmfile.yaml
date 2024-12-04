@@ -1,0 +1,13 @@
+---
+repositories:
+  - name: kube-vip
+    url: https://kube-vip.github.io/helm-charts
+
+releases:
+  - name: kube-vip
+    namespace: kube-system
+    createNamespace: false
+    chart: kube-vip/kube-vip
+    version: 0.5.12
+    values:
+      - ./values/kube-vip.yaml

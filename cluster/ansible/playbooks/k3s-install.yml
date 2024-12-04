@@ -1,0 +1,44 @@
+---
+- hosts: k3s_cluster
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name: 
+          - curl
+          - python3-pip
+        state: present
+        update_cache: yes
+
+- hosts: master
+  become: yes
+  tasks:
+    - name: Download k3sup
+      get_url:
+        url: https://get.k3sup.dev
+        dest: /usr/local/bin/k3sup
+        mode: '0755'
+
+    - name: Install k3s on master
+      command: >
+        k3sup install 
+        --ip {{ ansible_host }} 
+        --user {{ ansible_user }} 
+        --k3s-version {{ k3s_version }} 
+        --k3s-extra-args "--node-ip {{ ansible_host }} --flannel-iface=eth0 --tls-san {{ master_vip }} --disable traefik"
+      args:
+        creates: /etc/systemd/system/k3s.service
+
+- hosts: workers
+  become: yes
+  tasks:
+    - name: Join workers to cluster
+      command: >
+        k3sup join 
+        --ip {{ ansible_host }} 
+        --user {{ ansible_user }} 
+        --server-ip {{ hostvars[groups['master'][0]]['ansible_host'] }} 
+        --k3s-version {{ k3s_version }}
+      args:
+        creates: /etc/systemd/system/k3s-agent.service
