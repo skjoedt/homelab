@@ -1,0 +1,17 @@
+repositories:
+  - name: kube-vip
+    url: https://kube-vip.io/helm-charts
+
+releases:
+  - name: kube-vip
+    namespace: kube-system
+    createNamespace: false
+    chart: kube-vip/kube-vip
+    version: 0.17.0
+    values:
+      - ./kube-vip/values.yaml
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-k", "./kube-vip/base"]
