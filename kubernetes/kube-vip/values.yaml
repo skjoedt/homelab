@@ -2,28 +2,24 @@ image:
   repository: ghcr.io/kube-vip/kube-vip
   pullPolicy: IfNotPresent
 
-# Main kube-vip configuration
+# Control plane VIP configuration
 config:
-  address: "10.0.0.10"  # Control plane VIP
+  address: "10.0.0.10"
 
 # Core environment configuration
 env:
-  # Interface configuration
   vip_interface: "enp5s0"
   vip_arp: "true"
-  
-  # Control plane configuration
-  cp_enable: "true"        # Enable control-plane VIP
-  cp_namespace: "kube-system"
+  cp_enable: "true"
   vip_leaderelection: "true"
-  port: "6443"          # Control plane port
+  port: "6443"
 
-# Service account configuration
+# RBAC configuration
 serviceAccount:
   create: true
   name: "kube-vip"
 
-# Ensure pods run on control plane nodes
+# Node scheduling
 tolerations:
 - key: node-role.kubernetes.io/control-plane
   operator: Exists
