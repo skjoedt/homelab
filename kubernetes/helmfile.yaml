@@ -28,5 +28,14 @@ releases:
     hooks:
       - events: ["postsync"]
         showlogs: true
-        command: "kubectl"
-        args: ["apply", "-k", "./metallb/base"]
+        command: "bash"
+        args:
+          - -c
+          - |
+            echo "Waiting for MetalLB webhook to be ready..."
+            kubectl wait --namespace metallb-system \
+              --for=condition=ready pod \
+              --selector=app.kubernetes.io/component=webhook \
+              --timeout=90s
+            echo "Applying MetalLB configuration..."
+            kubectl apply -k ./metallb/base
