@@ -23,7 +23,10 @@ env:
   svc_election: "true"     # Enable per-service leader election
   vip_leaderelection: "true"
   
-  # Enable service controller debug logging
+  # Cloud provider settings
+  provider_config: "true"   # Enable cloud provider functionality
+  
+  # Debug logging
   log_level: "debug"
 
 # Security context for required capabilities
@@ -37,7 +40,13 @@ securityContext:
 serviceAccount:
   create: true
   name: "kube-vip"
-
-# Ensure pods run on all nodes
+  
+# Run on all nodes
 tolerations:
 - operator: Exists
+
+# Additional arguments
+extraArgs:
+  enableServicesElection: "true"
+  servicesElection: "true"
+  enableServiceController: "true"
