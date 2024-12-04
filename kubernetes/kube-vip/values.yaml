@@ -7,7 +7,7 @@ config:
   svc_election: true
   bgp_enable: false
   # LoadBalancer service IP range
-  cidr_range: "10.0.0.50-10.0.0.100"  # Allocatable range for services
+  cidr_range: "10.0.0.50-10.0.0.99"  # Allocatable range for services
   
 rbac:
   create: true

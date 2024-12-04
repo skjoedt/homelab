@@ -1,13 +1,13 @@
 repositories:
   - name: kube-vip
-    url: oci://ghcr.io/kube-vip
+    url: https://kube-vip.github.io/helm-charts
 
 releases:
   - name: kube-vip
     namespace: kube-system
     createNamespace: false
     chart: kube-vip/kube-vip
-    version: 0.7.0  # Latest stable version
+    version: 0.6.4
     values:
       - ./kube-vip/values.yaml
     hooks:
