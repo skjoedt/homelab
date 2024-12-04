@@ -16,6 +16,7 @@ env:
   cp_enable: "true"        # Enable control-plane VIP
   cp_namespace: "kube-system"
   vip_leaderelection: "true"
+  port: "6443"          # Control plane port
   
   # Disable service LoadBalancer functionality
   svc_enable: "false"
