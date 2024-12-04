@@ -1,23 +1,43 @@
+# kube-vip configuration
+image:
+  repository: ghcr.io/kube-vip/kube-vip
+  tag: v0.6.4
+
 config:
+  # Layer 2 configuration
   vip_interface: enp5s0
-  vip_address: "10.0.0.10"  # Control plane VIP
+  vip_address: "10.0.0.10"
+  port: 6443
+  cp_enable: true      # Enable control-plane VIP
+  cp_namespace: "kube-system"
+  svc_enable: true     # Enable service LoadBalancer
+  vip_mode: "layer2"  # Explicitly set layer2 mode
   lb_enable: true
-  cp_enable: true
-  vip_ddns: false
-  svc_election: true
-  bgp_enable: false
-  # LoadBalancer service IP range
-  cidr_range: "10.0.0.50-10.0.0.99"  # Allocatable range for services
+  prometheus:
+    server: false     # Disable prometheus for simplicity
   
+  # Service LoadBalancer configuration  
+  cidr_range: "10.0.0.50-10.0.0.100"
+
+env:
+  - name: vip_interface
+    value: enp5s0
+  - name: vip_address
+    value: "10.0.0.10"
+  - name: cp_enable
+    value: "true"
+  - name: lb_enable
+    value: "true"
+  - name: vip_mode
+    value: "layer2"
+
 rbac:
   create: true
   serviceAccount:
     create: true
+    name: "kube-vip"
 
 controller:
   election: true
   services:
     enable: true
-    # Annotations for services to use kube-vip
-    annotations:
-      "kube-vip.io/loadbalancerIPs": ""  # Can be overridden per service
