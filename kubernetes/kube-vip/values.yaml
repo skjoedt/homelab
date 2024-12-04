@@ -23,8 +23,8 @@ env:
   svc_election: "true"     # Enable leader election for services
   vip_leaderelection: "true"
   
-  # Additional configs
-  cidr: "10.0.0.50-10.0.0.100"  # Range for LoadBalancer IPs
+  # LoadBalancer IP range
+  range: "10.0.0.50-10.0.0.100"  # Range for LoadBalancer services
 
 # Security context for required capabilities
 securityContext:
