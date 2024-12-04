@@ -23,9 +23,11 @@ chmod +x kubernetes/bootstrap.sh
 
 The script will:
 1. Install k3sup if not present
-2. Bootstrap the control plane node
+2. Bootstrap the control plane node with VIP support (10.0.0.10)
 3. Join worker nodes to the cluster
 4. Configure your local kubeconfig
+
+> **Important**: The bootstrap process automatically configures the API server certificate to include the VIP address (10.0.0.10) in its SANs list.
 
 Verify the cluster is ready:
 ```bash
@@ -34,17 +36,19 @@ kubectl get nodes -o wide
 
 ## 2. Configure High Availability
 
-Our cluster uses two complementary solutions for high availability:
+Our cluster uses two complementary tools for high availability:
 
 ### Control Plane HA (kube-vip)
-kube-vip provides a virtual IP for the control plane, ensuring continuous API server availability:
+kube-vip provides API server high availability:
 - Control Plane VIP: `10.0.0.10`
+- Access the cluster via `kubectl --server=https://10.0.0.10:6443`
 - Layer 2 mode with ARP for local network compatibility
 
 ### Service Load Balancing (MetalLB)
-MetalLB handles LoadBalancer service types:
+MetalLB manages external access to services:
 - IP Range: `10.0.0.50-10.0.0.99`
 - Layer 2 mode for simple network integration
+- Automatic IP assignment for LoadBalancer services
 
 ### Deploy HA Components
 
@@ -59,38 +63,46 @@ helmfile sync
 
 ## 3. Verify Installation
 
-Test the control plane HA:
+Validate the control plane HA:
 ```bash
-./kube-vip/validate.sh
+./kube-vip/validate.sh   # Tests API server availability via VIP
 ```
 
-Test service load balancing:
+Test load balancing:
 ```bash
-./metallb/validate.sh
+./metallb/validate.sh    # Creates test service and validates IP assignment
 ```
 
 ## Troubleshooting
 
 ### Control Plane VIP Issues
-1. Check kube-vip pods:
+1. Certificate errors when accessing VIP:
 ```bash
-kubectl get pods -n kube-system -l app.kubernetes.io/name=kube-vip
+# Check the API server certificate SANs
+echo | openssl s_client -connect 10.0.0.10:6443 2>/dev/null | openssl x509 -noout -text | grep DNS
+# If VIP is missing, rerun bootstrap with correct tls-san parameter
 ```
 
-2. Verify VIP accessibility:
+2. Connection issues:
 ```bash
+# Verify kube-vip pods
+kubectl get pods -n kube-system -l app.kubernetes.io/name=kube-vip
+
+# Check VIP status
 ping 10.0.0.10
+telnet 10.0.0.10 6443
 ```
 
 ### LoadBalancer Service Issues
-1. Check MetalLB pods:
+1. Check MetalLB status:
 ```bash
-kubectl get pods -n metallb-system
+kubectl -n metallb-system get all
 ```
 
-2. Verify service allocation:
+2. Verify IP assignment:
 ```bash
-kubectl describe service <service-name>
+kubectl get svc -o wide     # Look for EXTERNAL-IP
+kubectl -n metallb-system logs -l app.kubernetes.io/component=controller
 ```
 
 ## Next Steps
