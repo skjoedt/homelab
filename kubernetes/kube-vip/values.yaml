@@ -12,32 +12,22 @@ env:
   vip_interface: "enp5s0"
   vip_arp: "true"
   
-  # LoadBalancer configuration
-  lb_enable: "true"
-  lb_port: "6443"
-  vip_cidr: "32"
-  
-  # Control plane and service handling
+  # Control plane configuration
   cp_enable: "true"        # Enable control-plane VIP
-  svc_enable: "true"       # Enable service LoadBalancer
-  svc_election: "true"     # Enable per-service leader election
+  cp_namespace: "kube-system"
   vip_leaderelection: "true"
   
-  # Enable service controller debug logging
-  log_level: "debug"
-
-# Security context for required capabilities
-securityContext:
-  capabilities:
-    add:
-      - NET_ADMIN
-      - NET_RAW
+  # Disable service LoadBalancer functionality
+  svc_enable: "false"
+  lb_enable: "false"
 
 # Service account configuration
 serviceAccount:
   create: true
   name: "kube-vip"
 
-# Ensure pods run on all nodes
+# Ensure pods run on control plane nodes
 tolerations:
-- operator: Exists
+- key: node-role.kubernetes.io/control-plane
+  operator: Exists
+  effect: NoSchedule
