@@ -24,22 +24,9 @@ env:
   vip_leaderelection: "true"
   
   # LoadBalancer IP range
-  range: "10.0.0.50-10.0.0.100"  # Range for LoadBalancer services
-
-# Security context for required capabilities
-securityContext:
-  capabilities:
-    add:
-      - NET_ADMIN
-      - NET_RAW
+  cidr_range: "10.0.0.50-10.0.0.99"  # Range for LoadBalancer services
 
 # Service account configuration
 serviceAccount:
   create: true
   name: "kube-vip"
-
-# Tolerations to run on control plane
-tolerations:
-  - effect: NoSchedule
-    key: node-role.kubernetes.io/control-plane
-    operator: Exists
