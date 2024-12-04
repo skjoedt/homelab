@@ -1,43 +1,45 @@
-# kube-vip configuration
 image:
   repository: ghcr.io/kube-vip/kube-vip
-  tag: v0.6.4
+  pullPolicy: IfNotPresent
 
+# Main kube-vip configuration
 config:
-  # Layer 2 configuration
-  vip_interface: enp5s0
-  vip_address: "10.0.0.10"
-  port: 6443
-  cp_enable: true      # Enable control-plane VIP
-  cp_namespace: "kube-system"
-  svc_enable: true     # Enable service LoadBalancer
-  vip_mode: "layer2"  # Explicitly set layer2 mode
-  lb_enable: true
-  prometheus:
-    server: false     # Disable prometheus for simplicity
-  
-  # Service LoadBalancer configuration  
-  cidr_range: "10.0.0.50-10.0.0.100"
+  address: "10.0.0.10"  # Control plane VIP
 
+# Core environment configuration
 env:
-  - name: vip_interface
-    value: enp5s0
-  - name: vip_address
-    value: "10.0.0.10"
-  - name: cp_enable
-    value: "true"
-  - name: lb_enable
-    value: "true"
-  - name: vip_mode
-    value: "layer2"
+  # Interface configuration
+  vip_interface: "enp5s0"
+  vip_arp: "true"
+  
+  # LoadBalancer configuration
+  lb_enable: "true"
+  lb_port: "6443"
+  vip_cidr: "32"
+  
+  # Control plane and service handling
+  cp_enable: "true"        # Enable control-plane VIP
+  svc_enable: "true"       # Enable service LoadBalancer
+  svc_election: "true"     # Enable leader election for services
+  vip_leaderelection: "true"
+  
+  # Additional configs
+  cidr: "10.0.0.50-10.0.0.100"  # Range for LoadBalancer IPs
 
-rbac:
+# Security context for required capabilities
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+      - NET_RAW
+
+# Service account configuration
+serviceAccount:
   create: true
-  serviceAccount:
-    create: true
-    name: "kube-vip"
+  name: "kube-vip"
 
-controller:
-  election: true
-  services:
-    enable: true
+# Tolerations to run on control plane
+tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+    operator: Exists
