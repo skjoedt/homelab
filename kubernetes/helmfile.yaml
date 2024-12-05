@@ -74,18 +74,3 @@ releases:
         value: false
     values:
       - ./external-secrets/values.yaml
-    hooks:
-      - events: ["postsync"]
-        showlogs: true
-        command: "bash"
-        args:
-          - -c
-          - |
-            echo "Waiting for External Secrets webhook..."
-            kubectl -n external-secrets wait deployment \
-              --selector=app.kubernetes.io/component=webhook \
-              --for=condition=Available=True \
-              --timeout=90s
-
-            echo "Applying ClusterSecretStore configuration..."
-            kubectl apply -k ./external-secrets/base
