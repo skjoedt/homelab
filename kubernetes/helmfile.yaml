@@ -3,6 +3,10 @@ repositories:
     url: https://kube-vip.github.io/helm-charts
   - name: metallb
     url: https://metallb.github.io/metallb
+  - name: traefik
+    url: https://traefik.github.io/charts
+  - name: external-secrets
+    url: https://charts.external-secrets.io
 
 releases:
   - name: kube-vip
@@ -40,3 +44,16 @@ releases:
             
             echo "Applying MetalLB configuration..."
             kubectl apply -k ./metallb/base
+
+  - name: external-secrets
+    namespace: external-secrets
+    createNamespace: true
+    chart: external-secrets/external-secrets
+    version: 0.9.9
+    values:
+      - ./external-secrets/values.yaml
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-k", "./external-secrets/base"]
