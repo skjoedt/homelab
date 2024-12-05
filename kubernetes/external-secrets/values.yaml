@@ -1,4 +1,6 @@
-# Core ESO configuration
+# External Secrets Operator Configuration
+
+# Resource allocation for ESO components
 resources:
   requests:
     cpu: 50m
@@ -6,3 +8,28 @@ resources:
   limits:
     cpu: 100m
     memory: 128Mi
+
+# Enable CRD installation by default
+installCRDs: true
+
+# AWS Secrets Manager ClusterSecretStore
+extraObjects:
+  - apiVersion: external-secrets.io/v1beta1
+    kind: ClusterSecretStore
+    metadata:
+      name: aws-secrets-manager
+    spec:
+      provider:
+        aws:
+          service: SecretsManager
+          region: eu-north-1
+          auth:
+            secretRef:
+              accessKeyIDSecretRef:
+                name: aws-creds
+                key: AWS_ACCESS_KEY_ID
+                namespace: external-secrets
+              secretAccessKeySecretRef:
+                name: aws-creds
+                key: AWS_SECRET_ACCESS_KEY
+                namespace: external-secrets
