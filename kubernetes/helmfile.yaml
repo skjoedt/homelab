@@ -49,7 +49,7 @@ releases:
     namespace: external-secrets
     createNamespace: true
     chart: external-secrets/external-secrets
-    version: 0.9.9
+    version: 0.11.0
     values:
       - ./external-secrets/values.yaml
     hooks:
