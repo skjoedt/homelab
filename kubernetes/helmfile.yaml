@@ -50,8 +50,7 @@ releases:
     createNamespace: true
     chart: external-secrets/external-secrets
     version: 0.11.0
-    skipHooks: true
-    installOnly: true
+    installed: true
     labels:
       type: crds
   
@@ -61,6 +60,8 @@ releases:
     version: 0.11.0
     needs:
       - external-secrets-crds
-    skipCRDs: true
+    set:
+      - name: installCRDs
+        value: false
     values:
       - ./external-secrets/values.yaml
