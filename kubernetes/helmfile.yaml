@@ -3,6 +3,8 @@ repositories:
     url: https://kube-vip.github.io/helm-charts
   - name: metallb
     url: https://metallb.github.io/metallb
+  - name: traefik
+    url: https://traefik.github.io/charts
 
 releases:
   - name: kube-vip
@@ -40,3 +42,16 @@ releases:
             
             echo "Applying MetalLB configuration..."
             kubectl apply -k ./metallb/base
+            
+  - name: traefik
+    namespace: traefik-system
+    createNamespace: true
+    chart: traefik/traefik
+    version: 25.0.0
+    values:
+      - ./traefik/values.yaml
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-k", "./traefik/base"]
