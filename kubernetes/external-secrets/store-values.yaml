@@ -1,0 +1,30 @@
+# Disable all ESO components as we only use this release for the ClusterSecretStore
+controller:
+  create: false
+webhook:
+  create: false
+certController:
+  create: false
+installCRDs: false
+
+# AWS Secrets Manager integration
+extraObjects:
+  - apiVersion: external-secrets.io/v1beta1
+    kind: ClusterSecretStore
+    metadata:
+      name: aws-secrets-manager
+    spec:
+      provider:
+        aws:
+          service: SecretsManager
+          region: eu-north-1
+          auth:
+            secretRef:
+              accessKeyIDSecretRef:
+                name: aws-creds
+                key: AWS_ACCESS_KEY_ID
+                namespace: external-secrets
+              secretAccessKeySecretRef:
+                name: aws-creds
+                key: AWS_SECRET_ACCESS_KEY
+                namespace: external-secrets
