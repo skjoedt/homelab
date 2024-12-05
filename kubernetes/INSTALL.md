@@ -106,24 +106,19 @@ The cluster uses AWS Secrets Manager for secure secret management via External S
 3. Create access keys for AWS API access
 
 ### Kubernetes Integration
-1. Create a dedicated namespace for AWS credentials:
+1. Store AWS credentials in the external-secrets namespace:
 ```bash
-kubectl create namespace vault
-```
-
-2. Store AWS credentials as Kubernetes secrets:
-```bash
-kubectl create secret generic aws-creds -n vault \
+kubectl create secret generic aws-creds -n external-secrets \
   --from-literal=AWS_ACCESS_KEY_ID=<access-key> \
   --from-literal=AWS_SECRET_ACCESS_KEY=<secret-key>
 ```
 
-3. Deploy External Secrets Operator:
+2. Deploy External Secrets Operator:
 ```bash
 helmfile --selector name=external-secrets sync
 ```
 
-4. Verify the setup:
+3. Verify the setup:
 ```bash
 # Check ESO is running
 kubectl get pods -n external-secrets
