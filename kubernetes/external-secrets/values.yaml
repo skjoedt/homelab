@@ -5,3 +5,11 @@ resources:
   limits:
     cpu: 100m
     memory: 128Mi
+
+clusterSecretStore:
+  enabled: true
+  aws:
+    region: eu-west-1
+    auth:
+      secretRef:
+        namespace: external-secrets
