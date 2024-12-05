@@ -53,6 +53,15 @@ releases:
     installed: true
     labels:
       type: crds
+    set:
+      - name: crds.enabled
+        value: true
+      - name: webhook.create
+        value: false
+      - name: certController.create
+        value: false
+      - name: controller.create
+        value: false
   
   - name: external-secrets
     namespace: external-secrets
@@ -61,7 +70,7 @@ releases:
     needs:
       - external-secrets-crds
     set:
-      - name: installCRDs
+      - name: crds.enabled
         value: false
     values:
       - ./external-secrets/values.yaml
