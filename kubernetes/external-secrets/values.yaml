@@ -7,9 +7,12 @@ resources:
     memory: 128Mi
 
 clusterSecretStore:
-  enabled: true
+  create: true
+  name: aws-secrets-manager
   aws:
-    region: eu-west-1
+    region: eu-north-1
+    service: SecretsManager
     auth:
       secretRef:
+        name: aws-creds
         namespace: external-secrets
