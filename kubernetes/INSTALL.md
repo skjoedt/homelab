@@ -73,6 +73,67 @@ Test load balancing:
 ./metallb/validate.sh    # Creates test service and validates IP assignment
 ```
 
+## 4. Secret Manager
+
+The cluster uses AWS Secrets Manager for secure secret management via External Secrets Operator (ESO). Here's how to configure it:
+
+### AWS IAM Setup
+1. Create the required IAM policies:
+
+```json
+# homelab-secrets-manager-read policy
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+            ],
+            "Resource": "arn:aws:secretsmanager:eu-west-1:*:secret:homelab/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "secretsmanager:ListSecrets",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+2. Attach the policy to your IAM user
+3. Create access keys for AWS API access
+
+### Kubernetes Integration
+1. Create a dedicated namespace for AWS credentials:
+```bash
+kubectl create namespace vault
+```
+
+2. Store AWS credentials as Kubernetes secrets:
+```bash
+kubectl create secret generic aws-creds -n vault \
+  --from-literal=AWS_ACCESS_KEY_ID=<access-key> \
+  --from-literal=AWS_SECRET_ACCESS_KEY=<secret-key>
+```
+
+3. Deploy External Secrets Operator:
+```bash
+helmfile --selector name=external-secrets sync
+```
+
+4. Verify the setup:
+```bash
+# Check ESO is running
+kubectl get pods -n external-secrets
+
+# Verify the ClusterSecretStore is ready
+kubectl get clustersecretstore aws-secrets-manager
+```
+
+After setup, you can create ExternalSecret resources that automatically sync AWS Secrets Manager secrets into Kubernetes secrets.
+
 ## Troubleshooting
 
 ### Control Plane VIP Issues
