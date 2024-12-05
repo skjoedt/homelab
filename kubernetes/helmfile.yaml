@@ -55,5 +55,15 @@ releases:
     hooks:
       - events: ["postsync"]
         showlogs: true
-        command: "kubectl"
-        args: ["apply", "-k", "./external-secrets/base"]
+        command: "bash"
+        args:
+          - -c
+          - |
+            echo "Waiting for External Secrets webhook..."
+            kubectl -n external-secrets wait deployment \
+              --selector=app.kubernetes.io/component=webhook \
+              --for=condition=Available=True \
+              --timeout=90s
+
+            echo "Applying External Secrets configuration..."
+            kubectl apply -k ./external-secrets/base
