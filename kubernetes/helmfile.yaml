@@ -45,25 +45,27 @@ releases:
             echo "Applying MetalLB configuration..."
             kubectl apply -k ./metallb/base
 
-  - name: external-secrets
+  - name: external-secrets-crds
     namespace: external-secrets
     createNamespace: true
     chart: external-secrets/external-secrets
     version: 0.11.0
+    skipHooks: true
+    installOnly: true
+    labels:
+      type: crds
+  
+  - name: external-secrets
+    namespace: external-secrets
+    chart: external-secrets/external-secrets
+    version: 0.11.0
+    needs:
+      - external-secrets-crds
+    skipCRDs: true
     values:
       - ./external-secrets/values.yaml
     hooks:
       - events: ["postsync"]
         showlogs: true
-        command: "bash"
-        args:
-          - -c
-          - |
-            echo "Waiting for External Secrets webhook..."
-            kubectl -n external-secrets wait deployment \
-              --selector=app.kubernetes.io/component=webhook \
-              --for=condition=Available=True \
-              --timeout=90s
-
-            echo "Applying External Secrets configuration..."
-            kubectl apply -k ./external-secrets/base
+        command: "kubectl"
+        args: ["apply", "-k", "./external-secrets/base"]
