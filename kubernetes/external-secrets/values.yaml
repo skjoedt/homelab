@@ -1,3 +1,4 @@
+# ESO resource configuration
 resources:
   requests:
     cpu: 50m
