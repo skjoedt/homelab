@@ -45,44 +45,10 @@ releases:
             echo "Applying MetalLB configuration..."
             kubectl apply -k ./metallb/base
 
-  - name: external-secrets-crds
-    namespace: external-secrets
-    createNamespace: true
-    chart: external-secrets/external-secrets
-    version: 0.11.0
-    installed: true
-    labels:
-      type: crds
-    set:
-      - name: crds.enabled
-        value: true
-      - name: webhook.create
-        value: false
-      - name: certController.create
-        value: false
-      - name: controller.create
-        value: false
-  
   - name: external-secrets
     namespace: external-secrets
     chart: external-secrets/external-secrets
     version: 0.11.0
-    needs:
-      - external-secrets-crds
-    set:
-      - name: crds.enabled
-        value: false
+    createNamespace: true
     values:
       - ./external-secrets/values.yaml
-
-  - name: external-secrets-store
-    namespace: external-secrets
-    chart: external-secrets/external-secrets
-    version: 0.11.0
-    needs:
-      - external-secrets
-    installed: true
-    labels:
-      type: config
-    values:
-      - ./external-secrets/store-values.yaml
