@@ -91,7 +91,7 @@ The cluster uses AWS Secrets Manager for secure secret management via External S
                 "secretsmanager:GetSecretValue",
                 "secretsmanager:DescribeSecret"
             ],
-            "Resource": "arn:aws:secretsmanager:eu-west-1:*:secret:homelab/*"
+            "Resource": "arn:aws:secretsmanager:eu-north-1:*:secret:homelab/*"
         },
         {
             "Effect": "Allow",
@@ -102,12 +102,13 @@ The cluster uses AWS Secrets Manager for secure secret management via External S
 }
 ```
 
-2. Attach the policy to your IAM user
-3. Create access keys for AWS API access
+2. Attach the policy to your IAM user `homelab`
+3. Create access keys for AWS API access 
 
 ### Kubernetes Integration
 1. Store AWS credentials in the external-secrets namespace:
 ```bash
+kubectl create namespace external-secrets
 kubectl create secret generic aws-creds -n external-secrets \
   --from-literal=AWS_ACCESS_KEY_ID=<access-key> \
   --from-literal=AWS_SECRET_ACCESS_KEY=<secret-key>
