@@ -64,8 +64,3 @@ releases:
     skipCRDs: true
     values:
       - ./external-secrets/values.yaml
-    hooks:
-      - events: ["postsync"]
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-k", "./external-secrets/base"]
