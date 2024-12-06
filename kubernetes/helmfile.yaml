@@ -3,8 +3,6 @@ repositories:
     url: https://kube-vip.github.io/helm-charts
   - name: metallb
     url: https://metallb.github.io/metallb
-  - name: traefik
-    url: https://traefik.github.io/charts
   - name: external-secrets
     url: https://charts.external-secrets.io
 
