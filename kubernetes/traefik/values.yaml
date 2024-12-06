@@ -1,62 +1,34 @@
-# Traefik values configuration
-global:
-  checknewversion: false
-
 deployment:
-  replicas: 2
+  replicas: 3
 
-ports:
-  web:
-    port: 8000
-    expose: true
-    exposedPort: 80
-  websecure:
-    port: 8443
-    expose: true
-    exposedPort: 443
-
-service:
-  enabled: true
-  type: LoadBalancer
-  spec:
-    loadBalancerIP: "10.0.0.50"  # First IP from your MetalLB range
-
-ingressClass:
-  enabled: true
-  isDefaultClass: true
-
-dashboard:
-  enabled: true
-
-resources:
-  requests:
-    cpu: "100m"
-    memory: "128Mi"
-  limits:
-    cpu: "300m"
-    memory: "256Mi"
+ingressRoute:
+  dashboard:
+    enabled: false  # We'll manage this separately
 
 providers:
   kubernetesCRD:
     enabled: true
-    allowCrossNamespace: true
   kubernetesIngress:
     enabled: true
-    allowExternalNameServices: true
+    publishedService:
+      enabled: true
 
-persistence:
-  enabled: true
-  path: /data
-  size: 128Mi
+ports:
+  web:
+    redirectTo: websecure
+  websecure:
+    tls:
+      enabled: true
 
-servers:
-  enabled: true
+service:
+  type: LoadBalancer
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: "10.0.0.50"
 
-log:
-  level: INFO
-
-accessLogs:
-  enabled: true
+additionalArguments:
+  - "--api.dashboard=true"
+  - "--metrics.prometheus=true"
+  - "--ping=true"
 
 securityContext:
   capabilities:
