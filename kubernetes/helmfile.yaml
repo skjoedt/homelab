@@ -63,6 +63,7 @@ releases:
       - name: controller.create
         value: false
   
+  # Must run a second time after sorting out crds
   - name: external-secrets
     namespace: external-secrets
     chart: external-secrets/external-secrets
