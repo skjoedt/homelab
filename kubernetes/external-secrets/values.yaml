@@ -1,4 +1,5 @@
 # ESO resource configuration
+installCRDs: false
 resources:
   requests:
     cpu: 50m
