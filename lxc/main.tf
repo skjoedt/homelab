@@ -5,6 +5,15 @@ variable "lxd_password" {
 }
 
 terraform {
+  backend "s3" {
+    bucket = "csh-terraform"
+    key    = "homelab-lxc"
+    region = "eu-north-1"
+  }
+}
+
+
+terraform {
   required_providers {
     lxd = {
       source = "terraform-lxd/lxd"
@@ -68,6 +77,18 @@ locals {
     kube-2 = "10.0.0.12"
     kube-3 = "10.0.0.13"
   }
+ 
+  # Define the number of Ceph volumes per instance
+  ceph_volumes = ["ceph-1", "ceph-2", "ceph-3"]
+
+  # Create a map of all volume combinations
+  volume_matrix = {
+    for pair in setproduct(keys(local.kube_instances), local.ceph_volumes) : 
+    "${pair[0]}-${pair[1]}" => {
+      instance = pair[0]
+      volume   = pair[1]
+    }
+  }
 }
 
 resource "lxd_instance" "kube_instances" {
@@ -104,16 +125,12 @@ resource "lxd_instance" "kube_instances" {
     memory = "2GB"
   }
 
-  device {
-    type = "disk"
-    name = "ceph-1"
-
-    properties = {
-      pool = "local"
-      size = "8GiB"
-      raw.mount = false
-    }
-  }
-
 }
 
+resource "lxd_volume" "ceph_volumes" {
+  for_each = local.volume_matrix
+  name     = each.key
+  pool     = "local"
+  type     = "block"
+  project  = lxd_project.homelab.name
+}
