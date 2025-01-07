@@ -104,5 +104,16 @@ resource "lxd_instance" "kube_instances" {
     memory = "2GB"
   }
 
+  device {
+    type = "disk"
+    name = "ceph-1"
+
+    properties = {
+      pool = "local"
+      size = "8GiB"
+      raw.mount = false
+    }
+  }
+
 }
 
