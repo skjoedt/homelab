@@ -127,10 +127,10 @@ resource "lxd_instance" "kube_instances" {
 
 }
 
-resource "lxd_volume" "ceph_volumes" {
-  for_each = local.volume_matrix
-  name     = each.key
-  pool     = "local"
-  type     = "block"
-  project  = lxd_project.homelab.name
-}
+# resource "lxd_volume" "ceph_volumes" {
+#   for_each = local.volume_matrix
+#   name     = each.key
+#   pool     = "local"
+#   type     = "block"
+#   project  = lxd_project.homelab.name
+# }

@@ -5,6 +5,10 @@ repositories:
     url: https://metallb.github.io/metallb
   - name: external-secrets
     url: https://charts.external-secrets.io
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: traefik
+    url: https://helm.traefik.io/traefik
 
 releases:
   - name: kube-vip
@@ -47,7 +51,7 @@ releases:
     namespace: external-secrets
     createNamespace: true
     chart: external-secrets/external-secrets
-    version: 0.11.0
+    version: 0.12.1
     installed: true
     labels:
       type: crds
@@ -61,11 +65,10 @@ releases:
       - name: controller.create
         value: false
   
-  # Must run a second time after sorting out crds
   - name: external-secrets
     namespace: external-secrets
     chart: external-secrets/external-secrets
-    version: 0.11.0
+    version: 0.12.1
     needs:
       - external-secrets-crds
     set:
@@ -88,3 +91,56 @@ releases:
 
             echo "Applying ClusterSecretStore configuration..."
             kubectl apply -k ./external-secrets/base
+
+  - name: cert-manager
+    namespace: cert-manager
+    createNamespace: true
+    chart: jetstack/cert-manager
+    version: v1.16.2
+    values:
+      - ./cert-manager/values.yaml
+    set:
+      - name: crds.enabled
+        value: true
+      - name: crds.keep
+        value: false
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "bash"
+        args:
+          - -c
+          - |
+            echo "Waiting for cert-manager webhook..."
+            kubectl -n cert-manager wait deployment \
+              --selector=app.kubernetes.io/component=webhook \
+              --for=condition=Available=True \
+              --timeout=90s
+
+            echo "Applying cert-manager configuration..."
+            kubectl apply -k ./cert-manager/base
+
+  - name: traefik
+    namespace: traefik
+    createNamespace: true
+    chart: traefik/traefik
+    version: 33.2.1
+    needs:
+      - cert-manager/cert-manager
+    values:
+      - ./traefik/values.yaml
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "bash"
+        args:
+          - -c
+          - |
+            echo "Waiting for Traefik controller..."
+            kubectl -n traefik wait deployment \
+              --selector=app.kubernetes.io/name=traefik \
+              --for=condition=Available=True \
+              --timeout=90s
+
+            echo "Applying Traefik configuration..."
+            kubectl apply -k ./traefik/base

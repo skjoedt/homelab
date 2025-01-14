@@ -1,0 +1,44 @@
+globalArguments:
+  - "--global.sendanonymoususage=false"
+  - "--global.checknewversion=false"
+  
+deployment:
+  replicas: 1
+
+ports:
+  web:
+    redirectTo:
+      port: websecure
+      priority: 10
+  websecure:
+    http3:
+      enabled: true
+    advertisedPort: 443
+    tls:
+      enabled: true
+
+ingressRoute: # will be created manually with tls
+  dashboard:
+    enabled: false
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    ingressClass: traefik-external # named explicitly to identify traffic coming from internet'
+
+service:
+  spec:
+    loadBalancerIP: "10.0.0.50"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+# Enable prometheus metrics
+metrics:
+  prometheus:
+    enabled: true

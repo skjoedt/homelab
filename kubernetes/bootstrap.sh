@@ -17,6 +17,9 @@ if ! command -v k3sup &> /dev/null; then
     sudo install k3sup /usr/local/bin/
 fi
 
+# Wipe local kube config
+echo "" > ~/.kube/config
+
 # Install control plane
 echo "Installing K3s control plane on ${CONTROL_PLANE}..."
 k3sup install \
