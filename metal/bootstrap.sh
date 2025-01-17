@@ -29,7 +29,7 @@ k3sup install \
     --k3s-extra-args "--disable traefik --disable servicelb --tls-san ${CONTROL_PLANE_VIP}" \
     --context homelab \
     --merge \
-    --local-path $HOME/.kube/config
+    --local-path "$HOME"/.kube/config
 
 # Join worker nodes
 for worker in "${WORKER_NODES[@]}"; do
@@ -42,8 +42,8 @@ for worker in "${WORKER_NODES[@]}"; do
 done
 
 # Verify cluster
-echo "\nVerifying cluster setup..."
+printf "\nVerifying cluster setup...\n"
 sleep 10  # Give some time for nodes to register
 kubectl get nodes -o wide
 
-echo "\nK3s cluster bootstrap complete!"
+printf "\nK3s cluster bootstrap complete!\n"

@@ -32,6 +32,7 @@
             pre-commit
             yamllint
             awscli
+            shellcheck
 
             (python3.withPackages (p: with p; [
               kubernetes
