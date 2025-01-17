@@ -32,7 +32,6 @@
             pre-commit
             yamllint
             awscli
-            lxc
 
             (python3.withPackages (p: with p; [
               kubernetes
