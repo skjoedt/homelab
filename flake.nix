@@ -9,7 +9,14 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+        inherit system;
+        config = {
+            allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+            "terraform"
+            ];
+        };
+        };
       in
       with pkgs;
       {
@@ -24,7 +31,7 @@
             kustomize
             pre-commit
             yamllint
-            awsli
+            awscli
             lxc
 
             (python3.withPackages (p: with p; [
