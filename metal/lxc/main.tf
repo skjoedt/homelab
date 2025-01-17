@@ -23,8 +23,8 @@ terraform {
 
 provider "lxd" {
   generate_client_certificates = true
-  accept_remote_certificate   = true
-  
+  accept_remote_certificate    = true
+
   remote {
     name     = "myhost"
     address  = "https://10.0.0.100:443"
@@ -36,18 +36,18 @@ provider "lxd" {
 resource "lxd_project" "homelab" {
   name = "homelab"
   config = {
-    "features.profiles": true
+    "features.profiles" : true
   }
 }
 
 resource "lxd_storage_pool" "local" {
   project = lxd_project.homelab.name
-  name   = "local"
-  driver = "lvm"
-  source = "/dev/sda4"
+  name    = "local"
+  driver  = "lvm"
+  source  = "/dev/sda4"
   config = {
-    "lvm.vg_name": "lxc-vg"
-    "lvm.thinpool_name": "lxc-lv"
+    "lvm.vg_name" : "lxc-vg"
+    "lvm.thinpool_name" : "lxc-lv"
   }
 }
 
@@ -77,13 +77,13 @@ locals {
     kube-2 = "10.0.0.12"
     kube-3 = "10.0.0.13"
   }
- 
+
   # Define the number of Ceph volumes per instance
   ceph_volumes = ["ceph-1", "ceph-2", "ceph-3"]
 
   # Create a map of all volume combinations
   volume_matrix = {
-    for pair in setproduct(keys(local.kube_instances), local.ceph_volumes) : 
+    for pair in setproduct(keys(local.kube_instances), local.ceph_volumes) :
     "${pair[0]}-${pair[1]}" => {
       instance = pair[0]
       volume   = pair[1]
@@ -97,9 +97,9 @@ resource "lxd_instance" "kube_instances" {
     lxd_profile.default,
     lxd_storage_pool.local
   ]
-  name  = each.key
-  type = "virtual-machine"
-  image = "ubuntu-daily:24.04"
+  name    = each.key
+  type    = "virtual-machine"
+  image   = "ubuntu-daily:24.04"
   project = lxd_project.homelab.name
 
   config = {
@@ -115,13 +115,13 @@ resource "lxd_instance" "kube_instances" {
     name = "enp5s0"
     type = "nic"
     properties = {
-      nictype   = "bridged"
-      parent    = "br0"
+      nictype = "bridged"
+      parent  = "br0"
     }
   }
 
   limits = {
-    cpu = 2
+    cpu    = 2
     memory = "2GB"
   }
 

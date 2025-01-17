@@ -13,16 +13,16 @@ terraform apply
 
 Will create 3 kubernetes controller and 2 worker instances.
 
-## Deploy k3s with k3sup 
+## Deploy k3s with k3sup
 https://www.youtube.com/watch?v=2cbniIZUpXM&t=1176s
 
-We use k3sup (ketchup) to deploy k3s via ssh in minutes. 
+We use k3sup (ketchup) to deploy k3s via ssh in minutes.
 
 ```
 brew install k3sup
 ```
 
-### First node 
+### First node
 
 Then, initialize the first server (kube-1) with
 
@@ -39,9 +39,9 @@ k3sup install \
 --merge
 ```
 
-Note: The `--tls-san` is yet to be routed. 
+Note: The `--tls-san` is yet to be routed.
 
-Note: The `--disable servicelb` is necessary when using kube-vip as service load balancer: 
+Note: The `--disable servicelb` is necessary when using kube-vip as service load balancer:
 
 > If wanting to use the kube-vip cloud controller, pass the --disable servicelb flag so K3s will not attempt to render Kubernetes Service resources of type LoadBalancer. If building with k3sup, the flag should be given as an argument to the --k3s-extra-args flag itself: --k3s-extra-args "--disable servicelb". To install the kube-vip cloud controller, follow the additional steps in the cloud controller guide.
 
@@ -84,14 +84,14 @@ NAMESPACE     NAME          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE  
 kube-system   kube-vip-ds   1         1         1       1            1           <none>          18m
 ```
 
-Finally, install the kube-vip cloud-provider to allow applications to receive a virtual IP as well in the range of 192.168.68.40-99. 
+Finally, install the kube-vip cloud-provider to allow applications to receive a virtual IP as well in the range of 192.168.68.40-99.
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
 kubectl create configmap -n kube-system kubevip --from-literal range-global=192.168.68.40-192.168.68.99/29
 ```
 
-Note: It could be interesting to test the above method using helmfile instead, with the charts at https://github.com/kube-vip/helm-charts for both kube-vip and kube-vip-cloud-provider. 
+Note: It could be interesting to test the above method using helmfile instead, with the charts at https://github.com/kube-vip/helm-charts for both kube-vip and kube-vip-cloud-provider.
 
 ### Initialize remaining k3s nodes
 
@@ -106,7 +106,7 @@ k3sup join \
 --user skjoedt
 ```
 
-and 
+and
 
 ```
 k3sup join \
@@ -117,7 +117,7 @@ k3sup join \
 --user skjoedt
 ```
 
-Note: The command might fail with `k3s.service: Failed with result 'exit-code'.`. Simply start the service again or rerun the join command. 
+Note: The command might fail with `k3s.service: Failed with result 'exit-code'.`. Simply start the service again or rerun the join command.
 
 Check that the nodes are ready
 
@@ -149,7 +149,7 @@ We may have to delete traefik to deploy it using helm charts with a custom confi
 kubectl delete deployment traefik --namespace kube-system
 ```
 
-Finally, 
+Finally,
 
 ## Test
 
