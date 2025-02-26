@@ -8,6 +8,7 @@ CONTROL_PLANE="10.0.0.11"
 WORKER_NODES=("10.0.0.12" "10.0.0.13")
 CONTROL_PLANE_VIP="10.0.0.10"
 SSH_USER="skjoedt"
+SSH_KEY="${HOME}/.ssh/id_rsa"
 K3S_VERSION="v1.31.2+k3s1"
 
 # Install k3sup if not present
@@ -25,6 +26,7 @@ echo "Installing K3s control plane on ${CONTROL_PLANE}..."
 k3sup install \
     --ip "${CONTROL_PLANE}" \
     --user "${SSH_USER}" \
+    --ssh-key  "${SSH_KEY}" \
     --k3s-version "${K3S_VERSION}" \
     --k3s-extra-args "--disable traefik --disable servicelb --tls-san ${CONTROL_PLANE_VIP}" \
     --context homelab \
@@ -37,6 +39,7 @@ for worker in "${WORKER_NODES[@]}"; do
     k3sup join \
         --ip "${worker}" \
         --user "${SSH_USER}" \
+        --ssh-key  "${SSH_KEY}" \
         --server-ip "${CONTROL_PLANE}" \
         --k3s-version "${K3S_VERSION}"
 done

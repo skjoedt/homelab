@@ -1,0 +1,4 @@
+---
+speaker:
+  frr:
+    enabled: false  # Disable BGP mode

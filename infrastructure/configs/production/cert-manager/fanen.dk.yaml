@@ -1,0 +1,15 @@
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: fanen-dk
+#   namespace: default
+# spec:
+#   secretName: fanen-dk-tls
+#   issuerRef:
+#     name: letsencrypt-production
+#     kind: ClusterIssuer
+#   commonName: "*.fanen.dk"
+#   dnsNames:
+#   - "fanen.dk"
+#   - "*.fanen.dk"
