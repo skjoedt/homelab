@@ -1,13 +1,35 @@
-# homelab
-Homelab stuff
+# 🏠 Homelab
 
-# Todo
+This repo contains all of the configuration and documentation of my homelab.
 
-- I deleted a flux deploy key in repo settings. I may need to bootstrap flux production again.
+The purpose of my homelab is to learn and to have fun.
 
-# Resources
+## :computer: Hardware
 
-- https://blog.nishanthkp.com/docs/devsecops/gitops/flux/setup
-- https://github.com/fluxcd/flux2-kustomize-helm-example/blob/main/.github/workflows/e2e.yaml # A github CI job that spins up a k8s in kind and run flux on it. See https://github.com/fluxcd/flux2-kustomize-helm-example?tab=readme-ov-file
-- https://github.com/fluxcd/flux2/discussions/4867
-- https://github.com/stefanprodan/flux-local-dev
+The cluster is not running high availability as I only have one node for staging and production.
+
+| Type       | Hardware                 |
+|------------|--------------------------|
+| staging    | Intel NUC NUC8i7BEH      |
+| production | Dell Precision Tower7810 |
+
+# Cluster provisioning
+
+| Type       | K8s Distribution | Control Plane | Deployment |
+|------------|------------------|---------------|------------|
+| Testing    | k3d (wrapper)    | localhost     | Kustomize  |
+| Staging    | k3sup (wrapper)  | 10.0.0.50/24  | Flux       |
+| Production | k3s              | N/A           | Flux       |
+
+# Storage
+
+Empty
+
+TODO: I will most likely setup ceph on the production node.
+
+# Secret management
+
+I use AWS Secret Manager to store my secrets.
+They are synced using external secrets.
+
+A fake store is provided for local testing.
