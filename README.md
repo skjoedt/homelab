@@ -13,13 +13,25 @@ The cluster is not running high availability as I only have one node for staging
 | staging    | Intel NUC NUC8i7BEH      |
 | production | Dell Precision Tower7810 |
 
+Development is on my local Macbook Pro M1.
+
 # Cluster provisioning
 
 | Type       | K8s Distribution | Control Plane | Deployment |
 |------------|------------------|---------------|------------|
-| Testing    | k3d (wrapper)    | localhost     | Kustomize  |
-| Staging    | k3sup (wrapper)  | 10.0.0.50/24  | Flux       |
-| Production | k3s              | N/A           | Flux       |
+| testing    | k3d (wrapper)    | localhost     | Kustomize  |
+| staging    | k3sup (wrapper)  | 10.0.0.50/24  | Flux       |
+| production | k3s              | N/A           | Flux       |
+
+# Endpoints
+
+Ingress routes are defined in each environment under the following endpoints
+
+| Type       | Endpoints          |
+|------------|--------------------|
+| testing    | *.traefik.me       |
+| staging    | *.staging.fanen.dk |
+| production | *.fanen.dk         |
 
 # Storage
 
