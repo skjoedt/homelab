@@ -37,7 +37,7 @@ Ingress routes are defined in each environment under the following endpoints
 
 Empty
 
-TODO: I will most likely setup ceph on the production node.
+TODO: I will most likely setup ceph rook on the production node.
 
 # Secret management
 
@@ -49,3 +49,4 @@ A fake store is provided for local testing.
 # References
 
 - <https://github.com/onedr0p/home-ops>
+- <https://github.com/mischavandenburg/homelab>
