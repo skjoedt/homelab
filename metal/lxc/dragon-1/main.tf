@@ -43,12 +43,7 @@ resource "lxd_project" "homelab" {
 resource "lxd_storage_pool" "local" {
   project = lxd_project.homelab.name
   name    = "local"
-  driver  = "lvm"
-  source  = "/dev/sda4"
-  config = {
-    "lvm.vg_name" : "lxc-vg"
-    "lvm.thinpool_name" : "lxc-lv"
-  }
+  driver  = "dir"
 }
 
 resource "lxd_profile" "default" {
@@ -77,18 +72,6 @@ locals {
     kube-2 = "10.0.0.22"
     kube-3 = "10.0.0.23"
   }
-
-  # Define the number of Ceph volumes per instance
-  ceph_volumes = ["ceph-1", "ceph-2", "ceph-3"]
-
-  # Create a map of all volume combinations
-  volume_matrix = {
-    for pair in setproduct(keys(local.kube_instances), local.ceph_volumes) :
-    "${pair[0]}-${pair[1]}" => {
-      instance = pair[0]
-      volume   = pair[1]
-    }
-  }
 }
 
 resource "lxd_instance" "kube_instances" {
@@ -104,11 +87,11 @@ resource "lxd_instance" "kube_instances" {
 
   config = {
     "boot.autostart" = true
-    "user.network-config" = templatefile("${path.module}/templates/netplan.yml", {
+    "user.network-config" = templatefile("${path.module}/../templates/netplan.yml", {
       ip_address = each.value
       gateway    = "10.0.0.1"
     })
-    "user.user-data" = file("${path.module}/templates/user_data.yml")
+    "user.user-data" = file("${path.module}/../templates/user_data.yml")
   }
 
   device {
@@ -124,13 +107,4 @@ resource "lxd_instance" "kube_instances" {
     cpu    = 2
     memory = "2GB"
   }
-
 }
-
-# resource "lxd_volume" "ceph_volumes" {
-#   for_each = local.volume_matrix
-#   name     = each.key
-#   pool     = "local"
-#   type     = "block"
-#   project  = lxd_project.homelab.name
-# }

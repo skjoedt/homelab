@@ -79,7 +79,7 @@ cluster-down:
 	@echo "Destroying k3s cluster nodes"
 	lxc remote switch beholder-1
 	lxc image list -f csv -c f | xargs -I {} lxc image delete {}
-	cd metal/lxc && terraform destroy
+	cd metal/lxc/beholder-1 && terraform destroy
 
 staging-up: cluster-up
 	@echo "Bootstrapping k3s"

@@ -104,11 +104,11 @@ resource "lxd_instance" "kube_instances" {
 
   config = {
     "boot.autostart" = true
-    "user.network-config" = templatefile("${path.module}/templates/netplan.yml", {
+    "user.network-config" = templatefile("${path.module}/../templates/netplan.yml", {
       ip_address = each.value
       gateway    = "10.0.0.1"
     })
-    "user.user-data" = file("${path.module}/templates/user_data.yml")
+    "user.user-data" = file("${path.module}/../templates/user_data.yml")
   }
 
   device {
