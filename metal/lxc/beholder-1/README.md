@@ -1,3 +1,17 @@
+# LXD
+
+Configure lxd using the `lxd.yaml` config
+
+```
+cat lxd.yaml | lxd init --preseed
+```
+
+Then, set an appropriate password
+
+```
+lxc config set core.trust_password=<my_password>
+```
+
 # Kubernetes
 
 Kubernetes is deployed in the following stages:

@@ -73,9 +73,9 @@ resource "lxd_profile" "default" {
 
 locals {
   kube_instances = {
-    kube-1 = "10.0.0.11"
-    kube-2 = "10.0.0.12"
-    kube-3 = "10.0.0.13"
+    kube-1 = "10.0.0.21"
+    kube-2 = "10.0.0.22"
+    kube-3 = "10.0.0.23"
   }
 
   # Define the number of Ceph volumes per instance

@@ -1,4 +1,5 @@
 # cloud-init network config for static IP
+---
 version: 2
 ethernets:
   enp5s0:

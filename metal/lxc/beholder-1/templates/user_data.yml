@@ -1,4 +1,4 @@
-#cloud-config
+---
 users:
   - name: skjoedt
     sudo: ALL=(ALL) NOPASSWD:ALL
