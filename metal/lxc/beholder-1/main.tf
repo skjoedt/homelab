@@ -73,9 +73,9 @@ resource "lxd_profile" "default" {
 
 locals {
   kube_instances = {
-    kube-1 = "10.0.0.11"
-    kube-2 = "10.0.0.12"
-    kube-3 = "10.0.0.13"
+    kube-1 = "10.0.0.31"
+    kube-2 = "10.0.0.32"
+    kube-3 = "10.0.0.33"
   }
 
   # Define the number of Ceph volumes per instance
@@ -104,11 +104,11 @@ resource "lxd_instance" "kube_instances" {
 
   config = {
     "boot.autostart" = true
-    "user.network-config" = templatefile("${path.module}/templates/netplan.yml", {
+    "user.network-config" = templatefile("${path.module}/../templates/netplan.yml", {
       ip_address = each.value
       gateway    = "10.0.0.1"
     })
-    "user.user-data" = file("${path.module}/templates/user_data.yml")
+    "user.user-data" = file("${path.module}/../templates/user_data.yml")
   }
 
   device {

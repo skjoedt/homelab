@@ -79,11 +79,15 @@ cluster-down:
 	@echo "Destroying k3s cluster nodes"
 	lxc remote switch beholder-1
 	lxc image list -f csv -c f | xargs -I {} lxc image delete {}
-	cd metal/lxc && terraform destroy
+	cd metal/lxc/beholder-1 && terraform destroy
 
-staging-up: cluster-up
-	@echo "Bootstrapping k3s"
-	bash metal/bootstrap.sh
+bootstrap-production:
+	@echo "Bootstrapping k3s on production"
+	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
+
+bootstrap-staging:
+	@echo "Bootstrapping k3s on production"
+	bash metal/bootstrap.sh 10.0.0.31 10.0.0.30 10.0.0.32 10.0.0.33
 
 # Install Flux in against branch
 flux-up:
