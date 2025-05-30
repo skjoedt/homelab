@@ -39,7 +39,10 @@ argocd-apps:
             repoURL: &repoURL https://github.com/skjoedt/homelab
             revision: &revision main
             directories:
-              - path: system/*
+              - path: system/controllers/*
+              - path: system/configs/*
+              - path: monitoring/controllers/*
+              - path: monitoring/configs/*
               - path: platform/*
               - path: apps/*
       template:
