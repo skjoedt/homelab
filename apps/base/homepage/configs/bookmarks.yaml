@@ -1,0 +1,12 @@
+---
+- Homelab:
+    - Public homelab repository:
+        - href: https://github.com/skjoedt/homelab
+          icon: github.svg
+- Providers:
+    - AWS Secret Manager:
+        - href: https://eu-north-1.console.aws.amazon.com/secretsmanager/listsecrets?region=eu-north-1  # yamllint disable-line rule:line-length
+          icon: aws.svg
+    - AWS Route 53:
+        - href: https://us-east-1.console.aws.amazon.com/route53/v2/home?region=eu-north-1#Dashboard  # yamllint disable-line rule:line-length
+          icon: aws.svg

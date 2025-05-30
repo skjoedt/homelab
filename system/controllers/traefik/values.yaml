@@ -1,0 +1,39 @@
+---
+globalArguments:
+  - "--global.sendanonymoususage=false"
+  - "--global.checknewversion=false"
+
+service:
+  spec:
+    loadBalancerIP: "10.0.0.50"
+
+ports:
+  web:
+    redirections:
+      entryPoint:
+        to: websecure
+        scheme: https
+        permanent: true
+  websecure:
+    port: 443
+    tls:
+      enabled: true
+
+log:
+  level: DEBUG
+
+ingressClass:
+  enabled: true
+  name: traefik
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi

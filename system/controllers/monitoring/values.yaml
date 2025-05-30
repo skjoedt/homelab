@@ -1,0 +1,11 @@
+---
+kube-prometheus-stack:
+  grafana:
+    enabled: false
+  prometheus:
+    prometheusSpec:
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      maximumStartupDurationSeconds: 60
