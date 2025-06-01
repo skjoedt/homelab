@@ -1,21 +1,25 @@
 ---
-sidecar:
-  datasources:
-    enabled: true
-    label: grafana_datasource
-    labelValue: "1"
-  dashboards:
-    enabled: true
-    label: grafana_dashboard
-    labelValue: "1"
-    # Allow discovery in all namespaces for dashboards
-    searchNamespace: ALL
-    provider:
-      allowUiUpdates: true
+grafana:
+  adminUser: admin
+  adminPassword: admin
 
-persistence:
-  enabled: true
-  type: pvc
-  accessModes:
-    - ReadWriteOnce
-  size: 4Gi
+  sidecar:
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      labelValue: "1"
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      # Allow discovery in all namespaces for dashboards
+      searchNamespace: ALL
+      provider:
+        allowUiUpdates: true
+
+  persistence:
+    enabled: true
+    type: pvc
+    accessModes:
+      - ReadWriteOnce
+    size: 4Gi
