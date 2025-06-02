@@ -39,6 +39,7 @@ dev-prepare:
 	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
 	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
 	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
+	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
 	kubectl apply -k ./system/configs/base
 	kubectl apply -k ./monitoring/configs/base
 dev: dev-up dev-prepare

@@ -1,0 +1,42 @@
+---
+alloy:
+  controller:
+    type: daemonset
+    hostPID: true
+
+  serviceAccount:
+    create: true
+    name: "alloy"
+
+  rbac:
+    create: true
+
+  alloy:
+    configMap:
+      name: "alloy-config"
+      # yamllint disable rule:line-length
+      content: |
+        discovery.kubernetes "pods" {
+          role = "pod"
+        }
+
+        loki.source.kubernetes "logs" {
+          targets    = discovery.kubernetes.pods.targets
+          forward_to = [loki.write.loki_destination.receiver]
+        }
+
+        loki.write "loki_destination" {
+          endpoint {
+            url = "http://loki-backend.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+          }
+        }
+      # yamllint enable rule:line-length
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+    enableReporting: false
