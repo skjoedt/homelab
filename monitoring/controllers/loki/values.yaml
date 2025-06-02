@@ -67,33 +67,33 @@ loki:
   bloomGateway:
     replicas: 0
 
-# Disable memcached for chunks
-chunksCache:
-  enabled: false
-  replicas: 0
+  # Disable memcached for chunks
+  chunksCache:
+    enabled: false
+    replicas: 0
 
-# Disable memcached for results
-resultsCache:
-  enabled: false
-  replicas: 0
+  # Disable memcached for results
+  resultsCache:
+    enabled: false
+    replicas: 0
 
-# Explicitly disable other known memcached components from the chart
-memcachedExporter:
-  enabled: false
-memcachedFrontend: # Often an alias for resultsCache
-  enabled: false
-memcachedIndexQueries:
-  enabled: false
-memcachedIndexWrites:
-  enabled: false
+  # Explicitly disable other known memcached components from the chart
+  memcachedExporter:
+    enabled: false
+  memcachedFrontend: # Often an alias for resultsCache
+    enabled: false
+  memcachedIndexQueries:
+    enabled: false
+  memcachedIndexWrites:
+    enabled: false
 
-# Gateway configuration
-gateway:
-  enabled: true # Was running, so keep enabled
-  replicas: 1
-  resources: # Added to control gateway memory
-    requests:
-      memory: "64Mi"
-      cpu: "50m"
-    limits:
-      memory: "128Mi"
+  # Gateway configuration
+  gateway:
+    enabled: true # Was running, so keep enabled
+    replicas: 1
+    resources: # Added to control gateway memory
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"
