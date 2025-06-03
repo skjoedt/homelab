@@ -14,23 +14,8 @@ alloy:
   alloy:
     configMap:
       name: "alloy-config"
-      # yamllint disable rule:line-length
       content: |
-        discovery.kubernetes "pods" {
-          role = "pod"
-        }
-
-        loki.source.kubernetes "logs" {
-          targets    = discovery.kubernetes.pods.targets
-          forward_to = [loki.write.loki_destination.receiver]
-        }
-
-        loki.write "loki_destination" {
-          endpoint {
-            url = "http://loki-backend.monitoring.svc.cluster.local:3100/loki/api/v1/push"
-          }
-        }
-      # yamllint enable rule:line-length
+        {{- .Files.Get "config.alloy" | nindent 8 }}
     resources:
       requests:
         cpu: "100m"
