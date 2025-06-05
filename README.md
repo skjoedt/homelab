@@ -20,8 +20,8 @@ Development is on my local Macbook Pro M1.
 | Type       | K8s Distribution | Control Plane | Deployment |
 |------------|------------------|---------------|------------|
 | testing    | k3d (wrapper)    | localhost     | Kustomize  |
-| staging    | k3sup (wrapper)  | 10.0.0.50/24  | Flux       |
-| production | k3s              | N/A           | Flux       |
+| staging    | k3sup (wrapper)  | 10.0.0.50/24  | TBD        |
+| production | k3s              | N/A           | TBD        |
 
 # Endpoints
 
