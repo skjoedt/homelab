@@ -6,3 +6,4 @@ resources:
   - dashboards
   - grafana
   - alloy
+  - alertmanager
