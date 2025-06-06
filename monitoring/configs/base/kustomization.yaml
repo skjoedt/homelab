@@ -7,3 +7,4 @@ resources:
   - grafana
   - alloy
   - alertmanager
+  - loki

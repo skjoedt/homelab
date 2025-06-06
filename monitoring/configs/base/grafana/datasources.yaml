@@ -31,3 +31,5 @@ data:
       type: loki
       uid: loki
       url: http://loki-gateway.monitoring:80/
+      jsonData:
+        manageAlerts: true
