@@ -1,0 +1,81 @@
+---
+argo-cd:
+  global:
+    domain: argocd.staging.fanen.dk
+  configs:
+    params:
+      server.insecure: true
+      controller.diff.server.side: true
+    cm:
+      resource.ignoreResourceUpdatesEnabled: true
+      resource.customizations.ignoreResourceUpdates.all: |
+        jsonPointers:
+          - /status
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+      tls: true
+    metrics: &metrics
+      enabled: true
+      serviceMonitor:
+        enabled: true
+  dex:
+    enabled: false
+  controller:
+    metrics: *metrics
+  repoServer:
+    metrics: *metrics
+  redis:
+    metrics: *metrics
+argocd-apps:
+  applicationsets:
+    root:
+      namespace: argocd
+      generators:
+        - git:
+            repoURL: &repoURL https://github.com/skjoedt/homelab
+            revision: &revision main
+            directories:
+              - path: system/controllers/*
+              - path: system/configs/*
+              - path: monitoring/controllers/*
+              - path: monitoring/configs/*
+              - path: platform/*
+              - path: apps/*
+      template:
+        metadata:
+          name: '{{path.basename}}'
+        spec:
+          destination:
+            name: in-cluster
+            namespace: '{{path.basename}}'
+          project: default  # TODO
+          source:
+            repoURL: *repoURL
+            path: '{{path}}'
+            targetRevision: *revision
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            retry:
+              limit: 10
+              backoff:
+                duration: 1m
+                factor: 2
+                maxDuration: 16m
+            syncOptions:
+              - CreateNamespace=true
+              - ApplyOutOfSyncOnly=true
+              - ServerSideApply=true
+            managedNamespaceMetadata:
+              annotations:
+                # Enable privileged VolSync movers by default for all namespaces
+                # yamllint disable rule:line-length
+                # TODO this may be refactored in the future for finer granularity
+                # See also https://volsync.readthedocs.io/en/stable/usage/permissionmodel.html
+                # yamllint enable rule:line-length
+                volsync.backube/privileged-movers: "true"

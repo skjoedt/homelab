@@ -1,0 +1,72 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: monitoring
+
+configMapGenerator:
+  - name: default-dashboards-1
+    files:
+      - standard-dashboards/alertmanager-overview.json
+      - standard-dashboards/apiserver.json
+      - standard-dashboards/cluster-total.json
+      - standard-dashboards/controller-manager.json
+      - standard-dashboards/etcd.json
+      - standard-dashboards/grafana-overview.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-2a # Was part of default-dashboards-2
+    files:
+      - standard-dashboards/k8s-coredns.json
+      - standard-dashboards/k8s-resources-cluster.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-2b # Was part of default-dashboards-2
+    files:
+      - standard-dashboards/k8s-resources-multicluster.json
+      - standard-dashboards/k8s-resources-namespace.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-2c # Was part of default-dashboards-2
+    files:
+      - standard-dashboards/k8s-resources-node.json
+      - standard-dashboards/k8s-resources-pod.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-3a # Was part of default-dashboards-3
+    files:
+      - standard-dashboards/k8s-resources-workload.json
+      - standard-dashboards/k8s-resources-workloads-namespace.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-3b # Was part of default-dashboards-3
+    files:
+      - standard-dashboards/kubelet.json
+      - standard-dashboards/namespace-by-pod.json
+      - standard-dashboards/namespace-by-workload.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-4
+    files:
+      - standard-dashboards/node-cluster-rsrc-use.json
+      - standard-dashboards/node-rsrc-use.json
+      - standard-dashboards/nodes-darwin.json
+      - standard-dashboards/nodes.json
+      - standard-dashboards/persistentvolumesusage.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: default-dashboards-5
+    files:
+      - standard-dashboards/pod-total.json
+      - standard-dashboards/prometheus.json
+      - standard-dashboards/proxy.json
+      - standard-dashboards/scheduler.json
+      - standard-dashboards/workload-total.json
+    options:
+      labels:
+        grafana_dashboard: "1"
