@@ -41,3 +41,13 @@ terraform.rc
 
 # Ignore helm chart builds
 **/charts/*
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
