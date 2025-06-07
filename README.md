@@ -44,4 +44,4 @@ TODO: I will most likely setup ceph on the production node.
 I use AWS Secret Manager to store my secrets.
 They are synced using external secrets.
 
-A fake store is provided for local testing.
+A fake store is provided for local testing and may provide a secret inventory.
