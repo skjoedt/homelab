@@ -50,6 +50,21 @@ dev-down:
 	@k3d cluster delete $(BRANCH_NAME_SLUG)
 	@echo "Cluster deleted"
 
+staging-prepare: # to be replaced by argocd
+	@echo "Installing CRDs to $(CLUSTER_NAME)..."
+	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
+	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
+	helm upgrade --install cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
+	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
+	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml
+	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
+	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
+	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
+	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
+	kubectl apply -k ./system/configs/staging
+	kubectl apply -k ./monitoring/configs/staging
+	kubectl apply -k ./apps/staging
+
 cluster-up:
 	@echo "Deploying k3s cluster nodes with lxc (terraform)"
 	cd metal/lxc && terraform apply

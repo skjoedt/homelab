@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: staging.fanen.dk
+    - host: fanen.dk
       http:
         paths:
           - path: /
@@ -18,4 +18,4 @@ spec:
               service:
                 name: homepage
                 port:
-                  name: http-homepage
+                  name: http

@@ -16,7 +16,7 @@ argo-cd:
       enabled: true
       ingressClassName: traefik
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-staging
+        cert-manager.io/cluster-issuer: letsencrypt
       tls: true
     metrics: &metrics
       enabled: true
@@ -39,12 +39,12 @@ argocd-apps:
             repoURL: &repoURL https://github.com/skjoedt/homelab
             revision: &revision main
             directories:
+              - path: argocd-prod
               - path: system/controllers/*
-              - path: system/configs/*
+              - path: system/configs/production/*
               - path: monitoring/controllers/*
-              - path: monitoring/configs/*
-              - path: platform/*
-              - path: apps/*
+              - path: monitoring/configs/production/*
+              - path: apps/production/*
       template:
         metadata:
           name: '{{path.basename}}'
@@ -52,7 +52,7 @@ argocd-apps:
           destination:
             name: in-cluster
             namespace: '{{path.basename}}'
-          project: default  # TODO
+          project: default
           source:
             repoURL: *repoURL
             path: '{{path}}'
@@ -71,11 +71,3 @@ argocd-apps:
               - CreateNamespace=true
               - ApplyOutOfSyncOnly=true
               - ServerSideApply=true
-            managedNamespaceMetadata:
-              annotations:
-                # Enable privileged VolSync movers by default for all namespaces
-                # yamllint disable rule:line-length
-                # TODO this may be refactored in the future for finer granularity
-                # See also https://volsync.readthedocs.io/en/stable/usage/permissionmodel.html
-                # yamllint enable rule:line-length
-                volsync.backube/privileged-movers: "true"
