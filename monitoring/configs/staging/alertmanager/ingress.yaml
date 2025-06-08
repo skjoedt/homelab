@@ -8,8 +8,12 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - &host alerts.staging.fanen.dk
+      secretName: alertmanager-tls
   rules:
-    - host: alerts.staging.fanen.dk
+    - host: *host
       http:
         paths:
           - path: /

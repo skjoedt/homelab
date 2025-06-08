@@ -1,0 +1,25 @@
+---
+external-dns:
+  provider: aws
+  txtOwnerId: homelab
+  env:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: route53-credentials
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: route53-credentials
+          key: AWS_SECRET_ACCESS_KEY
+    - name: AWS_DEFAULT_REGION
+      value: "eu-north-1"
+  extraArgs:
+    - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
+  interval: 5m
+  triggerLoopOnEvent: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
