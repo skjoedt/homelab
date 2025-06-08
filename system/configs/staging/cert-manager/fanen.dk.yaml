@@ -6,10 +6,12 @@ metadata:
   namespace: default
 spec:
   secretName: fanen-dk-staging-tls
-  secretTemplate: # Copy generated secret to default namespace
+  secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: ""  # yamllint disable-line rule:line-length
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: ""  # yamllint disable-line rule:line-length
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer

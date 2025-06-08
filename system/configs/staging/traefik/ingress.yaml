@@ -4,11 +4,13 @@ kind: IngressRoute
 metadata:
   name: traefik-dashboard
   namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: &host traefik.staging.fanen.dk
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`traefik.staging.fanen.dk`)
+    - match: Host(`*host`)
       kind: Rule
       middlewares:
         - name: traefik-dashboard-basicauth

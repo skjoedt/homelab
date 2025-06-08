@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - &host staging.fanen.dk
-      secretName: homepage-tls
+      secretName: fanen-dk-staging-tls
   rules:
     - host: *host
       http:
