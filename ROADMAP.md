@@ -5,7 +5,8 @@
 Everything needed for speed of iteration and security
 
 - [ ] Automated bare metal provisioning
-- [ ] Full develop and production environment compatibility
+- [x] Automated cluster provisioning
+- [x] Full develop and production environment compatibility
 - [ ] GitOps deployment (ArgoCD)
 - [ ] Automated DNS management
 - [x] Observability
@@ -39,10 +40,11 @@ Everything needed for family onboarding
 
 # Unplanned
 
-Things I should get to at some point
+Things I might get to at some point
 
 - [ ] Automated app upgrades (tbd)
 - [ ] HA on at least three phyiscal nodes
 - [ ] Bare metal with talos linux or similar
 - [ ] Bare-metal OS rolling upgrade
 - [ ] Kubernetes version rolling upgrade
+- [ ] Measure power consumption (send to grafana?)

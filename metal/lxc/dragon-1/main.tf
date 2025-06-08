@@ -104,7 +104,7 @@ resource "lxd_instance" "kube_instances" {
   }
 
   limits = {
-    cpu    = 2
-    memory = "2GB"
+    cpu    = 8
+    memory = "12GB"
   }
 }

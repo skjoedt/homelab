@@ -19,7 +19,7 @@ spec:
           image: ghcr.io/gethomepage/homepage
           env:
             - name: HOMEPAGE_ALLOWED_HOSTS
-              value: "homepage.traefik.me"
+              value: "*" # TODO: Set up correct host for each environment
           ports:
             - containerPort: 3000
               name: http-homepage

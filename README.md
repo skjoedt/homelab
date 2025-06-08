@@ -15,6 +15,19 @@ The cluster is not running high availability as I only have one node for staging
 
 Development is on my local Macbook Pro M1.
 
+# Getting started
+
+1. Bootstrap the cluster
+2. Load it with AWS access key secret `aws-creds`
+
+```
+kubectl create secret generic aws-creds -n external-secrets \
+  --from-literal=AWS_ACCESS_KEY_ID=XXX \
+  --from-literal=AWS_SECRET_ACCESS_KEY=XXX \
+  --from-literal=VAULT_SEAL_TYPE=awskms \
+  --from-literal=VAULT_AWSKMS_SEAL_KEY_ID=XXX
+```
+
 # Cluster provisioning
 
 | Type       | K8s Distribution | Control Plane | Deployment |
