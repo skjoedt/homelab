@@ -8,7 +8,7 @@ Everything needed for speed of iteration and security
 - [x] Automated cluster provisioning
 - [x] Full develop and production environment compatibility
 - [ ] GitOps deployment (ArgoCD)
-- [ ] Automated DNS management
+- [x] Automated DNS management
 - [x] Observability
   - [x] Monitoring
   - [x] Logging
