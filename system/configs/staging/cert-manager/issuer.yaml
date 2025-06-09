@@ -10,7 +10,7 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: skjoedt@fanen.dk
     privateKeySecretRef:
-      name: letsencrypt-prod-account-key
+      name: letsencrypt-staging-account-key
     solvers:
       - dns01:
           route53:
