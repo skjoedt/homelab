@@ -62,6 +62,7 @@ resource "lxd_profile" "default" {
     properties = {
       pool = "local"
       path = "/"
+      size = "400GB"
     }
   }
 }

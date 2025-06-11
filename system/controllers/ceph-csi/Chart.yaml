@@ -1,0 +1,13 @@
+apiVersion: v2
+name: ceph-csi
+description: Ceph CSI drivers for RBD and CephFS
+type: application
+version: 0.0.0
+
+dependencies:
+  - name: ceph-csi-rbd
+    version: ">3.11.0"
+    repository: "https://ceph.github.io/csi-charts"
+  - name: ceph-csi-cephfs
+    version: ">3.11.0"
+    repository: "https://ceph.github.io/csi-charts"

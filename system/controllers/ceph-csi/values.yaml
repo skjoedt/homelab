@@ -1,0 +1,39 @@
+ceph-csi-rbd:
+  csiConfig:
+    - clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      monitors:
+        - "10.0.0.11:6789"
+
+  secret:
+    create: false
+    name: "ceph-csi-secret"
+    userID: userID
+    userKey: userKey
+
+  provisioner:
+    replicaCount: 1
+
+  nodeplugin: {}
+  configMapName: ceph-csi-config-rbd
+  cephConfConfigMapName: ceph-config-rbd
+  kmsConfigMapName: ceph-csi-encryption-kms-config-rbd
+
+ceph-csi-cephfs:
+  csiConfig:
+    - clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      monitors:
+        - "10.0.0.11:6789"
+
+  secret:
+    create: false
+    name: "ceph-csi-secret"
+    adminID: userID
+    adminKey: userKey
+
+  provisioner:
+    replicaCount: 1
+
+  nodeplugin: {}
+  configMapName: ceph-csi-config-cephfs
+  cephConfConfigMapName: ceph-config-cephfs
+  kmsConfigMapName: ceph-csi-encryption-kms-config-cephfs
