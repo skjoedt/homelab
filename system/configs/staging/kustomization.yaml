@@ -6,4 +6,4 @@ resources:
   - traefik
   - external-secrets
   - metallb
-  - ceph/
+  - ceph
