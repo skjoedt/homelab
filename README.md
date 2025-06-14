@@ -50,6 +50,12 @@ Ingress routes are defined in each environment under the following endpoints
 
 The goal of using an external ceph storage is to be able to delete the entire kubernetes cluster and recreate it using deterministic volume handles and fetch existing data that has the `Retain` reclaim policy through the ceph storage classes.
 
+The caveat is we need to create all rbd images manually with the same size
+
+```
+rbd -c ceph.conf --id homelab-staging -p kubernetes-staging create grafana-data --size 10G
+```
+
 # Secret management
 
 I use AWS Secret Manager to store my secrets.

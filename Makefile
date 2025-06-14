@@ -51,6 +51,7 @@ dev-down:
 	@echo "Cluster deleted"
 
 staging-prepare: # to be replaced by argocd
+	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	@echo "Installing CRDs to $(CLUSTER_NAME)..."
 	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
 	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml

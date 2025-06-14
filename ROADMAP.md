@@ -23,6 +23,7 @@ Everything needed for speed of iteration and security
 Everything needed for family onboarding
 
 - [ ] NordVPN
+- [ ] Add ceph radosgw s3 endpoint
 - [ ] Applications
   - [ ] Immich
   - [ ] Budget Planning (tbd)

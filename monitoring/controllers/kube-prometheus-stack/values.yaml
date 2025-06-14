@@ -14,3 +14,11 @@ kube-prometheus-stack:
       ruleSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       maximumStartupDurationSeconds: 60
+  kubeProxy:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeControllerManager:
+    enabled: true

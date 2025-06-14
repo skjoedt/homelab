@@ -12,13 +12,13 @@ spec:
   csi:
     driver: rbd.csi.ceph.com
     volumeHandle: grafana-data
-    # volumeAttributes:
-    #   clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-    #   pool: kubernetes-staging
-    #   staticVolume: "true"
-    # nodeStageSecretRef:
-    #   name: csi-rbd-secret
-    #   namespace: ceph
+    volumeAttributes:
+      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      pool: kubernetes-staging
+      staticVolume: "true"
+    nodeStageSecretRef:
+      name: csi-rbd-secret
+      namespace: ceph
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

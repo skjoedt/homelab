@@ -16,8 +16,6 @@ ceph-csi-rbd:
   storageClass:
     create: true
     name: ceph-rbd
-    annotations:
-      storageclass.kubernetes.io/is-default-class: "true"
     clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
     pool: kubernetes-staging
     imageFeatures: layering,exclusive-lock,object-map,fast-diff
