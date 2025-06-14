@@ -16,7 +16,7 @@ Everything needed for speed of iteration and security
   - [x] Automated certificate management
   - [x] External secret management
   - [ ] Backup solution (3 copies, 2 seperate devices, 1 offsite)
-- [ ] Reclaimable CSI with cephfs or ceph rbd
+- [x] Reclaimable CSI with cephfs or ceph rbd
 
 # Production requirements
 
