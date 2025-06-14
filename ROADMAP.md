@@ -48,3 +48,8 @@ Things I might get to at some point
 - [ ] Bare-metal OS rolling upgrade
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
+
+# Issues
+
+- [ ] Fix ceph provisioner permission error
+- [ ] Fix continue dev mcp problems

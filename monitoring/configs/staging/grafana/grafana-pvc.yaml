@@ -4,7 +4,7 @@ metadata:
   name: grafana-data-pvc
   namespace: monitoring
   annotations:
-    csi.volume.kubernetes.io/volume-handle: "grafana-data"
+    rbd.csi.ceph.com/imageName: "grafana-data"
 spec:
   accessModes:
     - ReadWriteOnce
