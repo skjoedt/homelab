@@ -51,11 +51,13 @@ dev-down:
 	@echo "Cluster deleted"
 
 staging-prepare: # to be replaced by argocd
+	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	@echo "Installing CRDs to $(CLUSTER_NAME)..."
 	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
 	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
 	helm upgrade --install cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
+	helm upgrade --install ceph-csi ./system/controllers/ceph-csi --namespace ceph --create-namespace -f ./system/controllers/ceph-csi/values.yaml
 	helm upgrade --install reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
 	helm upgrade --install external-dns ./system/controllers/external-dns --namespace external-dns --create-namespace -f ./system/controllers/external-dns/values.yaml
 	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml

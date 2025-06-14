@@ -16,13 +16,14 @@ Everything needed for speed of iteration and security
   - [x] Automated certificate management
   - [x] External secret management
   - [ ] Backup solution (3 copies, 2 seperate devices, 1 offsite)
-- [ ] Reclaimable CSI with cephfs or ceph rbd
+- [x] Reclaimable CSI with cephfs or ceph rbd
 
 # Production requirements
 
 Everything needed for family onboarding
 
 - [ ] NordVPN
+- [ ] Add ceph radosgw s3 endpoint
 - [ ] Applications
   - [ ] Immich
   - [ ] Budget Planning (tbd)
@@ -48,3 +49,8 @@ Things I might get to at some point
 - [ ] Bare-metal OS rolling upgrade
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
+
+# Issues
+
+- [ ] Fix ceph provisioner permission error
+- [ ] Fix continue dev mcp problems
