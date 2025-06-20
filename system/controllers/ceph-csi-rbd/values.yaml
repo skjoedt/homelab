@@ -1,18 +1,15 @@
+---
 ceph-csi-rbd:
   csiConfig:
     - clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
       monitors:
         - "10.0.0.11:6789"
-
   secret:
     create: false
     name: csi-rbd-secret
-
   provisioner:
     replicaCount: 1
-
   nodeplugin: {}
-
   storageClass:
     create: true
     name: ceph-rbd
@@ -21,4 +18,4 @@ ceph-csi-rbd:
     imageFeatures: layering,exclusive-lock,object-map,fast-diff
     reclaimPolicy: Retain
     provisionerSecret: csi-rbd-secret
-    provisionerSecretNamespace: ceph
+    provisionerSecretNamespace: ceph-csi-rbd

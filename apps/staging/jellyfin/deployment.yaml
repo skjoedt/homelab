@@ -1,8 +1,8 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jellyfin
-  namespace: arr
 spec:
   replicas: 1
   selector:
@@ -42,3 +42,8 @@ spec:
         - name: jellyfin-data
           persistentVolumeClaim:
             claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"

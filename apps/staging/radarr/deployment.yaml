@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+        app.kubernetes.io/name: radarr
+        app.kubernetes.io/instance: radarr
+    spec:
+      containers:
+        - name: radarr
+          image: ghcr.io/home-operations/radarr:5.26.1.10080@sha256:1c85411af158a269592b9ce2c90ec10a59528f3585844b832e38f710e0c89557  # yamllint disable-line rule:line-length
+          resources:
+            requests:
+              cpu: 10m
+              memory: 170Mi
+            limits:
+              memory: 400Mi
+          volumeMounts:
+            - name: radarr-config
+              mountPath: /config
+              subPath: radarr/config
+            - name: radarr-data
+              mountPath: /media/movies
+              subPath: movies
+      volumes:
+        - name: radarr-config
+          persistentVolumeClaim:
+            claimName: radarr-config-pvc
+        - name: radarr-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
