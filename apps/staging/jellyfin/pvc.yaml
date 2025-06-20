@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-data-pv
+  labels:
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/instance: jellyfin
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ceph-rbd
+  csi:
+    driver: rbd.csi.ceph.com
+    volumeHandle: jellyfin-data
+    volumeAttributes:
+      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      pool: kubernetes-staging
+      staticVolume: "true"
+    nodeStageSecretRef:
+      name: csi-rbd-secret
+      namespace: ceph
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-data-pvc
+  labels:
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/instance: jellyfin
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: ceph-rbd
+  volumeName: jellyfin-data-pv

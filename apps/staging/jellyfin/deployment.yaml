@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: arr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+        app.kubernetes.io/name: jellyfin
+        app.kubernetes.io/instance: jellyfin
+    spec:
+      containers:
+        - name: jellyfin
+          image: jellyfin/jellyfin:10.10.7
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "1Gi"
+            limits:
+              cpu: 3
+              memory: "5Gi"
+          volumeMounts:
+            - name: jellyfin-data
+              mountPath: /config
+              subPath: jellyfin/config
+            - name: jellyfin-data
+              mountPath: /media/movies
+              subPath: movies
+            - name: jellyfin-data
+              mountPath: /media/shows
+              subPath: shows
+      volumes:
+        - name: jellyfin-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
