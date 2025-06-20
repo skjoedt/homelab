@@ -5,4 +5,5 @@ namespace: monitoring
 resources:
   - ingress.yaml
   - ../../base/grafana
-  - grafana-pvc.yaml
+  - pvc.yaml
+  - secret.yaml
