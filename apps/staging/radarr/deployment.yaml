@@ -2,22 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: radarr
+  name: transmission
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: radarr
+      app: transmission
   template:
     metadata:
       labels:
-        app: radarr
-        app.kubernetes.io/name: radarr
-        app.kubernetes.io/instance: radarr
+        app: transmission
+        app.kubernetes.io/name: transmission
+        app.kubernetes.io/instance: transmission
     spec:
       containers:
-        - name: radarr
-          image: ghcr.io/home-operations/radarr:5.26.1.10080@sha256:1c85411af158a269592b9ce2c90ec10a59528f3585844b832e38f710e0c89557  # yamllint disable-line rule:line-length
+        - name: transmission
+          image: haugene/transmission-openvpn:v5.3.2
+          env:
+
           resources:
             requests:
               cpu: 10m
@@ -25,17 +27,17 @@ spec:
             limits:
               memory: 400Mi
           volumeMounts:
-            - name: radarr-config
+            - name: transmission-config
               mountPath: /config
-              subPath: radarr/config
-            - name: radarr-data
+              subPath: transmission/config
+            - name: transmission-data
               mountPath: /media/movies
               subPath: movies
       volumes:
-        - name: radarr-config
+        - name: transmission-config
           persistentVolumeClaim:
-            claimName: radarr-config-pvc
-        - name: radarr-data
+            claimName: transmission-config-pvc
+        - name: transmission-data
           persistentVolumeClaim:
             claimName: jellyfin-data-pvc
       securityContext:
