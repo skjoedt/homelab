@@ -30,7 +30,7 @@ spec:
           env:
             - name: PROTONVPN_SERVER
               value: "185.111.109.1"
-            - name: KILL_SWITCH
+            - name: KILL_SWITCH  # Tested `protonwire disconnect` disables transmission routing
               value: "1"
             - name: SKIP_DNS_CONFIG
               value: "1"
