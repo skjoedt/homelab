@@ -21,6 +21,10 @@ spec:
           env:
             - name: TZ
               value: Europe/Copenhagen
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
           resources:
             requests:
               cpu: "10m"
@@ -29,16 +33,19 @@ spec:
               cpu: 3
               memory: "5Gi"
           volumeMounts:
-            - name: jellyfin-data
+            - name: jellyfin-config
               mountPath: /config
               subPath: jellyfin/config
             - name: jellyfin-data
-              mountPath: /media/movies
-              subPath: movies
+              mountPath: /data/movies
+              subPath: media/movies
             - name: jellyfin-data
-              mountPath: /media/shows
-              subPath: shows
+              mountPath: /data/shows
+              subPath: media/shows
       volumes:
+        - name: jellyfin-config
+          persistentVolumeClaim:
+            claimName: jellyfin-config-pvc
         - name: jellyfin-data
           persistentVolumeClaim:
             claimName: jellyfin-data-pvc

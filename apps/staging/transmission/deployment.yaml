@@ -52,6 +52,15 @@ spec:
               mountPath: /tmp
         - name: transmission
           image: linuxserver/transmission:4.0.6
+          env:
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+            - name: TRANSMISSION_DOWNLOAD_DIR
+              value: /downloads
+            - name: TZ
+              value: Europe/Copenhagen
           resources:
             requests:
               cpu: 150m
@@ -66,11 +75,8 @@ spec:
               mountPath: /config
               subPath: transmission/config
             - name: transmission-data
-              mountPath: /media/shows
-              subPath: shows
-          env:
-            - name: TZ
-              value: Europe/Copenhagen
+              mountPath: /downloads
+              subPath: media/downloads
       volumes:
         - name: transmission-config
           persistentVolumeClaim:
