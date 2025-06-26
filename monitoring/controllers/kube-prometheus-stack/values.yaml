@@ -1,0 +1,24 @@
+---
+kube-prometheus-stack:
+  alertmanager:
+    enabled: true
+  grafana:
+    enabled: false
+  prometheus:
+    prometheusSpec:
+      podMonitorNamespaceSelector:
+        matchLabels:
+          podmonitorscrape: "true"
+      podMonitorSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      maximumStartupDurationSeconds: 60
+  kubeProxy:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeControllerManager:
+    enabled: true

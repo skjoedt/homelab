@@ -1,3 +1,6 @@
+# continue.dev
+.continue/*
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -38,3 +41,16 @@ override.tf.json
 terraform.rc
 
 .direnv/
+
+# Ignore helm chart builds
+**/charts/*
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml

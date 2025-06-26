@@ -1,0 +1,22 @@
+---
+config:
+  core.https_address: 0.0.0.0:443
+  core.trust_password: true
+networks: []
+storage_pools: []
+storage_volumes: []
+profiles:
+  - config: {}
+    description: Default LXD profile
+    devices: {}
+    name: default
+projects:
+  - config:
+      features.images: "true"
+      features.networks: "true"
+      features.networks.zones: "true"
+      features.profiles: "true"
+      features.storage.buckets: "true"
+      features.storage.volumes: "true"
+    description: Default LXD project
+    name: default

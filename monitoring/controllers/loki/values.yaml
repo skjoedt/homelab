@@ -1,0 +1,108 @@
+---
+loki:
+  deploymentMode: SingleBinary
+
+  rulesSelector:
+    enabled: true
+    type: configmap
+    selector:
+      matchLabels:
+        loki_rule: "true"
+
+  rulerConfig:
+    alertmanager_url: http://prometheus-stack-kube-prom-alertmanager.monitoring.svc:9093 # yamllint disable-line rule:line-length
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    ingester:
+      chunk_encoding: snappy
+    tracing:
+      enabled: true
+    querier:
+      max_concurrent: 4
+
+  # Minio for storage
+  minio:
+    enabled: true
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "256Mi"
+
+  singleBinary:
+    replicas: 1
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+
+  # Zero out replica counts of other deployment modes
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  ingester:
+    replicas: 0
+  querier:
+    replicas: 0
+  queryFrontend:
+    replicas: 0
+  queryScheduler:
+    replicas: 0
+  distributor:
+    replicas: 0
+  compactor:
+    replicas: 0
+  indexGateway:
+    replicas: 0
+  bloomCompactor:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
+
+  # Disable memcached for chunks
+  chunksCache:
+    enabled: false
+    replicas: 0
+
+  # Disable memcached for results
+  resultsCache:
+    enabled: false
+    replicas: 0
+
+  # Explicitly disable other known memcached components from the chart
+  memcachedExporter:
+    enabled: false
+  memcachedFrontend:
+    enabled: false
+  memcachedIndexQueries:
+    enabled: false
+  memcachedIndexWrites:
+    enabled: false
+
+  # Gateway configuration
+  gateway:
+    enabled: true
+    replicas: 1
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"

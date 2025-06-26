@@ -1,0 +1,31 @@
+---
+grafana:
+  adminUser: admin
+  adminPassword: admin
+
+  env:
+    # This sets the secret_key for encrypting/decrypting data in the database
+    GF_SECURITY_SECRET_KEY:
+      valueFrom:
+        secretKeyRef:
+          name: grafana-secret-key
+          key: secret-key
+
+  sidecar:
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      labelValue: "1"
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      # Allow discovery in all namespaces for dashboards
+      searchNamespace: ALL
+      provider:
+        allowUiUpdates: true
+
+  persistence:
+    enabled: true
+    type: pvc
+    existingClaim: grafana-data-pvc

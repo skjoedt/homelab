@@ -3,10 +3,21 @@
 # Exit on error
 set -e
 
+# Check for required arguments
+if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 <controller_ip> <controller_vip> <worker_ip1> [worker_ip2] [worker_ipN]..."
+    exit 1
+fi
+
+# Parse arguments
+CONTROL_PLANE="$1"
+CONTROL_PLANE_VIP="$2"
+# Shift away the first two arguments to get worker nodes
+shift 2
+# Remaining arguments are worker nodes
+WORKER_NODES=("$@")
+
 # Configuration
-CONTROL_PLANE="10.0.0.11"
-WORKER_NODES=("10.0.0.12" "10.0.0.13")
-CONTROL_PLANE_VIP="10.0.0.10"
 SSH_USER="skjoedt"
 SSH_KEY="${HOME}/.ssh/id_rsa"
 K3S_VERSION="v1.31.2+k3s1"
@@ -28,7 +39,7 @@ k3sup install \
     --user "${SSH_USER}" \
     --ssh-key  "${SSH_KEY}" \
     --k3s-version "${K3S_VERSION}" \
-    --k3s-extra-args "--disable traefik --disable servicelb --tls-san ${CONTROL_PLANE_VIP}" \
+    --k3s-extra-args "--disable traefik --disable servicelb --tls-san ${CONTROL_PLANE_VIP} --kubelet-arg allowed-unsafe-sysctls=net.ipv4.conf.all.rp_filter,net.ipv6.conf.all.disable_ipv6" \
     --context homelab \
     --merge \
     --local-path "$HOME"/.kube/config
@@ -41,6 +52,7 @@ for worker in "${WORKER_NODES[@]}"; do
         --user "${SSH_USER}" \
         --ssh-key  "${SSH_KEY}" \
         --server-ip "${CONTROL_PLANE}" \
+        --k3s-extra-args "--kubelet-arg allowed-unsafe-sysctls=net.ipv4.conf.all.rp_filter,net.ipv6.conf.all.disable_ipv6" \
         --k3s-version "${K3S_VERSION}"
 done
 

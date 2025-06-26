@@ -1,0 +1,73 @@
+---
+argo-cd:
+  global:
+    domain: argocd.staging.fanen.dk
+  configs:
+    params:
+      server.insecure: true
+      controller.diff.server.side: true
+    cm:
+      resource.ignoreResourceUpdatesEnabled: true
+      resource.customizations.ignoreResourceUpdates.all: |
+        jsonPointers:
+          - /status
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+      tls: true
+    metrics: &metrics
+      enabled: true
+      serviceMonitor:
+        enabled: true
+  dex:
+    enabled: false
+  controller:
+    metrics: *metrics
+  repoServer:
+    metrics: *metrics
+  redis:
+    metrics: *metrics
+argocd-apps:
+  applicationsets:
+    root:
+      namespace: argocd
+      generators:
+        - git:
+            repoURL: &repoURL https://github.com/skjoedt/homelab
+            revision: &revision main
+            directories:
+              - path: argocd-prod
+              - path: system/controllers/*
+              - path: system/configs/production/*
+              - path: monitoring/controllers/*
+              - path: monitoring/configs/production/*
+              - path: apps/production/*
+      template:
+        metadata:
+          name: '{{path.basename}}'
+        spec:
+          destination:
+            name: in-cluster
+            namespace: '{{path.basename}}'
+          project: default
+          source:
+            repoURL: *repoURL
+            path: '{{path}}'
+            targetRevision: *revision
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            retry:
+              limit: 10
+              backoff:
+                duration: 1m
+                factor: 2
+                maxDuration: 16m
+            syncOptions:
+              - CreateNamespace=true
+              - ApplyOutOfSyncOnly=true
+              - ServerSideApply=true

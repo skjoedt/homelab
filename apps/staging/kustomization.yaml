@@ -2,4 +2,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - nginx
+  - homepage
+  - jellyfin
+  - prowlarr
+  - radarr
+  - sonarr
+  - transmission

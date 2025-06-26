@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+        app.kubernetes.io/name: jellyfin
+        app.kubernetes.io/instance: jellyfin
+    spec:
+      containers:
+        - name: jellyfin
+          image: jellyfin/jellyfin:10.10.7
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "1Gi"
+            limits:
+              cpu: 3
+              memory: "5Gi"
+          volumeMounts:
+            - name: jellyfin-config
+              mountPath: /config
+              subPath: jellyfin/config
+            - name: jellyfin-data
+              mountPath: /data/movies
+              subPath: media/movies
+            - name: jellyfin-data
+              mountPath: /data/shows
+              subPath: media/shows
+      volumes:
+        - name: jellyfin-config
+          persistentVolumeClaim:
+            claimName: jellyfin-config-pvc
+        - name: jellyfin-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
