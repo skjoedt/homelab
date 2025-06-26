@@ -17,16 +17,39 @@ Development is on my local Macbook Pro M1.
 
 # Getting started
 
-1. Bootstrap the cluster
-2. Load it with AWS access key secret `aws-creds`
+1. Provision metal
 
-```
-kubectl create secret generic aws-creds -n external-secrets \
-  --from-literal=AWS_ACCESS_KEY_ID=XXX \
-  --from-literal=AWS_SECRET_ACCESS_KEY=XXX \
-  --from-literal=VAULT_SEAL_TYPE=awskms \
-  --from-literal=VAULT_AWSKMS_SEAL_KEY_ID=XXX
-```
+    ```bash
+    cd metal/lxc/dragon-1 && terraform apply
+    ```
+
+2. Bootstrap the cluster
+
+    ```bash
+    make bootstrap-staging
+    ```
+
+3. Install external secrets
+
+    ```bash
+    make prepare-staging
+    ```
+
+4. Load it with AWS access key secret `aws-creds`
+
+    ```bash
+    kubectl create secret generic aws-creds -n external-secrets \
+    --from-literal=AWS_ACCESS_KEY_ID=XXX \
+    --from-literal=AWS_SECRET_ACCESS_KEY=XXX \
+    --from-literal=VAULT_SEAL_TYPE=awskms \
+    --from-literal=VAULT_AWSKMS_SEAL_KEY_ID=XXX
+    ```
+
+5. Provision resources
+
+    ```bash
+    make prepare-staging
+    ```
 
 # Cluster provisioning
 

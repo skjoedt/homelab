@@ -50,7 +50,15 @@ dev-down:
 	@k3d cluster delete $(BRANCH_NAME_SLUG)
 	@echo "Cluster deleted"
 
-staging-prepare: # to be replaced by argocd
+bootstrap-staging:
+	@echo "Bootstrapping k3s on production"
+	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
+
+bootstrap-production:
+	@echo "Bootstrapping k3s on production"
+	bash metal/bootstrap.sh 10.0.0.31 10.0.0.30 10.0.0.32 10.0.0.33
+
+prepare-staging: # to be replaced by argocd
 	@echo "Installing CRDs to $(CLUSTER_NAME)..."
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
@@ -69,27 +77,3 @@ staging-prepare: # to be replaced by argocd
 	kubectl apply -k ./system/configs/staging
 	kubectl apply -k ./monitoring/configs/staging
 	kubectl apply -k ./apps/staging
-
-cluster-up:
-	@echo "Deploying k3s cluster nodes with lxc (terraform)"
-	cd metal/lxc && terraform apply
-	sleep 15
-
-cluster-down:
-	@echo "Destroying k3s cluster nodes"
-	lxc remote switch beholder-1
-	lxc image list -f csv -c f | xargs -I {} lxc image delete {}
-	cd metal/lxc/beholder-1 && terraform destroy
-
-bootstrap-production:
-	@echo "Bootstrapping k3s on production"
-	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
-
-bootstrap-staging:
-	@echo "Bootstrapping k3s on production"
-	bash metal/bootstrap.sh 10.0.0.31 10.0.0.30 10.0.0.32 10.0.0.33
-
-SYSTEM_APPS = cert-manager kube-vip metallb
-
-helm:
-	helm upgrade --install $(app) ./$(type)/$(app) --namespace $(app) --create-namespace -f ./$(type)/$(app)/values.yaml
