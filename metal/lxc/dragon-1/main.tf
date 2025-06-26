@@ -1,9 +1,3 @@
-variable "lxd_password" {
-  type        = string
-  sensitive   = true
-  description = "LXD trust password"
-}
-
 terraform {
   backend "s3" {
     bucket = "csh-terraform"
@@ -26,10 +20,9 @@ provider "lxd" {
   accept_remote_certificate    = true
 
   remote {
-    name     = "dragon-1"
-    address  = "https://10.0.0.11:443"
-    password = var.lxd_password
-    default  = true
+    name    = "dragon-1"
+    address = "https://10.0.0.11:443"
+    default = true
   }
 }
 

@@ -17,7 +17,7 @@ spec:
       clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
       pool: kubernetes-staging
       staticVolume: "true"
-      rootPath: /volumes/jellyfin
+      rootPath: /jellyfin
       fsName: "cephfs"
     nodeStageSecretRef:
       name: csi-cephfs-secret

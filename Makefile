@@ -51,12 +51,12 @@ dev-down:
 	@echo "Cluster deleted"
 
 staging-prepare: # to be replaced by argocd
-	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	@echo "Installing CRDs to $(CLUSTER_NAME)..."
+	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
+	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
 	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
 	helm upgrade --install cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
-	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install ceph-csi-rbd ./system/controllers/ceph-csi-rbd --namespace ceph-csi-rbd --create-namespace -f ./system/controllers/ceph-csi-rbd/values.yaml
 	helm upgrade --install ceph-csi-cephfs ./system/controllers/ceph-csi-cephfs --namespace ceph-csi-cephfs --create-namespace -f ./system/controllers/ceph-csi-cephfs/values.yaml
 	helm upgrade --install reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
