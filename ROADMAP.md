@@ -51,4 +51,9 @@ Things I might get to at some point
 - [ ] Measure power consumption (send to grafana?)
 - [ ] Install protonvpn on router
 
-# Issues
+# Todo
+
+- [ ] ingress patch from `staging.fanen.dk` to `fanen.dk`
+- [ ] pvc patch (rbd using pool name `kubernets` rather than `kubernetes-staging`)
+- [x] certificates
+- [ ] external secret (secret names without `*-staging`)
