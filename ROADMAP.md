@@ -22,12 +22,12 @@ Everything needed for speed of iteration and security
 
 Everything needed for family onboarding
 
-- [ ] NordVPN
+- [x] ProtonVPN
 - [ ] Add ceph radosgw s3 endpoint
 - [ ] Applications
   - [ ] Immich
   - [ ] Budget Planning (tbd)
-  - [ ] Jellyfin
+  - [x] Jellyfin
 - [ ] Adblock DNS with failover on home network
 - [ ] Observability
   - [ ] Alert notifications
@@ -52,6 +52,3 @@ Things I might get to at some point
 - [ ] Install protonvpn on router
 
 # Issues
-
-- [ ] Fix ceph provisioner permission error
-- [ ] Fix continue dev mcp problems
