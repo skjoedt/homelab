@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+        app.kubernetes.io/name: transmission
+        app.kubernetes.io/instance: transmission
+    spec:
+      containers:
+        - name: protonwire
+          image: ghcr.io/tprasadtp/protonwire:latest
+          resources:
+            requests:
+              cpu: 150m
+              memory: 170Mi
+            limits:
+              memory: 700Mi
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          env:
+            - name: PROTONVPN_SERVER
+              value: "185.111.109.1"
+            - name: KILL_SWITCH  # Tested `protonwire disconnect` disables transmission routing
+              value: "1"
+            - name: SKIP_DNS_CONFIG
+              value: "1"
+            - name: IPCHECK_INTERVAL
+              value: "0"
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: protonvpn-wireguard-secret
+                  key: PrivateKey
+          ports:
+            - name: peer-tcp
+              containerPort: 51413
+            - name: peer-udp
+              containerPort: 51413
+              protocol: UDP
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+        - name: transmission
+          image: linuxserver/transmission:4.0.6
+          env:
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+            - name: TRANSMISSION_DOWNLOAD_DIR
+              value: /downloads
+            - name: TZ
+              value: Europe/Copenhagen
+          resources:
+            requests:
+              cpu: 150m
+              memory: 170Mi
+            limits:
+              memory: 700Mi
+          securityContext:
+            runAsUser: 995
+            runAsGroup: 501
+          volumeMounts:
+            - name: transmission-config
+              mountPath: /config
+              subPath: transmission/config
+            - name: transmission-data
+              mountPath: /downloads
+              subPath: media/downloads
+      volumes:
+        - name: transmission-config
+          persistentVolumeClaim:
+            claimName: transmission-config-pvc
+        - name: transmission-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
+      securityContext:
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
+        sysctls:
+          - name: net.ipv4.conf.all.rp_filter
+            value: "2"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "1"

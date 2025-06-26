@@ -9,6 +9,18 @@
         href: https://transmission.fanen.dk
         description: Bittorrent client
         icon: transmission.svg
+    - Prowlarr:
+        href: https://prowlarr.fanen.dk
+        description: Indexer management
+        icon: prowlarr.svg
+    - Radarr:
+        href: https://radarr.fanen.dk
+        description: Movie tracker
+        icon: radarr.svg
+    - Sonarr:
+        href: https://sonarr.fanen.dk
+        description: TV show tracker
+        icon: sonarr.svg
 - Development:
     - ArgoCD:
         href: https://argocd.fanen.dk

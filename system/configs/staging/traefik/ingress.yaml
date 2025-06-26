@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`*host`)
+    - match: Host(`traefik.staging.fanen.dk`)
       kind: Rule
       middlewares:
         - name: traefik-dashboard-basicauth

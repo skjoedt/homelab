@@ -2,17 +2,17 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: grafana-data-pv
+  name: transmission-config-pv
 spec:
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 10Gi
+    storage: 1Gi
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ceph-rbd
   csi:
     driver: rbd.csi.ceph.com
-    volumeHandle: grafana-data
+    volumeHandle: transmission-config
     volumeAttributes:
       clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
       pool: kubernetes-staging
@@ -24,12 +24,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana-data-pvc
+  name: transmission-config-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
   storageClassName: ceph-rbd
-  volumeName: grafana-data-pv
+  volumeName: transmission-config-pv
