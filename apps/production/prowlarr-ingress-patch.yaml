@@ -1,0 +1,11 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prowlarr
+spec:
+  tls:
+    - hosts:
+        - &host prowlarr.fanen.dk
+  rules:
+    - host: *host

@@ -53,7 +53,10 @@ Things I might get to at some point
 
 # Todo
 
-- [ ] ingress patch from `staging.fanen.dk` to `fanen.dk`
-- [ ] pvc patch (rbd using pool name `kubernets` rather than `kubernetes-staging`)
-- [x] certificates
-- [ ] external secret (secret names without `*-staging`)
+- [ ] Patch all ingress.yaml from `staging.fanen.dk` to `fanen.dk`
+
+- [ ] Patch all pvc.yaml from rbd pool name `kubernetes-staging` to `kubernetes`). Also refactor the generic  pool attribute.
+
+- [x] Create the  and   and use it actively.
+
+- [ ] external secret (secret names without `*-staging`) such as  or
