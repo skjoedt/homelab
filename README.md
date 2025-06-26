@@ -10,8 +10,8 @@ The cluster is not running high availability as I only have one node for staging
 
 | Device                   | Num | OS Disk | Data Disk         | RAM   | CPU            | Function   |
 | ------------------------ | --- | ------- | ----------------- | ----- | -------------- | ---------- |
-| Intel NUC NUC8i7BEH      | 1   | 223.6G  | 3x IronWolf 10 TB | 8 GB  | Intel i7-8559U | staging    |
-| Dell Precision Tower7810 | 1   | 512G    | -                 | 64 GB | Xeon e5-2620   | production |
+| Intel NUC NUC8i7BEH      | 1   | 223.6G  | -                 | 8 GB  | Intel i7-8559U | staging    |
+| Dell Precision Tower7810 | 1   | 512G    | 3x IronWolf 10 TB | 64 GB | Xeon e5-2620   | production |
 
 Development is on my local Macbook Pro M1.
 
