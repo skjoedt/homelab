@@ -15,7 +15,6 @@ spec:
     volumeHandle: jellyfin-data
     volumeAttributes:
       clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-      pool: kubernetes-staging
       staticVolume: "true"
       rootPath: /jellyfin
       fsName: "cephfs"

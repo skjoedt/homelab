@@ -9,3 +9,4 @@ patches:
   - alertmanager/ingress-patch.yaml
   - alloy/ingress-patch.yaml
   - grafana/ingress-patch.yaml
+  - grafana/pvc-patch.yaml

@@ -5,7 +5,7 @@ globalArguments:
 
 service:
   spec:
-    loadBalancerIP: "10.0.0.50"
+    loadBalancerIP: "10.0.0.50" # production
 
 ports:
   web:

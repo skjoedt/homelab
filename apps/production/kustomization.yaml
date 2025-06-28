@@ -7,8 +7,13 @@ resources:
 
 patches:
   - prowlarr/ingress-patch.yaml
+  - prowlarr/pvc-patch.yaml
   - homepage/ingress-patch.yaml
   - jellyfin/ingress-patch.yaml
+  - jellyfin/pvc-patch.yaml
   - radarr/ingress-patch.yaml
+  - radarr/pvc-patch.yaml
   - transmission/ingress-patch.yaml
+  - transmission/pvc-patch.yaml
   - sonarr/ingress-patch.yaml
+  - sonarr/pvc-patch.yaml
