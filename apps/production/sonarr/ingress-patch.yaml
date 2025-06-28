@@ -2,10 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyfin
+  name: alloy
+  namespace: monitoring
 spec:
   tls:
     - hosts:
-        - &host jellyfin.fanen.dk
-  rules:
-    - host: *host
+        - &host sonarr.fanen.dk

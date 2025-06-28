@@ -50,11 +50,11 @@ dev-down:
 	@k3d cluster delete $(BRANCH_NAME_SLUG)
 	@echo "Cluster deleted"
 
-bootstrap-staging:
+bootstrap-production:
 	@echo "Bootstrapping k3s on production"
 	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
 
-bootstrap-production:
+bootstrap-staging:
 	@echo "Bootstrapping k3s on production"
 	bash metal/bootstrap.sh 10.0.0.31 10.0.0.30 10.0.0.32 10.0.0.33
 

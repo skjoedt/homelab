@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ../staging
 
-patchesStrategicMerge:
-  - alloy-ingress-patch.yaml
-  - alertmanager-ingress-patch.yaml
-  - grafana-ingress-patch.yaml
+patches:
+  - alertmanager/ingress-patch.yaml
+  - alloy/ingress-patch.yaml
+  - grafana/ingress-patch.yaml

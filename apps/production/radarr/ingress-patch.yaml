@@ -3,9 +3,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: alloy
+  namespace: monitoring
 spec:
   tls:
     - hosts:
-        - &host alloy.fanen.dk
-  rules:
-    - host: *host
+        - &host radarr.fanen.dk

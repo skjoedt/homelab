@@ -5,10 +5,10 @@ kind: Kustomization
 resources:
   - ../staging
 
-patchesStrategicMerge:
-  - prowlarr-ingress-patch.yaml
-  - homepage-ingress-patch.yaml
-  - jellyfin-ingress-patch.yaml
-  - radarr-ingress-patch.yaml
-  - transmission-ingress-patch.yaml
-  - sonarr-ingress-patch.yaml
+patches:
+  - prowlarr/ingress-patch.yaml
+  - homepage/ingress-patch.yaml
+  - jellyfin/ingress-patch.yaml
+  - radarr/ingress-patch.yaml
+  - transmission/ingress-patch.yaml
+  - sonarr/ingress-patch.yaml

@@ -2,10 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sonarr
+  name: alloy
+  namespace: monitoring
 spec:
   tls:
     - hosts:
-        - &host sonarr.fanen.dk
-  rules:
-    - host: *host
+        - &host alerts.fanen.dk

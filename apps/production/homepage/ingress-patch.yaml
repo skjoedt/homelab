@@ -2,10 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prowlarr
+  name: alloy
+  namespace: monitoring
 spec:
   tls:
     - hosts:
-        - &host prowlarr.fanen.dk
-  rules:
-    - host: *host
+        - &host fanen.dk

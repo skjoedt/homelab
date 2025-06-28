@@ -2,10 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: alertmanager
+  name: alloy
+  namespace: monitoring
 spec:
   tls:
     - hosts:
-        - &host alertmanager.fanen.dk
-  rules:
-    - host: *host
+        - &host prowlarr.fanen.dk

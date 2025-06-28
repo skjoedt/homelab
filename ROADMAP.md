@@ -50,13 +50,12 @@ Things I might get to at some point
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
 - [ ] Install protonvpn on router
+- [ ] Have production patch base/ instead of staging/
 
 # Todo
 
-- [ ] Patch all ingress.yaml from `staging.fanen.dk` to `fanen.dk`
-
+- [x] Patch all ingress.yaml from `staging.fanen.dk` to `fanen.dk`
 - [ ] Patch all pvc.yaml from rbd pool name `kubernetes-staging` to `kubernetes`). Also refactor the generic  pool attribute.
-
 - [x] Create the  and   and use it actively.
-
 - [ ] external secret (secret names without `*-staging`) such as  or
+- [ ] Fix kube-vip and traefik controller hardcoded IPs

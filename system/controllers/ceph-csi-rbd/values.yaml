@@ -11,11 +11,4 @@ ceph-csi-rbd:
     replicaCount: 1
   nodeplugin: {}
   storageClass:
-    create: true
-    name: ceph-rbd
-    clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-    pool: kubernetes-staging
-    imageFeatures: layering,exclusive-lock,object-map,fast-diff
-    reclaimPolicy: Retain
-    provisionerSecret: csi-rbd-secret
-    provisionerSecretNamespace: ceph-csi-rbd
+    create: false
