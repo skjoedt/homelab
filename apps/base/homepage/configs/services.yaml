@@ -5,10 +5,10 @@
         description: Media system (movies, music, etc.)
         icon: jellyfin.svg
 - Management:
-    - Transmission:
-        href: https://transmission.fanen.dk
+    - Qbittorrent:
+        href: https://qbittorrent.fanen.dk
         description: Bittorrent client
-        icon: transmission.svg
+        icon: qbittorrent.svg
     - Prowlarr:
         href: https://prowlarr.fanen.dk
         description: Indexer management
