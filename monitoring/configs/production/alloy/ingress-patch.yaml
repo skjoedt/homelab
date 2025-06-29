@@ -8,3 +8,15 @@ spec:
   tls:
     - hosts:
         - &host alloy.fanen.dk
+      secretName: alloy-fanen-dk-tls
+  rules:
+    - host: *host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: alloy
+                port:
+                  name: http-metrics

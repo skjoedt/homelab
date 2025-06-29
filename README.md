@@ -53,11 +53,11 @@ Development is on my local Macbook Pro M1.
 
 # Cluster provisioning
 
-| Type       | K8s Distribution | Control Plane | Deployment |
-| ---------- | ---------------- | ------------- | ---------- |
-| testing    | k3d (wrapper)    | localhost     | Kustomize  |
-| staging    | k3sup (wrapper)  | 10.0.0.50/24  | TBD        |
-| production | k3s              | N/A           | TBD        |
+| Type       | K8s Distribution | Control Plane | Load Balancer | Deployment |
+| ---------- | ---------------- | ------------- | ------------- | ---------- |
+| testing    | k3d (wrapper)    | localhost     | localhost     | Kustomize  |
+| staging    | k3sup (wrapper)  | 10.0.0.20     | 10.0.0.70     | Kustomize  |
+| production | k3s              | 10.0.0.30     | 10.0.0.50     | ArgoCD     |
 
 # Endpoints
 

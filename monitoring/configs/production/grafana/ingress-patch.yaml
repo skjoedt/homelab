@@ -2,9 +2,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: alloy
+  name: grafana
   namespace: monitoring
 spec:
   tls:
     - hosts:
         - &host grafana.fanen.dk
+      secretName: grafana-fanen-dk-tls
+  rules:
+    - host: *host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  name: service

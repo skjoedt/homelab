@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - &host alloy.staging.fanen.dk
-      secretName: fanen-dk-tls
+      secretName: alloy-fanen-dk-tls
   rules:
     - host: *host
       http:

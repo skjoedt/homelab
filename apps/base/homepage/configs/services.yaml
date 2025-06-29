@@ -31,3 +31,11 @@
         href: https://grafana.fanen.dk
         description: Observability dashboards
         icon: grafana.svg
+    - Alloy:
+        href: https://alloy.fanen.dk
+        description: Logging dashboard
+        icon: alloy.svg
+    - Alerts:
+        href: https://alerts.fanen.dk
+        description: Alert Managers
+        icon: alertmanager.svg

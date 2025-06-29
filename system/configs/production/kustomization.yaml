@@ -5,8 +5,8 @@ resources:
   - ../staging
 
 patches:
-  - ceph/patch-credentials.yaml
-  - cert-manager/patch-issuer.yaml
-  - cert-manager/patch-certificate.yaml
-  - metallb/patch-layer2-config.yaml
-  - traefik/patch-ingress.yaml
+  - path: ceph/patch-credentials.yaml
+  - path: cert-manager/patch-issuer.yaml
+  - path: cert-manager/patch-certificate.yaml
+  - path: metallb/patch-layer2-config.yaml
+  - path: traefik/patch-ingress.yaml

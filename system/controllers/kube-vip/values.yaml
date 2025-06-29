@@ -1,7 +1,7 @@
 ---
 # Control plane VIP configuration
 config:
-  address: ""
+  address: "10.0.0.20"
 
 # Core environment configuration
 env:

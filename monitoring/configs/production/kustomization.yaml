@@ -6,7 +6,7 @@ resources:
   - ../staging
 
 patches:
-  - alertmanager/ingress-patch.yaml
-  - alloy/ingress-patch.yaml
-  - grafana/ingress-patch.yaml
-  - grafana/pvc-patch.yaml
+  - path: alertmanager/ingress-patch.yaml
+  - path: alloy/ingress-patch.yaml
+  - path: grafana/ingress-patch.yaml
+  - path: grafana/pvc-patch.yaml

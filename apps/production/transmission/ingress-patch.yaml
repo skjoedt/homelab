@@ -2,9 +2,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: alloy
-  namespace: monitoring
+  name: transmission
+  namespace: arr
 spec:
   tls:
     - hosts:
         - &host transmission.fanen.dk
+      secretName: transmission-fanen-dk-tls
+  rules:
+    - host: *host
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: transmission
+                port:
+                  name: http

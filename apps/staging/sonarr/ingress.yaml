@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - &host sonarr.staging.fanen.dk
-      secretName: fanen-dk-tls
+      secretName: sonarr-fanen-dk-tls
   rules:
     - host: *host
       http:

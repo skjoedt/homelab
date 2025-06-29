@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - &host transmission.staging.fanen.dk
-      secretName: fanen-dk-tls
+      secretName: transmission-fanen-dk-tls
   rules:
     - host: *host
       http:
