@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - &host radarr.staging.fanen.dk
-      secretName: fanen-dk-staging-tls
+      secretName: radarr-fanen-dk-tls
   rules:
     - host: *host
       http:

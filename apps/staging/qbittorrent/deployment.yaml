@@ -1,0 +1,100 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+        app.kubernetes.io/name: qbittorrent
+        app.kubernetes.io/instance: qbittorrent
+    spec:
+      containers:
+        - name: gluetun
+          image: qmcgaw/gluetun:v3.40
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+            privileged: true
+          ports:
+            - containerPort: 8085
+              name: qbittorrent-ui
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: "protonvpn"
+            - name: VPN_TYPE
+              value: "wireguard"
+            - name: WIREGUARD_PUBLIC_KEY
+              value: "+6VseaiwdWLFSlaTgwafQM9D9DsT1aanqywtgf7XdC8="
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: protonvpn-wireguard-secret
+                  key: PrivateKey
+            - name: WIREGUARD_ENDPOINT_IP
+              value: "185.111.109.1"
+            # - name: WIREGUARD_ENDPOINT_PORT
+            #   value: "51820"
+            - name: WIREGUARD_ADDRESSES
+              value: "10.2.0.2/32"
+            - name: VPN_PORT_FORWARDING
+              value: "on"
+            - name: VPN_PORT_FORWARDING_PROVIDER
+              value: "protonvpn"
+            - name: PORT_FORWARD_ONLY
+              value: "on"
+            - name: VPN_PORT_FORWARDING_UP_COMMAND
+              value: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8085/api/v2/app/setPreferences 2>&1'  # yamllint disable-line rule:line-length
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:5.1.0
+          env:
+            - name: WEBUI_PORT
+              value: "8085"
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+            - name: TZ
+              value: Europe/Copenhagen
+          volumeMounts:
+            - name: qbittorrent-config
+              mountPath: /config
+            - name: qbittorrent-data
+              mountPath: /downloads
+              subPath: media/downloads
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: qbittorrent-config
+          persistentVolumeClaim:
+            claimName: qbittorrent-config-pvc
+        - name: qbittorrent-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
+        sysctls:
+          - name: net.ipv4.conf.all.rp_filter
+            value: "2"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "1"

@@ -4,13 +4,10 @@ kind: Ingress
 metadata:
   name: alloy
   namespace: monitoring
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: traefik
   tls:
     - hosts:
-        - &host alloy.staging.fanen.dk
+        - &host alloy.fanen.dk
       secretName: alloy-fanen-dk-tls
   rules:
     - host: *host

@@ -33,7 +33,7 @@ dev-up: check-deps
 
 # Install CRDs
 dev-prepare:
-	@echo "Installing CRDs to $(CLUSTER_NAME)..."
+	@echo "Installing CRDs..."
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
 	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
@@ -50,16 +50,36 @@ dev-down:
 	@k3d cluster delete $(BRANCH_NAME_SLUG)
 	@echo "Cluster deleted"
 
-bootstrap-staging:
+bootstrap-production:
 	@echo "Bootstrapping k3s on production"
 	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
 
-bootstrap-production:
+bootstrap-staging:
 	@echo "Bootstrapping k3s on production"
 	bash metal/bootstrap.sh 10.0.0.31 10.0.0.30 10.0.0.32 10.0.0.33
 
-prepare-staging: # to be replaced by argocd
-	@echo "Installing CRDs to $(CLUSTER_NAME)..."
+prepare-staging:
+	@echo "Installing CRDs..."
+	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
+	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
+	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml --set config.address="10.0.0.30"
+	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
+	helm upgrade --install cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
+	helm upgrade --install ceph-csi-rbd ./system/controllers/ceph-csi-rbd --namespace ceph-csi-rbd --create-namespace -f ./system/controllers/ceph-csi-rbd/values.yaml
+	helm upgrade --install ceph-csi-cephfs ./system/controllers/ceph-csi-cephfs --namespace ceph-csi-cephfs --create-namespace -f ./system/controllers/ceph-csi-cephfs/values.yaml
+	helm upgrade --install reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
+	helm upgrade --install external-dns ./system/controllers/external-dns --namespace external-dns --create-namespace -f ./system/controllers/external-dns/values.yaml
+	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml --set service.spec.loadBalancerIP="10.0.0.70"
+	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
+	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
+	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
+	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
+	kubectl apply -k ./system/configs/staging
+	kubectl apply -k ./monitoring/configs/staging
+	kubectl apply -k ./apps/staging
+
+prepare-production: # to be replaced by argocd
+	@echo "Installing CRDs..."
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
@@ -74,6 +94,6 @@ prepare-staging: # to be replaced by argocd
 	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
 	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
 	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
-	kubectl apply -k ./system/configs/staging
-	kubectl apply -k ./monitoring/configs/staging
-	kubectl apply -k ./apps/staging
+	kubectl apply -k ./system/configs/production
+	kubectl apply -k ./monitoring/configs/production
+	kubectl apply -k ./apps/production

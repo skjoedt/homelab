@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-data-pv
+  namespace: arr
+spec:
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    volumeAttributes:
+      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      staticVolume: "true"
+      rootPath: /jellyfin
+      fsName: "cephfs"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-config-pv
+  namespace: arr
+spec:
+  csi:
+    volumeAttributes:
+      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      pool: kubernetes

@@ -2,15 +2,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyfin
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
+  name: sonarr
+  namespace: arr
 spec:
-  ingressClassName: traefik
   tls:
     - hosts:
-        - &host jellyfin.staging.fanen.dk
-      secretName: jellyfin-fanen-dk-tls
+        - &host sonarr.fanen.dk
+      secretName: sonarr-fanen-dk-tls
   rules:
     - host: *host
       http:
@@ -19,6 +17,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: jellyfin
+                name: sonarr
                 port:
                   name: http

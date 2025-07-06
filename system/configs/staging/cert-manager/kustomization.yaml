@@ -4,5 +4,5 @@ kind: Kustomization
 namespace: cert-manager
 resources:
   - ../../base/cert-manager
-  - fanen.dk.yaml
+  - certificate.yaml
   - issuer.yaml

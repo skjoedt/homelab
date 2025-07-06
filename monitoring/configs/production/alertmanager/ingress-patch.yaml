@@ -2,16 +2,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: alloy
+  name: alertmanager
   namespace: monitoring
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: traefik
   tls:
     - hosts:
-        - &host alloy.staging.fanen.dk
-      secretName: alloy-fanen-dk-tls
+        - &host alerts.fanen.dk
+      secretName: alerts-fanen-dk-tls
   rules:
     - host: *host
       http:
@@ -20,6 +17,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: alloy
+                name: kube-prometheus-stack-alertmanager
                 port:
-                  name: http-metrics
+                  name: http-web

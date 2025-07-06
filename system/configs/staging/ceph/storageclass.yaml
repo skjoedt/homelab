@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ceph-rbd
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+  pool: kubernetes-staging
+  imageFeatures: layering,exclusive-lock,object-map,fast-diff
+  csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi-rbd
+  csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: ceph-csi-rbd
+  csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: ceph-csi-rbd
+reclaimPolicy: Retain
+allowVolumeExpansion: true

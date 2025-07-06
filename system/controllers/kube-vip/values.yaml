@@ -1,7 +1,7 @@
 ---
 # Control plane VIP configuration
 config:
-  address: "10.0.0.10" # TODO: Bring out into an environment
+  address: "10.0.0.20"
 
 # Core environment configuration
 env:

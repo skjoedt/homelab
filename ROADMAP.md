@@ -50,5 +50,4 @@ Things I might get to at some point
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
 - [ ] Install protonvpn on router
-
-# Issues
+- [ ] Have production patch base/ instead of staging/
