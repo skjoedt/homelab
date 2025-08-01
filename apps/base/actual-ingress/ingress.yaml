@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: actual
+  namespace: actual
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: budget.traefik.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: actual
+                port:
+                  name: http-actual

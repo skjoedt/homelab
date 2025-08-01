@@ -33,7 +33,7 @@ Everything needed for family onboarding
   - [ ] Alert notifications
   - [ ] More dashboards and alert rules
 - [ ] SSO
-- [ ] Expose services to the internet securely with Wireguard
+- [x] Expose services to the internet securely with Wireguard
 - [ ] Ceph exposure
   - [ ] Connect ceph dashboard to traefik
   - [ ] Send ceph logs and node exporters to grafana
