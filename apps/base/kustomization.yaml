@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - homepage
   - homepage-ingress
-  - jellyfin
+  - actual

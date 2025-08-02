@@ -33,6 +33,7 @@ dev-up: check-deps
 
 # Install CRDs
 dev-prepare:
+	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 	@echo "Installing CRDs..."
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
