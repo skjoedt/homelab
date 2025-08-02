@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actual
+  namespace: actual
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actual
+  template:
+    metadata:
+      labels:
+        app: actual
+        app.kubernetes.io/name: actual
+        app.kubernetes.io/instance: actual
+    spec:
+      containers:
+        - name: actual
+          image: docker.io/actualbudget/actual-server:25.8.0
+          ports:
+            - containerPort: 5006
+              name: http-actual
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+            - name: ACTUAL_PORT
+              value: "5006"
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "100Mi"
+            limits:
+              cpu: 3
+              memory: "1Gi"
+          volumeMounts:
+            - name: actual-data
+              mountPath: /data
+      volumes:
+        - name: actual-data
+          persistentVolumeClaim:
+            claimName: actual-data-pvc

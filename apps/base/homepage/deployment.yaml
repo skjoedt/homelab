@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: homepage
+        app.kubernetes.io/name: homepage
+        app.kubernetes.io/instance: homepage
     spec:
       containers:
         - name: homepage

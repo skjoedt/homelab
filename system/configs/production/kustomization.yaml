@@ -5,7 +5,8 @@ resources:
   - ../staging
 
 patches:
-  - path: ceph/patch-credentials.yaml
+  - path: ceph/patch-rbd-credentials.yaml
+  - path: ceph/patch-cephfs-credentials.yaml
   - path: cert-manager/patch-issuer.yaml
   - path: cert-manager/patch-certificate.yaml
   - path: metallb/patch-layer2-config.yaml
