@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: actual-data-pvc
+  name: radarr-config-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -10,3 +10,4 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: local-path
+  volumeName: radarr-config-pv

@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+        app.kubernetes.io/name: sonarr
+        app.kubernetes.io/instance: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr:4.0.15.2941-ls285
+          env:
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+          resources:
+            requests:
+              cpu: 150m
+              memory: 100Mi
+            limits:
+              memory: 500Mi
+          volumeMounts:
+            - name: sonarr-config
+              mountPath: /config
+              subPath: sonarr/config
+            - name: sonarr-data
+              mountPath: /downloads
+              subPath: media/downloads
+            - name: sonarr-data
+              mountPath: /tv
+              subPath: media/shows
+      volumes:
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config-pvc
+        - name: sonarr-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"

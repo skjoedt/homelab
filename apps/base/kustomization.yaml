@@ -5,3 +5,8 @@ resources:
   - homepage
   - homepage-ingress
   - actual
+  - jellyfin
+  - prowlarr
+  - qbittorrent
+  - radarr
+  - sonarr
