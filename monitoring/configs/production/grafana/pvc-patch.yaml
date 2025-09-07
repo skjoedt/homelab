@@ -1,12 +1,13 @@
 ---
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: grafana-data-pv
-  namespace: monitoring
+  name: grafana-data-pvc
 spec:
-  csi:
-    volumeAttributes:
-      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-      pool: kubernetes
-      staticVolume: "true"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ceph-rbd
+  volumeName: grafana-data-pv

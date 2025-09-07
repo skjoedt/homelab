@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
+        sysctls:
+          - name: net.ipv4.conf.all.rp_filter
+            value: "2"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "1"

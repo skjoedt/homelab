@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyseerr-config-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ceph-rbd
+  csi:
+    driver: rbd.csi.ceph.com
+    volumeHandle: jellyseerr-config
+    volumeAttributes:
+      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
+      pool: kubernetes
+      staticVolume: "true"
+    nodeStageSecretRef:
+      name: csi-rbd-secret
+      namespace: ceph-csi-rbd

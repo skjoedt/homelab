@@ -4,7 +4,10 @@ kind: Ingress
 metadata:
   name: qbittorrent
   namespace: arr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - &host qbittorrent.fanen.dk

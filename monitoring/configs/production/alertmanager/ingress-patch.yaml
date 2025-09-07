@@ -4,7 +4,10 @@ kind: Ingress
 metadata:
   name: alertmanager
   namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - &host alerts.fanen.dk

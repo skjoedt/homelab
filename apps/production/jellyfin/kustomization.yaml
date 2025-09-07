@@ -3,9 +3,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../staging/jellyfin
+  - ../../base/jellyfin
+  - pv.yaml
 
 patches:
   - path: ingress-patch.yaml
-  - path: pv-config-patch.yaml
-  - path: pv-data-patch.yaml
+  - path: pvc-config-patch.yaml
+  - path: pvc-data-patch.yaml
