@@ -52,7 +52,7 @@ spec:
               value: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8085/api/v2/app/setPreferences 2>&1'  # yamllint disable-line rule:line-length
           resources:
             requests:
-              memory: "100Mi"
+              memory: "256Mi"
               cpu: "100m"
             limits:
               memory: "512Mi"
@@ -76,7 +76,7 @@ spec:
               subPath: media/downloads
           resources:
             requests:
-              memory: "100Mi"
+              memory: "512Mi"
               cpu: "200m"
             limits:
               memory: "1Gi"
@@ -91,8 +91,3 @@ spec:
       securityContext:
         fsGroup: 501
         fsGroupChangePolicy: "OnRootMismatch"
-        sysctls:
-          - name: net.ipv4.conf.all.rp_filter
-            value: "2"
-          - name: net.ipv6.conf.all.disable_ipv6
-            value: "1"

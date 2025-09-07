@@ -4,7 +4,10 @@ kind: Ingress
 metadata:
   name: homepage
   namespace: homepage
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - &host fanen.dk

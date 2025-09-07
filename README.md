@@ -6,14 +6,14 @@ The purpose of my homelab is to learn and to have fun.
 
 ## :computer: Hardware
 
-The cluster is not running high availability as I only have one node for staging and production.
+The cluster is not running high availability as I only have two nodes.
 
-| Device                   | Num | OS Disk | Data Disk         | RAM   | CPU            | Function   |
-| ------------------------ | --- | ------- | ----------------- | ----- | -------------- | ---------- |
-| Intel NUC NUC8i7BEH      | 1   | 223.6G  | -                 | 8 GB  | Intel i7-8559U | staging    |
-| Dell Precision Tower7810 | 1   | 512G    | 3x IronWolf 10 TB | 64 GB | Xeon e5-2620   | production |
+| Device                   | Num | OS Disk | Data Disk         | RAM   | CPU            |
+| ------------------------ | --- | ------- | ----------------- | ----- | -------------- |
+| Intel NUC NUC8i7BEH      | 1   | 223.6G  | -                 | 8 GB  | Intel i7-8559U |
+| Dell Precision Tower7810 | 1   | 512G    | 3x IronWolf 10 TB | 64 GB | Xeon e5-2620   |
 
-Development is on my local Macbook Pro M1.
+Development is on my local macbook using k3d.
 
 # Getting started
 
@@ -26,13 +26,13 @@ Development is on my local Macbook Pro M1.
 2. Bootstrap the cluster
 
     ```bash
-    make bootstrap-staging
+    make bootstrap-production
     ```
 
 3. Install external secrets
 
     ```bash
-    make prepare-staging
+    make prepare-production
     ```
 
 4. Load it with AWS access key secret `aws-creds`
@@ -48,15 +48,14 @@ Development is on my local Macbook Pro M1.
 5. Provision resources
 
     ```bash
-    make prepare-staging
+    make prepare-production
     ```
 
 # Cluster provisioning
 
 | Type       | K8s Distribution | Control Plane | Load Balancer | Deployment |
 | ---------- | ---------------- | ------------- | ------------- | ---------- |
-| testing    | k3d (wrapper)    | localhost     | localhost     | Kustomize  |
-| staging    | k3sup (wrapper)  | 10.0.0.20     | 10.0.0.70     | Kustomize  |
+| testing    | k3d (wrapper)    | localhost     | localhost     | Manual     |
 | production | k3s              | 10.0.0.30     | 10.0.0.50     | ArgoCD     |
 
 # Endpoints
@@ -66,7 +65,6 @@ Ingress routes are defined in each environment under the following endpoints
 | Type       | Endpoints          |
 | ---------- | ------------------ |
 | testing    | *.traefik.me       |
-| staging    | *.staging.fanen.dk |
 | production | *.fanen.dk         |
 
 # Storage
@@ -76,7 +74,7 @@ The goal of using an external ceph storage is to be able to delete the entire ku
 The caveat is we need to create all rbd images manually with the same size
 
 ```
-rbd -c ceph.conf --id homelab-staging -p kubernetes-staging create grafana-data --size 10G
+rbd -c ceph.conf --id homelab -p kubernetes create grafana-data --size 10G
 ```
 
 # Secret management

@@ -26,7 +26,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-              memory: 100Mi
+              memory: 170Mi
             limits:
               memory: 400Mi
           volumeMounts:

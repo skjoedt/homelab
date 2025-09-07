@@ -49,5 +49,4 @@ Things I might get to at some point
 - [ ] Bare-metal OS rolling upgrade
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
-- [ ] Install protonvpn on router
-- [ ] Have production patch base/ instead of staging/
+- [x] Have production patch base/ instead of staging/

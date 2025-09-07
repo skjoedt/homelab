@@ -4,7 +4,10 @@ kind: Ingress
 metadata:
   name: sonarr
   namespace: arr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - &host sonarr.fanen.dk

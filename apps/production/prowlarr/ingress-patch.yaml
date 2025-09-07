@@ -4,7 +4,10 @@ kind: Ingress
 metadata:
   name: prowlarr
   namespace: arr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - &host prowlarr.fanen.dk
