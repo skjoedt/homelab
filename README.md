@@ -74,7 +74,7 @@ The goal of using an external ceph storage is to be able to delete the entire ku
 The caveat is we need to create all rbd images manually with the same size
 
 ```
-rbd -c ceph.conf --id homelab -p kubernetes create grafana-data --size 10G
+rbd -c ceph.conf --id homelab.rbd -p kubernetes create grafana-data --size 10G
 ```
 
 # Secret management
