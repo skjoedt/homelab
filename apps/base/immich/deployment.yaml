@@ -1,0 +1,125 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+        app.kubernetes.io/name: immich
+        app.kubernetes.io/instance: immich
+    spec:
+      containers:
+        - name: immich-server
+          image: ghcr.io/immich-app/immich-server:v1.141.1
+          ports:
+            - containerPort: 2283
+              name: http-immich
+          env:
+            - name: IMMICH_PORT
+              value: "2283"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_PASSWORD
+            - name: DB_USERNAME
+              value: "immich"
+            - name: DB_DATABASE_NAME
+              value: "immich"
+            - name: REDIS_HOSTNAME
+              value: "localhost"
+            - name: DB_HOSTNAME
+              value: "localhost"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_STORAGE_TYPE
+              value: HDD
+            - name: TZ
+              value: "Europe/Copenhagen"
+          volumeMounts:
+            - name: immich-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: 2
+              memory: "2Gi"
+
+        - name: immich-machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:v1.141.1
+          env:
+            - name: IMMICH_PORT
+              value: "3003"
+            - name: TZ
+              value: "Europe/Copenhagen"
+          volumeMounts:
+            - name: model-cache
+              mountPath: /cache
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: 4
+              memory: "4Gi"
+
+        - name: redis
+          image: docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571  # yamllint disable-line rule:line-length
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "50Mi"
+            limits:
+              cpu: 1
+              memory: "500Mi"
+
+        - name: postgres
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:8d292bdb796aa58bbbaa47fe971c8516f6f57d6a47e7172e62754feb6ed4e7b0  # yamllint disable-line rule:line-length
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_PASSWORD
+            - name: POSTGRES_USER
+              value: "immich"
+            - name: POSTGRES_DB
+              value: "immich"
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: 2
+              memory: "2Gi"
+
+      volumes:
+        - name: immich-data
+          persistentVolumeClaim:
+            claimName: immich-data-pvc
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: immich-postgres-pvc
+        - name: model-cache
+          emptyDir: {}
