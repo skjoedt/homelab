@@ -17,6 +17,11 @@ ports:
     tls:
       enabled: true
 
+volumes:
+  - name: traefik-config-dynamic
+    mountPath: "/config/dynamic"
+    type: configMap
+
 log:
   level: DEBUG
 

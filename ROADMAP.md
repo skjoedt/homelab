@@ -38,6 +38,7 @@ Everything needed for family onboarding
   - [ ] Connect ceph dashboard to traefik
   - [ ] Send ceph logs and node exporters to grafana
   - [ ] Send ceph alerts to alert manager
+  - [ ] Expose ceph CSI metrics to prometheus (to get per-pvc usage and IO rates)
 
 # Unplanned
 

@@ -1,0 +1,58 @@
+http:
+  routers:
+    ceph-dashboard:
+      rule: "Host(`ceph.fanen.dk`)"
+      tls: {}
+      service: ceph-dashboard
+      entrypoints:
+        - "websecure"
+
+    # Ceph radosgw frontend
+    ceph-s3:
+      rule: "Host(`s3.fanen.dk`)"
+      tls: true
+      service: ceph-radosgw
+      entrypoints:
+        - "websecure"
+
+    # Ceph grafana frontend
+    # Remember to set mgr/dashboard/GRAFANA_FRONTEND_API_URL to ceph-grafana.fanen.dk
+    ceph-grafana:
+      rule: "Host(`ceph-grafana.fanen.dk`)"
+      tls: {}
+      service: ceph-grafana
+      entrypoints:
+        - "websecure"
+
+  services:
+    ceph-dashboard:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:8080"
+        healthCheck:
+          path: "/"
+          interval: "10s"
+          timeout: "5s"
+
+    ceph-radosgw:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:7480"
+        healthCheck:
+          path: "/"
+          interval: "10s"
+          timeout: "5s"
+
+    ceph-grafana:
+      loadBalancer:
+        servers:
+          - url: "https://localhost:3000"
+        healthCheck:
+          path: "/"
+          interval: "10s"
+          timeout: "5s"
+        serversTransport: ceph-grafana
+
+  serversTransports:
+    ceph-grafana:
+      insecureSkipVerify: true
