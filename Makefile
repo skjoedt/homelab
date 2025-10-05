@@ -21,6 +21,7 @@ check-deps:
 dev-up: check-deps
 	@if ! k3d cluster list | grep -q "$(BRANCH_NAME_SLUG)"; then \
 		k3d cluster create $(BRANCH_NAME_SLUG) \
+		    --image rancher/k3s:v1.31.5-k3s1 \
 		    --k3s-arg "--disable=traefik@server:*" \
 			--servers 1 \
 			--agents 0 \
