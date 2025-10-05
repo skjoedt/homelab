@@ -30,8 +30,8 @@ spec:
               cpu: "10m"
               memory: "1Gi"
             limits:
-              cpu: 3
-              memory: "5Gi"
+              cpu: 6
+              memory: "6Gi"
           volumeMounts:
             - name: jellyfin-config
               mountPath: /config
