@@ -20,7 +20,7 @@ WORKER_NODES=("$@")
 # Configuration
 SSH_USER="skjoedt"
 SSH_KEY="${HOME}/.ssh/id_rsa"
-K3S_VERSION="v1.31.2+k3s1"
+K3S_VERSION="v1.31.5-k3s1"
 
 # Install k3sup if not present
 if ! command -v k3sup &> /dev/null; then
