@@ -33,7 +33,7 @@ Everything needed for family onboarding
   - [ ] Alert notifications
   - [ ] More dashboards and alert rules
 - [ ] SSO
-- [x] Expose services to the internet securely with Wireguard
+- [ ] Expose services to the internet securely with Wireguard
 - [ ] Ceph exposure
   - [ ] Connect ceph dashboard to traefik
   - [ ] Send ceph logs and node exporters to grafana
@@ -50,3 +50,4 @@ Things I might get to at some point
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
 - [x] Have production patch base/ instead of staging/
+- [ ] Enable wakeonlan
