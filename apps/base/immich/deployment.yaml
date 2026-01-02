@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v1.141.1
+          image: ghcr.io/immich-app/immich-server:v2.0.1
           ports:
             - containerPort: 2283
               name: http-immich
@@ -106,6 +106,7 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
+              subPath: immich/postgres
           resources:
             requests:
               cpu: "100m"
