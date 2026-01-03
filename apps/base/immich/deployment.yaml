@@ -6,6 +6,8 @@ metadata:
   namespace: immich
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: immich
@@ -18,7 +20,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v2.0.1
+          image: ghcr.io/immich-app/immich-server:v2.4.1
           ports:
             - containerPort: 2283
               name: http-immich
