@@ -6,6 +6,8 @@ metadata:
   namespace: actual
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: actual
@@ -18,7 +20,7 @@ spec:
     spec:
       containers:
         - name: actual
-          image: docker.io/actualbudget/actual-server:25.8.0
+          image: docker.io/actualbudget/actual-server:26.1.0
           ports:
             - containerPort: 5006
               name: http-actual
