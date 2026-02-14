@@ -25,13 +25,14 @@ Everything needed for family onboarding
 - [x] ProtonVPN
 - [ ] Add ceph radosgw s3 endpoint
 - [ ] Applications
-  - [ ] Immich
-  - [ ] Budget Planning (tbd)
+  - [x] Immich
+  - [x] Actual Budget
   - [x] Jellyfin
-- [ ] Adblock DNS with failover on home network
+  - [ ] Automatic Ripping Machine
+- [ ] Adblock Home
 - [ ] Observability
   - [ ] Alert notifications
-  - [ ] More dashboards and alert rules
+  - [ ] Alert rules on container errors
 - [ ] SSO
 - [ ] Expose services to the internet securely with Wireguard
 - [ ] Ceph exposure
@@ -50,4 +51,4 @@ Things I might get to at some point
 - [ ] Kubernetes version rolling upgrade
 - [ ] Measure power consumption (send to grafana?)
 - [x] Have production patch base/ instead of staging/
-- [ ] Enable wakeonlan
+- [x] Enable wakeonlan
