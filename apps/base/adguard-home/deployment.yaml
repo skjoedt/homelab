@@ -46,9 +46,6 @@ spec:
         - name: adguard-data
           mountPath: /opt/adguardhome/work
           subPath: work
-        - name: adguard-config
-          mountPath: /opt/adguardhome/conf
-          subPath: work
         resources:
           requests:
             memory: "100Mi"
@@ -60,7 +57,3 @@ spec:
       - name: adguard-data
         persistentVolumeClaim:
           claimName: adguard-home-data-pvc
-      - name: adguard-config
-        persistentVolumeClaim:
-          claimName: adguard-home-config-pvc
-      restartPolicy: Always

@@ -10,15 +10,3 @@ spec:
     requests:
       storage: 2Gi
   storageClassName: local-path
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: adguard-home-config-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Mi
-  storageClassName: local-path
