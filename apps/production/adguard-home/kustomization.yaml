@@ -7,9 +7,18 @@ namespace: adguard-home
 resources:
   - ../../base/adguard-home
   - pv.yaml
+  - external-secret.yaml
+
+configMapGenerator:
+  - name: adguard-home-config
+    files:
+      - AdGuardHome.yaml=config/AdGuardHome.yaml
+    options:
+      disableNameSuffixHash: true
 
 patches:
   - path: service-patch.yaml
   - path: ingress-patch.yaml
-  - path: pvc-config-patch.yaml
   - path: pvc-data-patch.yaml
+  - path: deployment-patch.yaml
+  - path: remove-config-pvc-patch.yaml

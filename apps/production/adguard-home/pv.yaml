@@ -21,26 +21,3 @@ spec:
     nodeStageSecretRef:
       name: csi-rbd-secret
       namespace: ceph-csi-rbd
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: adguard-home-config-pv
-  namespace: adguard-home
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 10Mi
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: ceph-rbd
-  csi:
-    driver: rbd.csi.ceph.com
-    volumeHandle: adguard-home-config
-    volumeAttributes:
-      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-      pool: kubernetes
-      staticVolume: "true"
-    nodeStageSecretRef:
-      name: csi-rbd-secret
-      namespace: ceph-csi-rbd
