@@ -17,13 +17,14 @@ dns:
     - 0.0.0.0
   port: 53
   anonymize_client_ip: false
-  ratelimit: 20
+  ratelimit: 30
   ratelimit_subnet_len_ipv4: 24
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
     - https://dns10.quad9.net/dns-query
+    - https://security.cloudflare-dns.com/dns-query
   upstream_dns_file: ""
   bootstrap_dns:
     - 9.9.9.10
@@ -43,18 +44,18 @@ dns:
     - 127.0.0.0/8
     - ::1/128
   cache_enabled: true
-  cache_size: 4194304
-  cache_ttl_min: 0
-  cache_ttl_max: 0
-  cache_optimistic: false
+  cache_size: 8388608
+  cache_ttl_min: 300
+  cache_ttl_max: 86400
+  cache_optimistic: true
   cache_optimistic_answer_ttl: 30s
   cache_optimistic_max_age: 12h
   bogus_nxdomain: []
   aaaa_disabled: false
-  enable_dnssec: false
+  enable_dnssec: true
   edns_client_subnet:
     custom_ip: ""
-    enabled: false
+    enabled: true
     use_custom: false
   max_goroutines: 300
   handle_ddr: true
@@ -91,8 +92,8 @@ tls:
 querylog:
   dir_path: ""
   ignored: []
-  interval: 2160h
-  size_memory: 1000
+  interval: 720h
+  size_memory: 2000
   enabled: true
   file_enabled: true
 statistics:
@@ -105,10 +106,18 @@ filters:
     url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
     name: AdGuard DNS filter
     id: 1
-  - enabled: false
+  - enabled: true
     url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
     name: AdAway Default Blocklist
     id: 2
+  - enabled: true
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/light.txt
+    name: HaGeZi Light (Balanced)
+    id: 3
+  - enabled: true
+    url: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_17_TrackParam/filter.txt
+    name: AdGuard URL Tracking Protection
+    id: 4
 whitelist_filters: []
 user_rules: []
 dhcp:
@@ -160,7 +169,7 @@ filtering:
   filtering_enabled: true
   rewrites_enabled: true
   parental_enabled: false
-  safebrowsing_enabled: false
+  safebrowsing_enabled: true
   protection_enabled: true
 clients:
   runtime_sources:

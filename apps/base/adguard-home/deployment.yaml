@@ -42,6 +42,9 @@ spec:
         - name: dns-over-tls
           containerPort: 853
           protocol: TCP
+        - name: dns-over-quic
+          containerPort: 853
+          protocol: UDP
         volumeMounts:
         - name: adguard-data
           mountPath: /opt/adguardhome/work
