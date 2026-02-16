@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard-home
+  namespace: adguard-home
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: adguard-home
+  template:
+    metadata:
+      labels:
+        app: adguard-home
+        app.kubernetes.io/name: adguard-home
+        app.kubernetes.io/instance: adguard-home
+    spec:
+      containers:
+      - name: adguard-home
+        image: adguard/adguardhome:v0.107.71
+        ports:
+        - name: dns-tcp
+          containerPort: 53
+          protocol: TCP
+        - name: dns-udp
+          containerPort: 53
+          protocol: UDP
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        - name: https-udp
+          containerPort: 443
+          protocol: UDP
+        - name: dashboard
+          containerPort: 3000
+          protocol: TCP
+        - name: dns-over-tls
+          containerPort: 853
+          protocol: TCP
+        volumeMounts:
+        - name: adguard-data
+          mountPath: /opt/adguardhome/work
+          subPath: work
+        - name: adguard-config
+          mountPath: /opt/adguardhome/conf
+          subPath: work
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "10m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: adguard-data
+        persistentVolumeClaim:
+          claimName: adguard-home-data-pvc
+      - name: adguard-config
+        persistentVolumeClaim:
+          claimName: adguard-home-config-pvc
+      restartPolicy: Always

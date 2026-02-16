@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - homepage
+  - adguard-home
   - jellyfin
   - prowlarr
   - radarr

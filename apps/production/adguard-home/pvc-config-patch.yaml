@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adguard-home-config-pvc
+  namespace: adguard-home
+spec:
+  storageClassName: ceph-rbd
+  volumeName: adguard-home-config-pv
