@@ -9,11 +9,12 @@ spec:
     spec:
       initContainers:
       - name: config-init
-        image: busybox:1.35
-        command:
+        image: alpine:3.19
+        command: # gettext package contains envsubst
           - sh
           - -c
           - |
+            apk add --no-cache gettext
             envsubst < /config-template/AdGuardHome.yaml > /config/AdGuardHome.yaml
         env:
         - name: ADGUARD_USER
@@ -39,6 +40,7 @@ spec:
           subPath: work
         - name: config-processed
           mountPath: /opt/adguardhome/conf
+          subPath:
       volumes:
       - name: adguard-data
         persistentVolumeClaim:
