@@ -89,11 +89,12 @@ resource "lxd_instance" "kube_instances" {
   }
 
   device {
-    name = "enp5s0"
+    name = "eth0"
     type = "nic"
     properties = {
       nictype = "bridged"
       parent  = "br0"
+      name    = "eth0"
     }
   }
 
