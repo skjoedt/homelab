@@ -85,8 +85,18 @@ if [[ "$CSI_DRIVER" != *"rbd.csi.ceph.com"* ]]; then
     echo -e "${YELLOW}Warning: PV is using CSI driver '$CSI_DRIVER', not Ceph RBD${NC}"
 fi
 
-# Get RBD image name and other details
-RBD_IMAGE=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeAttributes.imageName}' 2>/dev/null || echo "")
+# Check if this is a static volume
+STATIC_VOLUME=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeAttributes.staticVolume}' 2>/dev/null || echo "")
+
+# Get RBD image name based on volume type
+if [[ "$STATIC_VOLUME" == "true" ]]; then
+    # For static volumes, the image name is in volumeHandle
+    RBD_IMAGE=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeHandle}' 2>/dev/null || echo "")
+else
+    # For dynamic volumes, use the imageName attribute
+    RBD_IMAGE=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeAttributes.imageName}' 2>/dev/null || echo "")
+fi
+
 POOL=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeAttributes.pool}' 2>/dev/null || echo "")
 VOLUME_HANDLE=$(kubectl get pv "$PV_NAME" -o jsonpath='{.spec.csi.volumeHandle}' 2>/dev/null || echo "")
 
