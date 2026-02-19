@@ -2,28 +2,6 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jellyfin-config-pv
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 3Gi
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: ceph-rbd
-  csi:
-    driver: rbd.csi.ceph.com
-    volumeHandle: jellyfin-config
-    volumeAttributes:
-      clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-      pool: kubernetes
-      staticVolume: "true"
-    nodeStageSecretRef:
-      name: csi-rbd-secret
-      namespace: ceph-csi-rbd
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
   name: jellyfin-data-pv
 spec:
   accessModes:

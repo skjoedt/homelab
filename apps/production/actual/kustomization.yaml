@@ -6,7 +6,6 @@ namespace: actual
 
 resources:
   - ../../base/actual
-  - pv.yaml
 
 patches:
   - path: ingress-patch.yaml

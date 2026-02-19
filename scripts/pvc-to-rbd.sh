@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script to find the RBD image name from a Kubernetes PVC
-# Usage: ./pvc-to-rbd.sh <pvc-name> [namespace]
 
 set -euo pipefail
 
