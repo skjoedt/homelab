@@ -10,15 +10,4 @@ ceph-csi-cephfs:
     replicaCount: 1
   nodeplugin: {}
   storageClass:
-    create: true
-    name: cephfs
-    clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
-    fsName: cephfs
-    pool: cephfs_data
-    mounter: kernel
-    reclaimPolicy: Retain
-    allowVolumeExpansion: true
-    provisionerSecret: csi-cephfs-secret
-    provisionerSecretNamespace: ceph-csi-cephfs
-    nodeStageSecret: csi-cephfs-secret
-    nodeStageSecretNamespace: ceph-csi-cephfs
+    create: false
