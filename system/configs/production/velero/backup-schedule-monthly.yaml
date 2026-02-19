@@ -1,0 +1,27 @@
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: monthly-backup
+  namespace: velero
+spec:
+  schedule: "0 4 1 * *"  # Monthly on 1st day at 4 AM
+  template:
+    ttl: 2160h0m0s  # 3 months retention (90 days)
+    includedNamespaces: ["*"]
+    excludedNamespaces:
+    - velero
+    - kube-system
+    - kube-public
+    - kube-node-lease
+    labelSelector:
+      matchExpressions:
+      - key: velero.io/exclude-from-backup
+        operator: NotIn
+        values: ["true"]
+    snapshotVolumes: true
+    defaultVolumesToFsBackup: false
+    csiSnapshotTimeout: 10m0s
+    storageLocation: aws-s3
+    volumeSnapshotLocations:
+    - csi-snapshots

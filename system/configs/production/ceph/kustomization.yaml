@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - credentials.yaml
-  - storageclass.yaml
+  - volumesnapshotclass-rbd.yaml
+  - volumesnapshotclass-cephfs.yaml

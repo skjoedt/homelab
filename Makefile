@@ -64,11 +64,13 @@ prepare-production: # to be replaced by argocd
 	helm upgrade --install ceph-csi-cephfs ./system/controllers/ceph-csi-cephfs --namespace ceph-csi-cephfs --create-namespace -f ./system/controllers/ceph-csi-cephfs/values.yaml
 	helm upgrade --install reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
 	helm upgrade --install external-dns ./system/controllers/external-dns --namespace external-dns --create-namespace -f ./system/controllers/external-dns/values.yaml
+	helm upgrade --install snapshot-controller ./system/controllers/snapshot-controller --namespace kube-system -f ./system/controllers/snapshot-controller/values.yaml
 	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml
 	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
 	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
 	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
 	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
+	helm upgrade --install velero ./system/controllers/velero --namespace velero --create-namespace -f ./system/controllers/velero/values.yaml
 	kubectl apply -k ./system/configs/production
 	kubectl apply -k ./monitoring/configs/production
 	kubectl apply -k ./apps/production

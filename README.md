@@ -51,6 +51,29 @@ Development is on my local macbook using k3d.
     make prepare-production
     ```
 
+# Folder structure
+
+```tree
+.
+├── apps # App deployments
+│   ├── base
+│   └── production
+├── metal # terraform provisioning of my server(s)
+│   ├── bootstrap.sh
+│   └── lxc
+├── monitoring # monitoring stack
+│   ├── configs # monitoring configs
+│   │   ├── base
+│   │   └── production
+│   └── controllers # monitoring helms
+└── system # system crds and core configurations
+    ├── argocd-prod # not used, wip
+    ├── configs # system configs
+    │   ├── base
+    │   └── production
+    └── controllers # system helms 
+```
+
 # Cluster provisioning
 
 | Type       | K8s Distribution | Control Plane | Load Balancer | Deployment |

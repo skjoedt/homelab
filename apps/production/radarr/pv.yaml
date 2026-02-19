@@ -17,6 +17,8 @@ spec:
       clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
       pool: kubernetes
       staticVolume: "true"
+      imageFeatures: "layering"
+      imageName: "radarr-config"
     nodeStageSecretRef:
       name: csi-rbd-secret
       namespace: ceph-csi-rbd

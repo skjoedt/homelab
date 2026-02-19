@@ -1,0 +1,39 @@
+---
+velero:
+  image:
+    tag: v1.17.1
+  
+  initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.13.2
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
+  
+  configuration:
+    backupStorageLocation:
+    - name: aws-s3
+      provider: aws
+      bucket: homelab-velero-metadata
+      default: true
+      config:
+        region: eu-north-1
+    
+    volumeSnapshotLocation:
+    - name: csi-snapshots
+      provider: csi
+    
+    features: EnableCSI
+  
+  credentials:
+    existingSecret: velero-aws-credentials
+  
+  deployNodeAgent: false
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
