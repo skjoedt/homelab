@@ -6,7 +6,7 @@ metadata:
   labels:
     velero.io/csi-volumesnapshot-class: "true"
 driver: cephfs.csi.ceph.com
-deletionPolicy: Retain
+deletionPolicy: Delete
 parameters:
   clusterID: "687a5923-f619-11ef-90b9-989096ad05fc"
   csi.storage.k8s.io/snapshotter-secret-name: csi-cephfs-secret
