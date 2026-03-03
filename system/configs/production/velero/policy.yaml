@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velero-resource-policies
+  namespace: velero
+data:
+  policies: |
+    version: v1
+    volumePolicies:
+    - conditions:
+        storageClass:
+        - local-path
+      action:
+        type: skip
