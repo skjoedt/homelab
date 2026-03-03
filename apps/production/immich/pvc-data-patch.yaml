@@ -9,6 +9,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 100Gi
+      storage: 500Gi
   storageClassName: cephfs
-  volumeName: immich-data-pv

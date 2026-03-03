@@ -19,6 +19,9 @@ spec:
       - key: velero.io/exclude-from-backup
         operator: NotIn
         values: ["true"]
+    resourcePolicy:
+      kind: configmap
+      name: velero-resource-policies
     snapshotVolumes: true
     defaultVolumesToFsBackup: false
     csiSnapshotTimeout: 10m0s

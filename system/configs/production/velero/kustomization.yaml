@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - external-secret.yaml
+  - policy.yaml
   - backup-schedule-daily.yaml
   - backup-schedule-weekly.yaml
   - backup-schedule-monthly.yaml

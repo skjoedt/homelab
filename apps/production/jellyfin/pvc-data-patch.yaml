@@ -10,6 +10,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 100Gi
+      storage: 8Ti
   storageClassName: cephfs
-  volumeName: jellyfin-data-pv

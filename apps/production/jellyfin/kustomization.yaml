@@ -4,7 +4,6 @@ kind: Kustomization
 
 resources:
   - ../../base/jellyfin
-  - pv.yaml
 
 patches:
   - path: ingress-patch.yaml
