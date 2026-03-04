@@ -7,4 +7,3 @@ metadata:
 spec:
   type: LoadBalancer
   loadBalancerIP: 10.0.0.53
-  externalTrafficPolicy: Local

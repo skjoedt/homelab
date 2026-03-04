@@ -29,14 +29,14 @@ Everything needed for family onboarding
   - [x] Actual Budget
   - [x] Jellyfin
   - [ ] Automatic Ripping Machine
-- [ ] Adblock Home
+- [x] Adblock Home
 - [ ] Observability
   - [ ] Alert notifications
   - [ ] Alert rules on container errors
 - [ ] SSO
-- [ ] Expose services to the internet securely with Wireguard
+- [x] Expose services to the internet securely with Wireguard
 - [ ] Ceph exposure
-  - [ ] Connect ceph dashboard to traefik
+  - [x] Connect ceph dashboard to traefik
   - [ ] Send ceph logs and node exporters to grafana
   - [ ] Send ceph alerts to alert manager
 
