@@ -1,0 +1,42 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ceph-fanen-relay
+  namespace: traefik
+  annotations:
+    # Use HTTPS when Traefik connects to the backend (Ceph dashboard is HTTPS-only)
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - ceph.fanen.dk
+      secretName: ceph-fanen-dk-tls
+  rules:
+    - host: ceph.fanen.dk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ceph-external
+                port:
+                  number: 8443
+---
+# ExternalName service pointing to the Ceph dashboard.
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-external
+  namespace: traefik
+  annotations:
+    # Tell Traefik to use HTTPS when connecting to this backend
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - port: 8443
+      targetPort: 8443
