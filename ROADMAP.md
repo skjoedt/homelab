@@ -16,6 +16,10 @@ Everything needed for speed of iteration and security
   - [x] Automated certificate management
   - [x] External secret management
   - [ ] Backup solution (3 copies, 2 seperate devices, 1 offsite)
+    - [x] Velero Ceph CSI snapshotter
+    - [x] Velero Manifest backups to s3
+    - [ ] Velero Data mover to s3
+    - [ ] Ceph S3 mirror
 - [x] Reclaimable CSI with cephfs or ceph rbd
 
 # Production requirements
