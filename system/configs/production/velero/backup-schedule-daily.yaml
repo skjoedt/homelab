@@ -1,0 +1,30 @@
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  template:
+    ttl: 168h0m0s  # 7 days retention
+    includedNamespaces: ["*"]
+    excludedNamespaces:
+    - velero
+    - kube-system
+    - kube-public
+    - kube-node-lease
+    labelSelector:
+      matchExpressions:
+      - key: velero.io/exclude-from-backup
+        operator: NotIn
+        values: ["true"]
+    resourcePolicy:
+      kind: configmap
+      name: velero-resource-policies
+    snapshotVolumes: true
+    defaultVolumesToFsBackup: false
+    csiSnapshotTimeout: 10m0s
+    storageLocation: aws-s3
+    volumeSnapshotLocations:
+    - csi-snapshots

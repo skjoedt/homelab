@@ -10,4 +10,3 @@ spec:
     requests:
       storage: 3Gi
   storageClassName: ceph-rbd
-  volumeName: jellyfin-config-pv

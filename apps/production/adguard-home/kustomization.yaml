@@ -6,7 +6,6 @@ namespace: adguard-home
 
 resources:
   - ../../base/adguard-home
-  - pv.yaml
   - external-secret.yaml
 
 configMapGenerator:
@@ -19,5 +18,4 @@ configMapGenerator:
 patches:
   - path: service-patch.yaml
   - path: ingress-patch.yaml
-  - path: pvc-data-patch.yaml
   - path: deployment-patch.yaml

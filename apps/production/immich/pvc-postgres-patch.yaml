@@ -11,4 +11,3 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: ceph-rbd
-  volumeName: immich-postgres-pv
