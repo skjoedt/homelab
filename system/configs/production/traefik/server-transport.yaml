@@ -1,0 +1,9 @@
+---
+# This ServersTransport allows Traefik to skip TLS verification when connecting to e.g. the Ceph Dashboard.
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: insecure-transport
+  namespace: traefik
+spec:
+  insecureSkipVerify: true

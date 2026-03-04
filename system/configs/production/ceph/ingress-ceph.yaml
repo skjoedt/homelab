@@ -1,0 +1,69 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ceph-dashboard
+  namespace: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - ceph.fanen.dk
+      secretName: ceph-fanen-dk-tls
+    - hosts:
+        - grafana.ceph.fanen.dk
+      secretName: grafana-ceph-fanen-dk-tls # Cert-manager will create this
+  rules:
+    - host: ceph.fanen.dk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ceph-dashboard
+                port:
+                  number: 8443
+    - host: grafana.ceph.fanen.dk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ceph-grafana
+                port:
+                  number: 3000
+---
+# Service for Ceph (HTTPS)
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-dashboard
+  namespace: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - name: https
+      port: 8443
+---
+# Service for Grafana (Usually HTTP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-grafana
+  namespace: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/service.serverstransport: insecure-transport@kubernetescrd
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - name: https
+      port: 3000

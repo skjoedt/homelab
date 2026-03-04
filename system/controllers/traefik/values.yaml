@@ -37,3 +37,12 @@ resources:
   limits:
     cpu: 300m
     memory: 256Mi
+
+traefik:
+  providers:
+    kubernetesIngress:
+      allowExternalNameServices: true
+    kubernetesCRD:
+      allowExternalNameServices: true
+  additionalArguments:
+    - "--serversTransport.insecureSkipVerify=true"
