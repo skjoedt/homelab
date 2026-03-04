@@ -29,6 +29,7 @@ Everything needed for family onboarding
   - [x] Actual Budget
   - [x] Jellyfin
   - [ ] Automatic Ripping Machine
+  - [ ] Reactive-resume
 - [x] Adblock Home
 - [ ] Observability
   - [ ] Alert notifications
