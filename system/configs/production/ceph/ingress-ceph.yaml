@@ -2,17 +2,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ceph-fanen-relay
+  name: ceph-dashboard
   namespace: traefik
   annotations:
-    # Use HTTPS when Traefik connects to the backend (Ceph dashboard is HTTPS-only)
-    traefik.ingress.kubernetes.io/service.serversscheme: https
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: traefik
   tls:
     - hosts:
         - ceph.fanen.dk
       secretName: ceph-fanen-dk-tls
+    - hosts:
+        - grafana.ceph.fanen.dk
+      secretName: grafana-ceph-fanen-dk-tls # Cert-manager will create this
   rules:
     - host: ceph.fanen.dk
       http:
@@ -21,22 +23,47 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: ceph-external
+                name: ceph-dashboard
                 port:
                   number: 8443
+    - host: grafana.ceph.fanen.dk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ceph-grafana
+                port:
+                  number: 3000
 ---
-# ExternalName service pointing to the Ceph dashboard.
+# Service for Ceph (HTTPS)
 apiVersion: v1
 kind: Service
 metadata:
-  name: ceph-external
+  name: ceph-dashboard
   namespace: traefik
   annotations:
-    # Tell Traefik to use HTTPS when connecting to this backend
     traefik.ingress.kubernetes.io/service.serversscheme: https
 spec:
   type: ExternalName
   externalName: 10.0.0.11
   ports:
-    - port: 8443
-      targetPort: 8443
+    - name: https
+      port: 8443
+---
+# Service for Grafana (Usually HTTP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-grafana
+  namespace: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/service.serverstransport: insecure-transport@kubernetescrd
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - name: https
+      port: 3000
