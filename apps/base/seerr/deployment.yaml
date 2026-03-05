@@ -2,25 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyseerr
+  name: seerr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jellyseerr
+      app: seerr
   template:
     metadata:
       labels:
-        app: jellyseerr
-        app.kubernetes.io/name: jellyseerr
-        app.kubernetes.io/instance: jellyseerr
+        app: seerr
+        app.kubernetes.io/name: seerr
+        app.kubernetes.io/instance: seerr
     spec:
       containers:
-        - name: jellyseerr
-          image: fallenbagel/jellyseerr:2.7.3
+        - name: seerr
+          image: ghcr.io/seerr-team/seerr:v3.1.0
           env:
-            - name: LOG_LEVEL
-              value: "debug"
             - name: TZ
               value: "Europe/Copenhagen"
             - name: PORT
@@ -33,10 +31,10 @@ spec:
               cpu: "500m"
               memory: "400Mi"
           volumeMounts:
-            - name: jellyseerr-config
+            - name: seerr-config
               mountPath: /app/config
-              subPath: jellyseerr/config
+              subPath: seerr/config
       volumes:
-        - name: jellyseerr-config
+        - name: seerr-config
           persistentVolumeClaim:
-            claimName: jellyseerr-config-pvc
+            claimName: seerr-config-pvc

@@ -6,7 +6,7 @@ resources:
   - actual
   - adguard-home
   - jellyfin
-  - jellyseerr
+  - seerr
   - prowlarr
   - qbittorrent
   - radarr
