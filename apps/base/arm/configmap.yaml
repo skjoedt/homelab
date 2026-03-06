@@ -38,9 +38,11 @@ data:
     TRANSCODE_PATH: "/home/arm/media/transcode/"
     COMPLETED_PATH: "/home/arm/media/completed/"
     EXTRAS_SUB: "extras"
+    INSTALLPATH: "/opt/arm/"
     LOGPATH: "/home/arm/logs/"
     LOGLEVEL: "INFO"
     LOGLIFE: 1
+    DBFILE: "/home/arm/db/arm.db"
 
     # File permissions
     SET_MEDIA_PERMISSIONS: false
@@ -89,8 +91,21 @@ data:
     JSON_URL: ""
     APPRISE: ""
 
+    WEBSERVER_IP: x.x.x.x
     WEBSERVER_PORT: 8080
     UI_BASE_URL: ""
+
+    # Emby integration (disabled)
+    EMBY_REFRESH: false
+    EMBY_SERVER: ""
+    EMBY_PORT: "8096"
+    EMBY_CLIENT: "ARM"
+    EMBY_DEVICE: "ARM"
+    EMBY_DEVICEID: "ARM"
+    EMBY_USERNAME: ""
+    EMBY_USERID: ""
+    EMBY_PASSWORD: ""
+    EMBY_API_KEY: ""
 
   abcde.conf: |
     # abcde configuration for ARM - Danish audio CDs

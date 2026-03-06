@@ -29,36 +29,38 @@ spec:
               sed "s/OMDB_API_KEY: \"\"/OMDB_API_KEY: \"${OMDB_API_KEY}\"/" \
                 /config-tpl/arm.yaml > /config/arm.yaml
               cp /config-tpl/abcde.conf /config/abcde.conf
+              # set ownership and permissions so main container (uid=1000,gid=1000) can read/write
+              chown -R 1000:1000 /config || true
+              chmod -R g+rwX /config || true
+              # fix ownership on PVC-backed dirs so ARM startup script can chown them
+              chown -R 1000:1000 /home/arm /home/arm/logs /home/arm/media || true
+              chmod -R g+rwX /home/arm /home/arm/media || true
           env:
             - name: OMDB_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: arm-credentials
+                  name: arm-omdb-api-key
                   key: omdb_api_key
           volumeMounts:
             - name: arm-config-tpl
               mountPath: /config-tpl
             - name: arm-config
               mountPath: /config
+            - name: arm-home
+              mountPath: /home/arm
+              subPath: arm/home
+            - name: arm-home
+              mountPath: /home/arm/logs
+              subPath: arm/logs
+            - name: arm-media
+              mountPath: /home/arm/media
+              subPath: arm/media
       containers:
         - name: arm
           image: automaticrippingmachine/automatic-ripping-machine:2.22.1
           env:
             - name: TZ
               value: Europe/Copenhagen
-            - name: ARM_UID
-              value: "995"
-            - name: ARM_GID
-              value: "501"
-            - name: PUID
-              value: "995"
-            - name: PGID
-              value: "501"
-            - name: ARM_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: arm-credentials
-                  key: admin_password
           resources:
             requests:
               cpu: "100m"
@@ -84,22 +86,19 @@ spec:
               mountPath: /home/arm/media/completed
               subPath: media/ripped
       volumes:
-        - name: arm-home
-          persistentVolumeClaim:
-            claimName: arm-home-pvc
-        - name: arm-media
-          persistentVolumeClaim:
-            claimName: arm-media-pvc
-        - name: arm-config-tpl
-          configMap:
-            name: arm-config
-        - name: arm-config
-          emptyDir: {}
-        - name: jellyfin-data
-          persistentVolumeClaim:
-            claimName: jellyfin-data-pvc
-      securityContext:
-        runAsUser: 995
-        runAsGroup: 501
-        fsGroup: 501
-        fsGroupChangePolicy: "OnRootMismatch"
+      - name: arm-home
+        persistentVolumeClaim:
+          claimName: arm-home-pvc
+      - name: arm-media
+        persistentVolumeClaim:
+          claimName: arm-media-pvc
+      - name: arm-config-tpl
+        configMap:
+          name: arm-config
+      - name: arm-config
+        emptyDir: {}
+      - name: jellyfin-data
+        persistentVolumeClaim:
+          claimName: jellyfin-data-pvc
+      securityContext: {}
+
