@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: arm
+  template:
+    metadata:
+      labels:
+        app: arm
+        app.kubernetes.io/name: arm
+        app.kubernetes.io/instance: arm
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: kube-3
+      initContainers:
+        - name: config-init # This is used to inject the OMDB API key into the ARM config file, since ARM doesn't support environment variables for config values
+          image: busybox:1.37
+          command:
+            - sh
+            - -c
+            - |
+              sed "s/OMDB_API_KEY: \"\"/OMDB_API_KEY: \"${OMDB_API_KEY}\"/" \
+                /config-tpl/arm.yaml > /config/arm.yaml
+              cp /config-tpl/abcde.conf /config/abcde.conf
+              # set ownership and permissions so main container (uid=1000,gid=1000) can read/write
+              chown -R 1000:1000 /config || true
+              chmod -R g+rwX /config || true
+              # fix ownership on PVC-backed dirs so ARM startup script can chown them
+              chown -R 1000:1000 /home/arm /home/arm/logs /home/arm/media || true
+              chmod -R g+rwX /home/arm /home/arm/media || true
+          env:
+            - name: OMDB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: arm-omdb-api-key
+                  key: omdb_api_key
+          volumeMounts:
+          - name: arm-config-tpl
+            mountPath: /config-tpl
+          - name: arm-config
+            mountPath: /config
+          - name: arm-home
+            mountPath: /home/arm
+            subPath: arm/home
+          - name: arm-home
+            mountPath: /home/arm/logs
+            subPath: arm/logs
+          - name: arm-media
+            mountPath: /home/arm/media
+            subPath: arm/media
+          - name: jellyfin-data
+            mountPath: /home/arm/media/completed
+            subPath: media/ripped
+
+      containers:
+        - name: arm
+          image: automaticrippingmachine/automatic-ripping-machine:2.22.1
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+              squat.ai/dvd-writer: "1"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+              squat.ai/dvd-writer: "1"
+          volumeMounts:
+            - name: arm-home
+              mountPath: /home/arm
+              subPath: arm/home
+            - name: arm-home
+              mountPath: /home/arm/logs
+              subPath: arm/logs
+            - name: arm-media
+              mountPath: /home/arm/media
+              subPath: arm/media
+            - name: arm-config
+              mountPath: /etc/arm/config
+            - name: jellyfin-data
+              mountPath: /home/arm/media/completed
+              subPath: media/ripped
+      volumes:
+      - name: arm-home
+        persistentVolumeClaim:
+          claimName: arm-home-pvc
+      - name: arm-media
+        persistentVolumeClaim:
+          claimName: arm-media-pvc
+      - name: arm-config-tpl
+        configMap:
+          name: arm-config
+      - name: arm-config
+        emptyDir: {}
+      - name: jellyfin-data
+        persistentVolumeClaim:
+          claimName: jellyfin-data-pvc
+      securityContext: {}
+
