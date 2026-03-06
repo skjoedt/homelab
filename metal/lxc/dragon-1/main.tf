@@ -98,6 +98,18 @@ resource "lxd_instance" "kube_instances" {
     }
   }
 
+  dynamic "device" {
+    for_each = each.key == "kube-3" ? [1] : []
+    content {
+      name = "dvd-reader"
+      type = "usb"
+      properties = {
+        vendorid  = "0e8d"
+        productid = "1887"
+      }
+    }
+  }
+
   limits = {
     cpu    = 8
     memory = "12GB"
