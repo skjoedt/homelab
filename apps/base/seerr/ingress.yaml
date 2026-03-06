@@ -2,17 +2,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyseerr
+  name: seerr
 spec:
   ingressClassName: traefik
   rules:
-    - host: jellyseerr.traefik.me
+    - host: seerr.traefik.me
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: jellyseerr
+                name: seerr
                 port:
                   name: http

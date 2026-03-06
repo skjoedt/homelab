@@ -11,3 +11,4 @@ resources:
   - sonarr
   - qbittorrent
   - arm
+  - seerr
