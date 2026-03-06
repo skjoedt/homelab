@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arm
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: arm.traefik.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: arm
+                port:
+                  name: http
