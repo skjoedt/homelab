@@ -8,6 +8,10 @@
         href: https://seerr.fanen.dk
         description: Request management for media
         icon: seerr.svg
+    - Photos:
+        href: https://photos.fanen.dk
+        description: Photo album
+        icon: immich.svg
 - Management:
     - Qbittorrent:
         href: https://qbittorrent.fanen.dk
@@ -25,6 +29,10 @@
         href: https://sonarr.fanen.dk
         description: TV show tracker
         icon: sonarr.svg
+    - AdGuard Home:
+        href: https://adguard.fanen.dk
+        description: Network-wide adblocker
+        icon: adguard-home.svg
 - Development:
     - ArgoCD:
         href: https://argocd.fanen.dk
