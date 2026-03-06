@@ -30,8 +30,7 @@ spec:
           groups:
             - paths:
                 - path: /dev/sr0
-            - paths:
-                - path: /dev/cdrom
+                - path: /dev/sg1
         name: generic-device-plugin
         resources:
           requests:

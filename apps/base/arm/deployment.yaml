@@ -42,19 +42,23 @@ spec:
                   name: arm-omdb-api-key
                   key: omdb_api_key
           volumeMounts:
-            - name: arm-config-tpl
-              mountPath: /config-tpl
-            - name: arm-config
-              mountPath: /config
-            - name: arm-home
-              mountPath: /home/arm
-              subPath: arm/home
-            - name: arm-home
-              mountPath: /home/arm/logs
-              subPath: arm/logs
-            - name: arm-media
-              mountPath: /home/arm/media
-              subPath: arm/media
+          - name: arm-config-tpl
+            mountPath: /config-tpl
+          - name: arm-config
+            mountPath: /config
+          - name: arm-home
+            mountPath: /home/arm
+            subPath: arm/home
+          - name: arm-home
+            mountPath: /home/arm/logs
+            subPath: arm/logs
+          - name: arm-media
+            mountPath: /home/arm/media
+            subPath: arm/media
+          - name: jellyfin-data
+            mountPath: /home/arm/media/completed
+            subPath: media/ripped
+
       containers:
         - name: arm
           image: automaticrippingmachine/automatic-ripping-machine:2.22.1
