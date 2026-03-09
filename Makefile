@@ -48,7 +48,7 @@ dev-prepare:
 	helm upgrade --install --dependency-update cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
 	helm upgrade --install --dependency-update cnpg ./system/controllers/cnpg --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg/values.yaml
 	helm upgrade --install --dependency-update cnpg-barman-plugin ./system/controllers/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg-barman-plugin/values.yaml
-	kubectl apply -k ./system/monitoring/base
+	kubectl apply -k ./monitoring/configs/base
 	kubectl apply -k ./system/configs/base
 
 # Delete the k3d cluster

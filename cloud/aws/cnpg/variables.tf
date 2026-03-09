@@ -1,3 +1,3 @@
 variable "backups_bucket_name" {
-  default = "homelab-cnpg-backups"
+  default = "homelab-cnpg-barman-backups"
 }

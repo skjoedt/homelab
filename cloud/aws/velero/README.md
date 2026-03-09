@@ -14,7 +14,7 @@ This Terraform configuration creates the necessary AWS resources for Velero back
 
 1. **Deploy Infrastructure**:
    ```bash
-   cd cloud/aws
+   cd cloud/aws/velero
    terraform init
    terraform plan
    terraform apply
