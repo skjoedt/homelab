@@ -11,3 +11,10 @@ resources:
   - service.yaml
   - pvc.yaml
   - ingress.yaml
+  - cluster.yaml
+  - pod-monitor.yaml
+  - object-store.yaml
+  - scheduled-backup.yaml
+
+patches:
+  - path: cluster-backup-patch.yaml

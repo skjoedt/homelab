@@ -41,6 +41,9 @@ dev-prepare:
 	@echo "Installing CRDs..."
 	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
+	helm upgrade --install --dependency-update cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
+	helm upgrade --install --dependency-update cnpg ./system/controllers/cnpg --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg/values.yaml
+	helm upgrade --install --dependency-update cnpg-barman-plugin ./system/controllers/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg-barman-plugin/values.yaml
 	kubectl apply -k ./system/configs/base
 
 # Delete the k3d cluster
@@ -71,6 +74,8 @@ prepare-production: # to be replaced by argocd
 	helm upgrade --install --dependency-update loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
 	helm upgrade --install --dependency-update alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
 	helm upgrade --install --dependency-update velero ./system/controllers/velero --namespace velero --create-namespace -f ./system/controllers/velero/values.yaml
+	helm upgrade --install --dependency-update cnpg ./system/controllers/cnpg --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg/values.yaml
+	helm upgrade --install --dependency-update cnpg-barman-plugin ./system/controllers/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg-barman-plugin/values.yaml
 	kubectl apply -k ./system/configs/production
 	kubectl apply -k ./monitoring/configs/production
 	kubectl apply -k ./apps/production
