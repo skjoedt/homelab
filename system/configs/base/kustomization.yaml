@@ -5,4 +5,4 @@ resources:
   - external-secrets-dev
   - traefik
   - cnpg
-  - rustfs
+  - rustfs-dev

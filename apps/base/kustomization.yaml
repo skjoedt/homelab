@@ -12,4 +12,4 @@ resources:
   - radarr
   - sonarr
   - arm
-  - resume
+  - resume-dev

@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: resume
 
 resources:
+  - ../resume
   - secrets.yaml
   - rustfs-credentials.yaml
   - object-store.yaml

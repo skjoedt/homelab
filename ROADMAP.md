@@ -7,7 +7,7 @@ Everything needed for speed of iteration and security
 - [ ] Automated bare metal provisioning
 - [x] Automated cluster provisioning
 - [x] Full develop and production environment compatibility
-- [ ] GitOps deployment (ArgoCD)
+- [ ] GitOps deployment (ArgoCD/Flux)
 - [x] Automated DNS management
 - [x] Observability
   - [x] Monitoring
@@ -20,6 +20,7 @@ Everything needed for speed of iteration and security
     - [x] Velero Manifest backups to s3
     - [ ] Velero Data mover to s3
     - [ ] Ceph S3 mirror
+    - [x] Cloudnative-pg Backup to s3
 - [x] Reclaimable CSI with cephfs or ceph rbd
 
 # Production requirements
@@ -32,8 +33,8 @@ Everything needed for family onboarding
   - [x] Immich
   - [x] Actual Budget
   - [x] Jellyfin
-  - [ ] Automatic Ripping Machine
-  - [ ] Reactive-resume
+  - [x] Automatic Ripping Machine
+  - [x] Reactive-resume
 - [x] Adblock Home
 - [ ] Observability
   - [ ] Alert notifications
@@ -57,3 +58,4 @@ Things I might get to at some point
 - [ ] Measure power consumption (send to grafana?)
 - [x] Have production patch base/ instead of staging/
 - [x] Enable wakeonlan
+- [ ] Enable homepage service discovery
