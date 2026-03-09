@@ -111,4 +111,4 @@ A fake store is provided for local testing and may provide a secret inventory.
 
 - <https://github.com/pando85/homelab>
 - <https://github.com/khuedoan/homelab>
-- <https://github.com/mischavandenburg/homelab>
+- <https://github.com/mischavandenburg/homelab> (no longer public)
