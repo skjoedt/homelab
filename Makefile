@@ -41,9 +41,14 @@ dev-prepare:
 	@echo "Installing CRDs..."
 	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
+	helm upgrade --install --dependency-update kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
+	helm upgrade --install --dependency-update grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
+	helm upgrade --install --dependency-update loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
+	helm upgrade --install --dependency-update alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
 	helm upgrade --install --dependency-update cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
 	helm upgrade --install --dependency-update cnpg ./system/controllers/cnpg --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg/values.yaml
 	helm upgrade --install --dependency-update cnpg-barman-plugin ./system/controllers/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg-barman-plugin/values.yaml
+	kubectl apply -k ./system/monitoring/base
 	kubectl apply -k ./system/configs/base
 
 # Delete the k3d cluster

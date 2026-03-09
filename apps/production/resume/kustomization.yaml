@@ -5,11 +5,17 @@ kind: Kustomization
 namespace: resume
 
 resources:
-  - ../../base/resume
+  - ../../base/namespace.yaml
+  - ../../base/rbac.yaml
+  - ../../base/deployment.yaml
+  - ../../base/service.yaml
+  - ../../base/ingress.yaml
+  - ../../base/database.yaml
+  - ../../base/scheduled-backup.yaml
+
   - external-secret.yaml
+  - object-store.yaml
 
 patches:
   - path: ingress-patch.yaml
-  - path: pvc-patch.yaml
   - path: deployment-patch.yaml
-  - path: object-store-patch.yaml

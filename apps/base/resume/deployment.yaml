@@ -46,7 +46,7 @@ spec:
             - name: TZ
               value: "Europe/Copenhagen"
             - name: APP_URL
-              value: "http://resume.traefik.me"
+              value: "https://resume.traefik.me"
             - name: PRINTER_APP_URL
               value: "http://localhost:3000"
             - name: PRINTER_ENDPOINT
@@ -61,12 +61,6 @@ spec:
                 secretKeyRef:
                   name: resume-secrets
                   key: AUTH_SECRET
-            - name: STORAGE_LOCAL_PATH
-              value: "/app/data"
-          volumeMounts:
-            - name: resume-storage
-              mountPath: /app/data
-              subPath: resume/data
           resources:
             requests:
               cpu: "50m"
@@ -96,8 +90,3 @@ spec:
             limits:
               cpu: 2
               memory: "1Gi"
-
-      volumes:
-        - name: resume-storage
-          persistentVolumeClaim:
-            claimName: resume-pvc

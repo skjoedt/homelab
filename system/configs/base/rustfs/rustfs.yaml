@@ -1,0 +1,104 @@
+---
+# RustFS — ephemeral S3-compatible object store for dev/k3d testing.
+# NOT used in production. Provides a local S3 endpoint for CNPG Barman backups
+# and any other apps that need S3 in development.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rustfs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rustfs
+  namespace: rustfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustfs
+  template:
+    metadata:
+      labels:
+        app: rustfs
+    spec:
+      containers:
+        - name: rustfs
+          image: rustfs/rustfs:latest
+          env:
+            - name: RUSTFS_ACCESS_KEY
+              value: "admin"
+            - name: RUSTFS_SECRET_KEY
+              value: "password123"
+          ports:
+            - containerPort: 9000
+              name: api
+            - containerPort: 9001
+              name: console
+          readinessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rustfs
+  namespace: rustfs
+spec:
+  selector:
+    app: rustfs
+  ports:
+    - name: api
+      port: 9000
+      targetPort: 9000
+    - name: console
+      port: 9001
+      targetPort: 9001
+---
+# Job to provision buckets after RustFS is ready.
+# A Job (not an initContainer) is correct here: the bucket-provisioner must
+# wait for the RustFS service which runs in a separate Pod.
+# On repeated `kubectl apply` the Job is idempotent — it only runs once and stays Completed.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rustfs-bucket-provisioner
+  namespace: rustfs
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: bucket-provisioner
+          image: minio/mc:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until mc alias set local http://rustfs:9000 admin password123 2>/dev/null; do
+                echo "Waiting for RustFS..."; sleep 2;
+              done
+              mc mb --ignore-existing local/cnpg-backups
+              echo "Buckets provisioned."
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"

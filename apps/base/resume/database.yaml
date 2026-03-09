@@ -6,7 +6,6 @@ metadata:
   namespace: resume
 spec:
   instances: 2
-
   imageName: ghcr.io/cloudnative-pg/postgresql:17.4
 
   storage:
@@ -21,6 +20,12 @@ spec:
   postgresql:
     parameters:
       max_connections: "100"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: resume-db-backup
 
   resources:
     requests:
