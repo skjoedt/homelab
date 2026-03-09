@@ -1,0 +1,30 @@
+---
+# Job to provision buckets after RustFS is ready.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rustfs-bucket-provisioner
+  namespace: rustfs
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: bucket-provisioner
+          image: minio/mc:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until mc alias set local http://rustfs:9000 admin password123 2>/dev/null; do
+                echo "Waiting for RustFS..."; sleep 2;
+              done
+              mc mb --ignore-existing local/cnpg-backups
+              echo "Buckets provisioned."
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"

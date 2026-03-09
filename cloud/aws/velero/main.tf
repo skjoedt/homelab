@@ -60,6 +60,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "velero_metadata" {
   }
 }
 
+# Block all public access
+resource "aws_s3_bucket_public_access_block" "velero_metadata" {
+  bucket = aws_s3_bucket.velero_metadata.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 # S3 bucket for Velero data backups
 resource "aws_s3_bucket" "velero_backups" {
   bucket = var.backups_bucket_name
@@ -100,6 +110,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
     }
   }
 }
+
+# Block all public access
+resource "aws_s3_bucket_public_access_block" "velero_backups" {
+  bucket = aws_s3_bucket.velero_backups.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 
 # IAM user for Velero
 resource "aws_iam_user" "velero" {
@@ -159,8 +180,10 @@ resource "aws_iam_policy" "velero_backup" {
   })
 }
 
+
 # Attach policy to user
 resource "aws_iam_user_policy_attachment" "velero_backup" {
   user       = aws_iam_user.velero.name
   policy_arn = aws_iam_policy.velero_backup.arn
 }
+

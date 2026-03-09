@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume
+  namespace: resume
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: resume
+  template:
+    metadata:
+      labels:
+        app: resume
+        app.kubernetes.io/name: resume
+        app.kubernetes.io/instance: resume
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: docker.io/postgres:17
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h resume-db-rw.resume -p 5432 -U app; do
+                echo "Waiting for database...";
+                sleep 2;
+              done
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+      containers:
+        - name: resume
+          image: docker.io/amruthpillai/reactive-resume:v5.0.11
+          ports:
+            - containerPort: 3000
+              name: http-resume
+          env:
+            - name: TZ
+              value: "Europe/Copenhagen"
+            - name: APP_URL
+              value: "https://resume.traefik.me"
+            - name: PRINTER_APP_URL
+              value: "http://localhost:3000"
+            - name: PRINTER_ENDPOINT
+              value: "ws://localhost:4000"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: resume-db-app
+                  key: uri
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: resume-secrets
+                  key: AUTH_SECRET
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: 1
+              memory: "512Mi"
+
+        - name: chromium
+          image: ghcr.io/browserless/chromium:v2.42.0
+          ports:
+            - containerPort: 4000
+              name: http-chromium
+          env:
+            - name: PORT
+              value: "4000"
+            - name: CONCURRENT
+              value: "5"
+            - name: QUEUED
+              value: "10"
+            - name: TIMEOUT
+              value: "60000"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "256Mi"
+            limits:
+              cpu: 2
+              memory: "1Gi"

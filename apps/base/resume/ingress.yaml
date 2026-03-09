@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: resume
+  namespace: resume
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: resume.traefik.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: resume
+                port:
+                  name: http-resume
