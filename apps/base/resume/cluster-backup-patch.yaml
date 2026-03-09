@@ -1,0 +1,15 @@
+---
+# Cluster patch: enables WAL archiving via the Barman plugin.
+# In base this points at the MinIO ObjectStore; production uses the same ObjectStore name
+# so this patch is shared across environments.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: resume-db
+  namespace: resume
+spec:
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: resume-db-backup

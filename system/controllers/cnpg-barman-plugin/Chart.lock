@@ -1,0 +1,6 @@
+dependencies:
+- name: plugin-barman-cloud
+  repository: https://cloudnative-pg.github.io/charts
+  version: 0.5.0
+digest: sha256:b2ad36f3d7650c2156da2632c5c7227947b9457d570410662c73a17545f604d0
+generated: "2026-03-09T11:20:20.453378+01:00"

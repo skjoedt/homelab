@@ -1,0 +1,32 @@
+---
+# ObjectStore for dev/k3d testing using local MinIO.
+# In production this spec is overridden by apps/production/resume/object-store-patch.yaml (real S3).
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: resume-db-backup
+  namespace: resume
+spec:
+  configuration:
+    destinationPath: s3://cnpg-backups/resume-db/
+    endpointURL: http://minio.cnpg-system:9000
+    s3Credentials:
+      accessKeyId:
+        name: cnpg-minio-credentials
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: cnpg-minio-credentials
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+      immediateCheckpoint: false
+      jobs: 2
+  instanceSidecarConfiguration:
+    env:
+      - name: AWS_REQUEST_CHECKSUM_CALCULATION
+        value: when_required
+      - name: AWS_RESPONSE_CHECKSUM_VALIDATION
+        value: when_required
+  retentionPolicy: "7d"
