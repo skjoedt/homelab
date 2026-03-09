@@ -6,6 +6,5 @@ resources:
   - credentials.yaml
   - storageclass.yaml
   - ingress-ceph.yaml
-  - ingress-grafana.yaml
   - volumesnapshotclass-rbd.yaml
   - volumesnapshotclass-cephfs.yaml

@@ -7,9 +7,6 @@ namespace: resume
 resources:
   - namespace.yaml
   - rbac.yaml
-  - dev/secrets.yaml
-  - dev/rustfs-credentials.yaml
-  - dev/object-store.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml

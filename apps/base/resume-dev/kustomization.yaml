@@ -5,11 +5,6 @@ kind: Kustomization
 namespace: resume
 
 resources:
-  - ../../base/resume
-
-  - external-secret.yaml
+  - secrets.yaml
+  - rustfs-credentials.yaml
   - object-store.yaml
-
-patches:
-  - path: ingress-patch.yaml
-  - path: deployment-patch.yaml
