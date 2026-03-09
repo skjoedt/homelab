@@ -39,8 +39,8 @@ dev-up: check-deps
 dev-prepare:
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 	@echo "Installing CRDs..."
-	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
-	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
+	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
+	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
 	kubectl apply -k ./system/configs/base
 
 # Delete the k3d cluster
@@ -57,20 +57,20 @@ prepare-production: # to be replaced by argocd
 	@echo "Installing CRDs..."
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
-	helm upgrade --install kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
-	helm upgrade --install metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
-	helm upgrade --install cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
-	helm upgrade --install ceph-csi-rbd ./system/controllers/ceph-csi-rbd --namespace ceph-csi-rbd --create-namespace -f ./system/controllers/ceph-csi-rbd/values.yaml
-	helm upgrade --install ceph-csi-cephfs ./system/controllers/ceph-csi-cephfs --namespace ceph-csi-cephfs --create-namespace -f ./system/controllers/ceph-csi-cephfs/values.yaml
-	helm upgrade --install reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
-	helm upgrade --install external-dns ./system/controllers/external-dns --namespace external-dns --create-namespace -f ./system/controllers/external-dns/values.yaml
-	helm upgrade --install snapshot-controller ./system/controllers/snapshot-controller --namespace kube-system -f ./system/controllers/snapshot-controller/values.yaml
-	helm upgrade --install traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml
-	helm upgrade --install kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
-	helm upgrade --install grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
-	helm upgrade --install loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
-	helm upgrade --install alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
-	helm upgrade --install velero ./system/controllers/velero --namespace velero --create-namespace -f ./system/controllers/velero/values.yaml
+	helm upgrade --install --dependency-update kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml
+	helm upgrade --install --dependency-update metallb ./system/controllers/metallb --namespace metallb --create-namespace -f ./system/controllers/metallb/values.yaml
+	helm upgrade --install --dependency-update cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
+	helm upgrade --install --dependency-update ceph-csi-rbd ./system/controllers/ceph-csi-rbd --namespace ceph-csi-rbd --create-namespace -f ./system/controllers/ceph-csi-rbd/values.yaml
+	helm upgrade --install --dependency-update ceph-csi-cephfs ./system/controllers/ceph-csi-cephfs --namespace ceph-csi-cephfs --create-namespace -f ./system/controllers/ceph-csi-cephfs/values.yaml
+	helm upgrade --install --dependency-update reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
+	helm upgrade --install --dependency-update external-dns ./system/controllers/external-dns --namespace external-dns --create-namespace -f ./system/controllers/external-dns/values.yaml
+	helm upgrade --install --dependency-update snapshot-controller ./system/controllers/snapshot-controller --namespace kube-system -f ./system/controllers/snapshot-controller/values.yaml
+	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values.yaml
+	helm upgrade --install --dependency-update kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
+	helm upgrade --install --dependency-update grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
+	helm upgrade --install --dependency-update loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
+	helm upgrade --install --dependency-update alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
+	helm upgrade --install --dependency-update velero ./system/controllers/velero --namespace velero --create-namespace -f ./system/controllers/velero/values.yaml
 	kubectl apply -k ./system/configs/production
 	kubectl apply -k ./monitoring/configs/production
 	kubectl apply -k ./apps/production
