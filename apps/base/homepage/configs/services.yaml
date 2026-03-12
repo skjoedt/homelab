@@ -12,12 +12,20 @@
         href: https://photos.fanen.dk
         description: Photo album
         icon: immich.svg
+    - Budget:
+        href: https://budget.fanen.dk
+        description: Personal finance
+        icon: actual-budget.svg
 - Tools:
     - Resume:
         href: https://resume.fanen.dk
         description: Personal resume
         icon: reactive-resume.svg     
 - Management:
+    - Arm:
+        href: https://arm.fanen.dk
+        description: Ripping of physical media
+        icon: arm.svg
     - Qbittorrent:
         href: https://qbittorrent.fanen.dk
         description: Bittorrent client
@@ -37,7 +45,7 @@
     - AdGuard Home:
         href: https://adguard.fanen.dk
         description: Network-wide adblocker
-        icon: adguard-home.svg
+        icon: adguard-home.svg  
 - Monitoring:
     - Grafana:
         href: https://grafana.fanen.dk
