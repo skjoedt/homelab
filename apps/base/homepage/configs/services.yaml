@@ -20,7 +20,11 @@
     - Resume:
         href: https://resume.fanen.dk
         description: Personal resume
-        icon: reactive-resume.svg     
+        icon: reactive-resume.svg
+    - Memos:
+        href: https://memos.fanen.dk
+        description: Personal memos
+        icon: memos.svg
 - Management:
     - Arm:
         href: https://arm.fanen.dk
