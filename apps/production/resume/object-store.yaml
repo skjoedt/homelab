@@ -6,7 +6,7 @@ metadata:
   namespace: resume
 spec:
   configuration:
-    destinationPath: s3://homelab-cnpg-backups/resume-db/
+    destinationPath: s3://homelab-cnpg-barman-backups/resume-db/
     endpointURL: ""
     s3Credentials:
       accessKeyId:
