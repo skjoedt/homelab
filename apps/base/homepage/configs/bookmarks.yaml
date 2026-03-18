@@ -3,6 +3,10 @@
     - Public homelab repository:
         - href: https://github.com/skjoedt/homelab
           icon: github.svg
+- Inspiration:
+    - Awesome Selfhosted:
+        - href: https://awweso.me/
+          icon: selfhosted.svg
 - Providers:
     - AWS Secret Manager:
         - href: https://eu-north-1.console.aws.amazon.com/secretsmanager/listsecrets?region=eu-north-1  # yamllint disable-line rule:line-length
