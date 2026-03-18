@@ -23,7 +23,7 @@ Everything needed for speed of iteration and security
     - [x] Cloudnative-pg Backup to s3
 - [x] Reclaimable CSI with cephfs or ceph rbd
 
-# Production requirements
+## Production requirements
 
 Everything needed for family onboarding
 
@@ -36,8 +36,9 @@ Everything needed for family onboarding
   - [x] Automatic Ripping Machine
   - [x] Reactive-resume
 - [x] Adblock Home
+- [ ] RBAC
 - [ ] Observability
-  - [ ] Alert notifications
+  - [ ] Alert notifications, e.g. nfty
   - [ ] Alert rules on container errors
 - [ ] SSO
 - [x] Expose services to the internet securely with Wireguard
@@ -46,7 +47,7 @@ Everything needed for family onboarding
   - [ ] Send ceph logs and node exporters to grafana
   - [ ] Send ceph alerts to alert manager
 
-# Unplanned
+## Unplanned
 
 Things I might get to at some point
 
@@ -59,3 +60,12 @@ Things I might get to at some point
 - [x] Have production patch base/ instead of staging/
 - [x] Enable wakeonlan
 - [ ] Enable homepage service discovery
+
+Applications
+
+- [ ] Local LLM API endpoint using GTX 1080 hardware
+- [ ] OpenWebUI or Vane (search)
+- [ ] Affine
+- [ ] Bookmark manager, like Karakeep
+- [ ] Document manager, like Papra
+- [ ] Home Assistant
