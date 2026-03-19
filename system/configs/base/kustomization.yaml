@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - external-secrets-dev
   - traefik
-  - cnpg
   - rustfs-dev
