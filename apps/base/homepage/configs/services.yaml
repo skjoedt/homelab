@@ -25,6 +25,10 @@
         href: https://memos.fanen.dk
         description: Personal memos
         icon: memos.svg
+    - Docs:
+        href: https://docs.fanen.dk
+        description: Document library
+        icon: papra.svg
 - Management:
     - Arm:
         href: https://arm.fanen.dk

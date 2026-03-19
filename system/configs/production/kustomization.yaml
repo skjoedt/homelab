@@ -7,4 +7,3 @@ resources:
   - external-secrets
   - metallb
   - ceph
-  - cnpg

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: papra
+  namespace: papra
+spec:
+  selector:
+    app.kubernetes.io/name: papra
+    app.kubernetes.io/instance: papra
+  ports:
+    - name: http
+      protocol: TCP
+      port: 1221
+      targetPort: http
