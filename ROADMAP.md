@@ -63,9 +63,9 @@ Things I might get to at some point
 
 Applications
 
-- [ ] Local LLM API endpoint using GTX 1080 hardware
+- [ ] Local LLM API endpoint using GPU
 - [ ] OpenWebUI or Vane (search)
 - [ ] Affine
 - [ ] Bookmark manager, like Karakeep
-- [ ] Document manager, like Papra
+- [x] Document manager, like Papra
 - [ ] Home Assistant
