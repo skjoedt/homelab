@@ -9,6 +9,7 @@ resources:
   - prowlarr
   - radarr
   - sonarr
+  - bazarr
   - qbittorrent
   - arm
   - seerr

@@ -50,6 +50,10 @@
         href: https://sonarr.fanen.dk
         description: TV show tracker
         icon: sonarr.svg
+    - Bazarr:
+        href: https://bazarr.fanen.dk
+        description: Subtitle management
+        icon: bazarr.svg
     - AdGuard Home:
         href: https://adguard.fanen.dk
         description: Network-wide adblocker
