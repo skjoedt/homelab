@@ -11,6 +11,7 @@ resources:
   - qbittorrent
   - radarr
   - sonarr
+  - bazarr
   - arm
   - resume-dev
   - papra

@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+        app.kubernetes.io/name: bazarr
+        app.kubernetes.io/instance: bazarr
+    spec:
+      containers:
+        - name: bazarr
+          image: lscr.io/linuxserver/bazarr:1.5.5
+          env:
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 170Mi
+            limits:
+              cpu: 2
+              memory: 400Mi
+          volumeMounts:
+            - name: bazarr-config
+              mountPath: /config
+              subPath: bazarr/config
+            - name: bazarr-data
+              mountPath: /movies
+              subPath: media/movies
+            - name: bazarr-data
+              mountPath: /tv
+              subPath: media/shows
+      volumes:
+        - name: bazarr-config
+          persistentVolumeClaim:
+            claimName: bazarr-config-pvc
+        - name: bazarr-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
