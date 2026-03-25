@@ -29,7 +29,7 @@ Everything needed for family onboarding
 
 - [x] ProtonVPN
 - [ ] Add ceph radosgw s3 endpoint
-- [ ] Applications
+- [x] Applications
   - [x] Immich
   - [x] Actual Budget
   - [x] Jellyfin
