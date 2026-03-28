@@ -110,6 +110,18 @@ resource "lxd_instance" "kube_instances" {
     }
   }
 
+  dynamic "device" {
+    for_each = each.key == "kube-2" ? [1] : []
+    content {
+      name = "zigbee-dongle"
+      type = "usb"
+      properties = {
+        vendorid  = "10c4"
+        productid = "ea60"
+      }
+    }
+  }
+
   limits = {
     cpu    = 8
     memory = "12GB"

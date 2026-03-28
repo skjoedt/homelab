@@ -13,6 +13,7 @@ packages:
   - git
   - ntp
   - zsh
+  - linux-modules-extra-generic # needeed for zigbee-dongle
 
 runcmd:
   - echo 'fs.inotify.max_user_instances=512' >> /etc/sysctl.conf

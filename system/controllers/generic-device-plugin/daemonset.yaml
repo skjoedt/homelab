@@ -31,6 +31,12 @@ spec:
             - paths:
                 - path: /dev/sr0
                 - path: /dev/sg1
+        - --device
+        - |
+          name: zigbee
+          groups:
+            - paths:
+                - path: /dev/ttyUSB0
         name: generic-device-plugin
         resources:
           requests:
