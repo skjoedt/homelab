@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: docker.io/postgres:17
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h homeassistant-db-rw.home-assistant -p 5432 -U ha; do
+                echo "Waiting for database...";
+                sleep 2;
+              done
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+      containers:
+        - name: home-assistant
+          image: ghcr.io/home-assistant/home-assistant:2026.3.4
+          ports:
+            - containerPort: 8123
+              name: http-ha
+          env:
+            - name: TZ
+              value: "Europe/Copenhagen"
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: homeassistant-db-app
+                  key: uri
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: ha-config
+              mountPath: /config/configuration.yaml
+              subPath: configuration.yaml
+              readOnly: true
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: homeassistant-config-pvc
+        - name: ha-config
+          configMap:
+            name: ha-config

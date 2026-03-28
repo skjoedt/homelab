@@ -1,0 +1,31 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: homeassistant-db
+  namespace: home-assistant
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.4
+  storage:
+    size: 5Gi
+    storageClass: local-path
+  bootstrap:
+    initdb:
+      database: ha
+      owner: ha
+  postgresql:
+    parameters:
+      max_connections: "200"
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: homeassistant-db-backup
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"

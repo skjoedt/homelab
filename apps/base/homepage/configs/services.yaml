@@ -16,6 +16,10 @@
         href: https://budget.fanen.dk
         description: Personal finance
         icon: actual-budget.svg
+    - Home Assistant:
+        href: https://home.fanen.dk
+        description: Home automation dashboard
+        icon: home-assistant.svg
 - Tools:
     - Resume:
         href: https://resume.fanen.dk

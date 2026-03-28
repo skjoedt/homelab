@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zigbee2mqtt
+  namespace: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee2mqtt
+  template:
+    metadata:
+      labels:
+        app: zigbee2mqtt
+    spec:
+      containers:
+        - name: zigbee2mqtt
+          image: koenkk/zigbee2mqtt:latest
+          env:
+            - name: TZ
+              value: "Europe/Copenhagen"
+            - name: MQTT_SERVER
+              value: "mqtt://mosquitto:1883"
+          ports:
+            - containerPort: 8080
+              name: http-z2m
+          volumeMounts:
+            - name: z2m-data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+              squat.ai/zigbee: "1"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+              squat.ai/zigbee: "1"
+      volumes:
+        - name: z2m-data
+          persistentVolumeClaim:
+            claimName: zigbee2mqtt-config-pvc

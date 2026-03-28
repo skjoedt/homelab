@@ -8,6 +8,7 @@ resources:
   - namespace.yaml
   - rbac.yaml
   - deployment.yaml
+  - external-secret.yaml
   - service.yaml
   - ingress.yaml
   - database.yaml

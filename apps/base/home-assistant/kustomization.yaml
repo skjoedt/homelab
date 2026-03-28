@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: home-assistant
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - pvc.yaml
+  - pnpg
+  - zigbee2mqtt
+  - mosquitto
+
+configMapGenerator:
+  - name: ha-config
+    files:
+      - configs/configuration.yaml
+    options:
+      disableNameSuffixHash: true

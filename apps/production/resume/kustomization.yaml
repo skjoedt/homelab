@@ -7,7 +7,6 @@ namespace: resume
 resources:
   - ../../base/resume
 
-  - external-secret.yaml
   - object-store.yaml
 
 patches:

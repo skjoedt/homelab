@@ -1,0 +1,37 @@
+# Home Assistant configuration
+# https://www.home-assistant.io/docs/configuration/
+
+homeassistant:
+  name: Home
+  latitude: 55.6761
+  longitude: 12.5683
+  elevation: 10
+  unit_system: metric
+  time_zone: Europe/Copenhagen
+  country: DK
+
+# Default config includes a set of commonly used integrations.
+# See: https://www.home-assistant.io/integrations/default_config/
+default_config:
+
+# Record history to PostgreSQL (CNPG-managed).
+# DB_URL is injected from the CNPG-generated homeassistant-db-app secret.
+# https://www.home-assistant.io/integrations/recorder/
+recorder:
+  db_url: !env_var DB_URL
+  purge_keep_days: 30
+  commit_interval: 10
+
+# Trust the Traefik reverse proxy running in the cluster.
+# Without this, HA rejects requests forwarded by the ingress controller.
+# https://www.home-assistant.io/integrations/http/#reverse-proxies
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 10.0.0.0/8  # k3s pod CIDR
+
+# MQTT broker is configured via the Home Assistant UI (Settings > Devices &
+# Services > Add Integration > MQTT). Point it at:
+#   broker: mosquitto   port: 1883
+# Zigbee2MQTT will auto-discover devices through MQTT once connected.
+# https://www.home-assistant.io/integrations/mqtt/

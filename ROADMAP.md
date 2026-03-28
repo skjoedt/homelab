@@ -68,4 +68,4 @@ Applications
 - [ ] Affine
 - [ ] Bookmark manager, like Karakeep
 - [x] Document manager, like Papra
-- [ ] Home Assistant
+- [x] Home Assistant
