@@ -38,10 +38,10 @@
         href: https://arm.fanen.dk
         description: Ripping of physical media
         icon: arm.svg
-    - Qbittorrent:
-        href: https://qbittorrent.fanen.dk
-        description: Bittorrent client
-        icon: qbittorrent.svg
+    - Qui:
+        href: https://qui.fanen.dk
+        description: Bittorrent client UI
+        icon: qui.svg
     - Prowlarr:
         href: https://prowlarr.fanen.dk
         description: Indexer management
@@ -58,6 +58,10 @@
         href: https://bazarr.fanen.dk
         description: Subtitle management
         icon: bazarr.svg
+    - Fileflows:
+        href: https://fileflows.fanen.dk
+        description: Media processing pipelines
+        icon: fileflows.svg
     - AdGuard Home:
         href: https://adguard.fanen.dk
         description: Network-wide adblocker

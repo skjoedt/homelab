@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fileflows
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: fileflows
+  template:
+    metadata:
+      labels:
+        app: fileflows
+        app.kubernetes.io/name: fileflows
+        app.kubernetes.io/instance: fileflows
+    spec:
+      containers:
+        - name: fileflows
+          image: revenz/fileflows:26.04
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+          ports:
+            - containerPort: 5000
+              name: http
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+          volumeMounts:
+            - name: fileflows-config
+              mountPath: /app/Data
+              subPath: fileflows/data
+            - name: fileflows-media
+              mountPath: /media
+            - name: fileflows-temp
+              mountPath: /temp
+      volumes:
+        - name: fileflows-config
+          persistentVolumeClaim:
+            claimName: fileflows-config-pvc
+        - name: fileflows-media
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+        - name: fileflows-temp
+          emptyDir:
+            sizeLimit: 30Gi
+      securityContext:
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"
