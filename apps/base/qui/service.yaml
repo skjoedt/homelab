@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qui
+  labels:
+    app.kubernetes.io/name: qui
+    app.kubernetes.io/instance: qui
+spec:
+  selector:
+    app.kubernetes.io/name: qui
+    app.kubernetes.io/instance: qui
+  ports:
+    - name: http
+      port: 7476
+      targetPort: 7476
+      protocol: TCP

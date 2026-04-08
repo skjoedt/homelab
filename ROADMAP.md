@@ -69,3 +69,4 @@ Applications
 - [ ] Bookmark manager, like Karakeep
 - [x] Document manager, like Papra
 - [x] Home Assistant
+- [ ] Nix cache

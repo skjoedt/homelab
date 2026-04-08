@@ -9,6 +9,7 @@ resources:
   - seerr
   - prowlarr
   - qbittorrent
+  - qui
   - radarr
   - sonarr
   - bazarr
