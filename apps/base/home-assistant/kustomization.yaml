@@ -11,6 +11,7 @@ resources:
   - pnpg
   - zigbee2mqtt
   - mosquitto
+  - object-store.yaml
 
 configMapGenerator:
   - name: ha-config

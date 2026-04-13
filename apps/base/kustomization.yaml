@@ -14,7 +14,8 @@ resources:
   - sonarr
   - bazarr
   - arm
-  - resume-dev
+  - resume
+  - nemmest
   - papra
-  - home-assistant-dev
+  - home-assistant
   - fileflows

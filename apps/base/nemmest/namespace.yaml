@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nemmest
+  labels:
+    podmonitorscrape: "true"

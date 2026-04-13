@@ -7,3 +7,4 @@ resources:
   - external-secrets
   - metallb
   - ceph
+  - ../base/cnpg

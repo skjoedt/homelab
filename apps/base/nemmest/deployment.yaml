@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nemmest
+  namespace: nemmest
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nemmest
+  template:
+    metadata:
+      labels:
+        app: nemmest
+        app.kubernetes.io/name: nemmest
+        app.kubernetes.io/instance: nemmest
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: docker.io/postgres:17
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h nemmest-db-rw.nemmest -p 5432 -U app; do
+                echo "Waiting for database...";
+                sleep 2;
+              done
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+      containers:
+        - name: nemmest
+          image: ghcr.io/skjoedt/nemmest:latest
+          ports:
+            - containerPort: 3000
+              name: http-nemmest
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: nemmest-db-app
+                  key: uri
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"

@@ -15,6 +15,7 @@ resources:
   - arm
   - seerr
   - resume
+  - nemmest
   - papra
   - home-assistant
   - fileflows

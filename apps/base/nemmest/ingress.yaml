@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nemmest
+  namespace: nemmest
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: nem.traefik.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nemmest
+                port:
+                  name: http-nemmest

@@ -2,18 +2,18 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: resume-db-backup
-  namespace: resume
+  name: nemmest-db-backup
+  namespace: nemmest
 spec:
   configuration:
-    destinationPath: s3://cnpg-backups/resume-db/
+    destinationPath: s3://cnpg-backups/nemmest-db/
     endpointURL: http://rustfs.rustfs:9000
     s3Credentials:
       accessKeyId:
-        name: rustfs-credentials
+        name: cnpg-aws-credentials
         key: ACCESS_KEY_ID
       secretAccessKey:
-        name: rustfs-credentials
+        name: cnpg-aws-credentials
         key: ACCESS_SECRET_KEY
     wal:
       compression: gzip

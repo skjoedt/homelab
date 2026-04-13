@@ -12,14 +12,14 @@
         href: https://photos.fanen.dk
         description: Photo album
         icon: immich.svg
+    - Nemmest:
+        href: https://nem.fanen.dk
+        description: Nemlig recipes and shopping list
+        icon: our-shopping-list.svg
     - Budget:
         href: https://budget.fanen.dk
         description: Personal finance
         icon: actual-budget.svg
-    - Home Assistant:
-        href: https://home.fanen.dk
-        description: Home automation dashboard
-        icon: home-assistant.svg
 - Tools:
     - Resume:
         href: https://resume.fanen.dk
@@ -34,6 +34,10 @@
         description: Document library
         icon: papra.svg
 - Management:
+    - Home Assistant:
+        href: https://home.fanen.dk
+        description: Home automation dashboard
+        icon: home-assistant.svg
     - Arm:
         href: https://arm.fanen.dk
         description: Ripping of physical media

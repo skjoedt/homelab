@@ -2,18 +2,18 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: homeassistant-db-backup
-  namespace: home-assistant
+  name: resume-db-backup
+  namespace: resume
 spec:
   configuration:
-    destinationPath: s3://cnpg-backups/homeassistant-db/
+    destinationPath: s3://cnpg-backups/resume-db/
     endpointURL: http://rustfs.rustfs:9000
     s3Credentials:
       accessKeyId:
-        name: rustfs-credentials
+        name: cnpg-aws-credentials
         key: ACCESS_KEY_ID
       secretAccessKey:
-        name: rustfs-credentials
+        name: cnpg-aws-credentials
         key: ACCESS_SECRET_KEY
     wal:
       compression: gzip

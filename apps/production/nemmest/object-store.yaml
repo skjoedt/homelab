@@ -1,0 +1,28 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nemmest-db-backup
+  namespace: nemmest
+spec:
+  configuration:
+    destinationPath: s3://homelab-cnpg-barman-backups/nemmest-db/
+    endpointURL: ""
+    s3Credentials:
+      accessKeyId:
+        name: cnpg-aws-credentials
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: cnpg-aws-credentials
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+      immediateCheckpoint: false
+      jobs: 2
+  instanceSidecarConfiguration:
+    env:
+      - name: AWS_DEFAULT_REGION
+        value: eu-north-1
+  retentionPolicy: "30d"
