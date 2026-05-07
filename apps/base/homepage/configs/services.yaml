@@ -83,3 +83,7 @@
         href: https://alerts.fanen.dk
         description: Alert Managers
         icon: alertmanager.svg
+    - Dozzle:
+        href: https://dozzle.fanen.dk
+        description: Kubernetes log viewer
+        icon: dozzle.svg

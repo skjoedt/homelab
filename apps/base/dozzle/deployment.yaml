@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dozzle
+  namespace: dozzle
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: dozzle
+  template:
+    metadata:
+      labels:
+        app: dozzle
+        app.kubernetes.io/name: dozzle
+        app.kubernetes.io/instance: dozzle
+    spec:
+      serviceAccountName: pod-viewer
+      containers:
+        - name: dozzle
+          image: amir20/dozzle:v10.5.2
+          ports:
+            - containerPort: 8080
+              name: http-dozzle
+          env:
+            - name: DOZZLE_MODE
+              value: "k8s"
+            - name: DOZZLE_AUTH_PROVIDER
+              value: "simple"
+          volumeMounts:
+            - name: dozzle-data
+              mountPath: /data
+            - name: dozzle-users
+              mountPath: /data/users.yml
+              subPath: users.yml
+              readOnly: true
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+      volumes:
+        - name: dozzle-data
+          persistentVolumeClaim:
+            claimName: dozzle-data-pvc
+        - name: dozzle-users
+          secret:
+            secretName: dozzle-users
