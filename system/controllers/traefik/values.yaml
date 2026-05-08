@@ -46,3 +46,5 @@ traefik:
       allowExternalNameServices: true
   additionalArguments:
     - "--serversTransport.insecureSkipVerify=true"
+    # Disable read timeout to allow large video uploads (e.g. via immich-go)
+    - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=0"

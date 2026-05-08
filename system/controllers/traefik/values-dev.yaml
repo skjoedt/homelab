@@ -35,3 +35,7 @@ resources:
   limits:
     cpu: 300m
     memory: 256Mi
+
+additionalArguments:
+  # Disable read timeout to allow large video uploads (e.g. via immich-go)
+  - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=0"
