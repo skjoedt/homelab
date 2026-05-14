@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbootxyz
+  namespace: netbootxyz
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: netbootxyz
+  template:
+    metadata:
+      labels:
+        app: netbootxyz
+        app.kubernetes.io/name: netbootxyz
+        app.kubernetes.io/instance: netbootxyz
+    spec:
+      containers:
+      - name: netbootxyz
+        image: ghcr.io/netbootxyz/netbootxyz:0.7.6-nbxyz18
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        - name: assets
+          containerPort: 80
+          protocol: TCP
+        - name: tftp
+          containerPort: 69
+          protocol: UDP
+        env:
+        - name: TZ
+          value: Europe/Copenhagen
+        - name: WEB_APP_PORT
+          value: "3000"
+        - name: NGINX_PORT
+          value: "80"
+        volumeMounts:
+        - name: netbootxyz-config
+          mountPath: /config
+        - name: netbootxyz-assets
+          mountPath: /assets
+        - name: netbootxyz-nginx-config
+          mountPath: /config/nginx/site-confs/default
+          subPath: default
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: netbootxyz-config
+        persistentVolumeClaim:
+          claimName: netbootxyz-config-pvc
+      - name: netbootxyz-assets
+        persistentVolumeClaim:
+          claimName: netbootxyz-assets-pvc
+      - name: netbootxyz-nginx-config
+        configMap:
+          name: netbootxyz-nginx-config
