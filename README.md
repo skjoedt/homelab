@@ -20,7 +20,7 @@ Development is on my local macbook using k3d.
 1. Provision metal
 
     ```bash
-    cd metal/lxc/dragon-1 && terraform apply
+    cd terraform/lxc/dragon-1 && terraform apply
     ```
 
 2. Bootstrap the cluster

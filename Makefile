@@ -60,7 +60,7 @@ dev-down:
 
 bootstrap-production:
 	@echo "Bootstrapping k3s on production"
-	bash metal/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
+	bash terraform/lxc/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
 
 prepare-production: # to be replaced by argocd
 	@echo "Installing CRDs..."
