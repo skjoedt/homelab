@@ -4,10 +4,18 @@
         href: https://jellyfin.fanen.dk
         description: Media system (movies, music, etc.)
         icon: jellyfin.svg
+    - Navidrome:
+        href: https://music.fanen.dk
+        description: Music streaming server
+        icon: navidrome.svg
     - Seerr:
         href: https://seerr.fanen.dk
         description: Request management for media
         icon: seerr.svg
+    - MusicSeerr:
+        href: https://musicseerr.fanen.dk
+        description: Request management for music
+        icon: lidarr.svg
     - Photos:
         href: https://photos.fanen.dk
         description: Photo album
@@ -58,6 +66,10 @@
         href: https://sonarr.fanen.dk
         description: TV show tracker
         icon: sonarr.svg
+    - Lidarr:
+        href: https://lidarr.fanen.dk
+        description: Music tracker
+        icon: lidarr.svg
     - Bazarr:
         href: https://bazarr.fanen.dk
         description: Subtitle management

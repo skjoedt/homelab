@@ -20,3 +20,6 @@ resources:
   - home-assistant
   - fileflows
   - dozzle
+  - lidarr
+  - musicseerr
+  - navidrome

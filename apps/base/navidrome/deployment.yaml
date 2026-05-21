@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navidrome
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: navidrome
+  template:
+    metadata:
+      labels:
+        app: navidrome
+        app.kubernetes.io/name: navidrome
+        app.kubernetes.io/instance: navidrome
+    spec:
+      containers:
+        - name: navidrome
+          image: deluan/navidrome:0.61.2
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "400Mi"
+          ports:
+            - containerPort: 4533
+          volumeMounts:
+            - name: navidrome-config
+              mountPath: /data
+              subPath: navidrome/data
+            - name: navidrome-data
+              mountPath: /music
+              subPath: media/music
+              readOnly: true
+      volumes:
+        - name: navidrome-config
+          persistentVolumeClaim:
+            claimName: navidrome-config-pvc
+        - name: navidrome-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"

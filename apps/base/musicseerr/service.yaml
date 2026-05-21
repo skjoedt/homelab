@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: musicseerr
+  labels:
+    app.kubernetes.io/name: musicseerr
+    app.kubernetes.io/instance: musicseerr
+spec:
+  selector:
+    app.kubernetes.io/name: musicseerr
+    app.kubernetes.io/instance: musicseerr
+  ports:
+    - name: http
+      port: 8688
+      targetPort: 8688
+      protocol: TCP

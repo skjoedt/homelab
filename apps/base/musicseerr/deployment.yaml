@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musicseerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: musicseerr
+  template:
+    metadata:
+      labels:
+        app: musicseerr
+        app.kubernetes.io/name: musicseerr
+        app.kubernetes.io/instance: musicseerr
+    spec:
+      containers:
+        - name: musicseerr
+          image: ghcr.io/habirabbu/musicseerr:v1.3.4
+          env:
+            - name: PUID
+              value: "995"
+            - name: PGID
+              value: "501"
+            - name: PORT
+              value: "8688"
+            - name: TZ
+              value: Europe/Copenhagen
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "400Mi"
+          volumeMounts:
+            - name: musicseerr-config
+              mountPath: /app/config
+              subPath: musicseerr/config
+            - name: musicseerr-config
+              mountPath: /app/cache
+              subPath: musicseerr/cache
+            - name: musicseerr-data
+              mountPath: /music
+              subPath: media/music
+              readOnly: true
+      volumes:
+        - name: musicseerr-config
+          persistentVolumeClaim:
+            claimName: musicseerr-config-pvc
+        - name: musicseerr-data
+          persistentVolumeClaim:
+            claimName: jellyfin-data-pvc
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 501
+        fsGroup: 501
+        fsGroupChangePolicy: "OnRootMismatch"

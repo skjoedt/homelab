@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  labels:
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: lidarr
+spec:
+  selector:
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: lidarr
+  ports:
+    - name: http
+      port: 8686
+      targetPort: 8686
+      protocol: TCP
