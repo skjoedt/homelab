@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hermes
+  namespace: hermes-personal
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hermes-personal-readonly
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hermes-personal-readonly
+subjects:
+  - kind: ServiceAccount
+    name: hermes
+    namespace: hermes-personal
+roleRef:
+  kind: ClusterRole
+  name: hermes-personal-readonly
+  apiGroup: rbac.authorization.k8s.io
