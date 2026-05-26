@@ -24,8 +24,21 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
+    limits_config:
+      retention_period: 14d
+      max_global_streams_per_user: 5000
+
+    compactor:
+      working_directory: /var/loki/compactor
+      retention_enabled: true
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 150
+      delete_request_store: s3
+
     ingester:
       chunk_encoding: snappy
+      wal:
+        replay_memory_ceiling: 256MB
     tracing:
       enabled: true
     querier:
