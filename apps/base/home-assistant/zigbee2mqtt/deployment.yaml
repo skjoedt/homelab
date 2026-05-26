@@ -32,11 +32,11 @@ spec:
             requests:
               cpu: "50m"
               memory: "128Mi"
-              squat.ai/zigbee: "1"
+              devic.es/zigbee: "1"
             limits:
               cpu: "500m"
               memory: "512Mi"
-              squat.ai/zigbee: "1"
+              devic.es/zigbee: "1"
       volumes:
         - name: z2m-data
           persistentVolumeClaim:
