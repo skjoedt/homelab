@@ -13,9 +13,10 @@ packages:
   - git
   - ntp
   - zsh
-  - linux-modules-extra-generic # needeed for zigbee-dongle; we need to `modprobe cp210x` manually
+  - linux-modules-extra-generic # needed for zigbee-dongle cp210x driver
 
 runcmd:
+  - echo 'cp210x' >> /etc/modules # needed for zigbee-dongle
   - echo 'fs.inotify.max_user_instances=512' >> /etc/sysctl.conf
   - echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf
   - sysctl -p

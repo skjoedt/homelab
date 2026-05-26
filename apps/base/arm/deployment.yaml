@@ -69,11 +69,11 @@ spec:
             requests:
               cpu: "100m"
               memory: "256Mi"
-              squat.ai/dvd-writer: "1"
+              devic.es/dvd-writer: "1"
             limits:
               cpu: "4"
               memory: "4Gi"
-              squat.ai/dvd-writer: "1"
+              devic.es/dvd-writer: "1"
           volumeMounts:
             - name: arm-home
               mountPath: /home/arm
