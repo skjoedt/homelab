@@ -47,6 +47,8 @@ spec:
               value: "1"
             - name: HERMES_DASHBOARD_HOST
               value: "0.0.0.0"
+            - name: HERMES_DASHBOARD_TUI
+              value: "1"
           volumeMounts:
             - name: hermes-data
               mountPath: /opt/data
