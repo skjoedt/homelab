@@ -6,6 +6,17 @@ metadata:
 spec:
   template:
     spec:
+      containers:
+        - name: gluetun
+          env:
+            # Route Kubernetes cluster CIDRs through the in-cluster DNS server
+            # so that Prowlarr proxy URLs (e.g. http://prowlarr.arr:9696/...) can
+            # be resolved inside the gluetun network namespace. Without this,
+            # gluetun's DoH resolver (Cloudflare/Google) cannot resolve internal
+            # service names, causing Lidarr download grabs to fail with
+            # "Download client failed to add torrent by url".
+            - name: DNS_PRIVATE_ADDRESS
+              value: "10.42.0.0/16,10.43.0.0/16"
       securityContext:
         fsGroup: 501
         fsGroupChangePolicy: "OnRootMismatch"
