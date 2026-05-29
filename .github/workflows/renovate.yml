@@ -25,4 +25,5 @@ jobs:
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_GIT_AUTHOR: "renovate-bot <renovate-bot@users.noreply.github.com>"
           RENOVATE_FORCE: ${{ inputs.overrideSchedule == 'true' && '{\"schedule\":null}' || '' }}
