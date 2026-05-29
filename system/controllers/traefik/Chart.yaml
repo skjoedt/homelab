@@ -4,5 +4,5 @@ name: traefik
 version: 0.0.0
 dependencies:
   - name: traefik
-    version: ">0.35"
+    version: "35.4.0"
     repository: https://helm.traefik.io/traefik

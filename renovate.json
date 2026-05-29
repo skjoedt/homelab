@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 6am on monday"],
+  "timezone": "UTC",
+  "dependencyDashboard": true,
+  "managers": [
+    {
+      "description": "Container images in Kubernetes manifests",
+      "fileMatch": ["(^|/)apps/.+\\.ya?ml$", "(^|/)monitoring/.+\\.ya?ml$", "(^|/)system/.+\\.ya?ml$"],
+      "matchStrings": [
+        "image:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "helmv3": {
+    "fileMatch": ["(^|/)Chart\\.yaml$"]
+  },
+  "postUpdateOptions": ["helmUpdateSubChartArchives"],
+  "packageRules": [
+    {
+      "description": "Group all non-major updates into a single weekly PR",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "all non-major updates",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Major updates open a PR for manual review",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}
