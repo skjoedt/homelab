@@ -18,6 +18,19 @@
     "fileMatch": ["(^|/)Chart\\.yaml$"]
   },
   "postUpdateOptions": ["helmUpdateSubChartArchives"],
+  "customManagers": [
+    {
+      "description": "Track CNPG imageName field in Cluster CRDs",
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)apps/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "imageName:\\s*(?<depName>[^:]+):(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
   "packageRules": [
     {
       "description": "Use loose versioning for Docker images (handles non-semver tags)",
