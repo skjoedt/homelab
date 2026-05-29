@@ -58,7 +58,7 @@ spec:
               memory: "2Gi"
 
         - name: immich-machine-learning
-          image: ghcr.io/immich-app/immich-machine-learning:v1.141.1
+          image: ghcr.io/immich-app/immich-machine-learning:v2.7.5
           env:
             - name: IMMICH_PORT
               value: "3003"
