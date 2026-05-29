@@ -76,7 +76,7 @@ spec:
               memory: "4Gi"
 
         - name: redis
-          image: docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571  # yamllint disable-line rule:line-length
+          image: docker.io/valkey/valkey:9.1.0@sha256:4963247afc4cd33c7d3b2d2816b9f7f8eeebab148d29056c2ca4d7cbc966f2d9  # yamllint disable-line rule:line-length
           ports:
             - containerPort: 6379
               name: redis
