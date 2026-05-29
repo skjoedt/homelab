@@ -3,7 +3,7 @@
   "extends": ["config:recommended"],
   "schedule": ["before 6am on monday"],
   "timezone": "UTC",
-  "dependencyDashboard": true,
+  "dependencyDashboard": false,
   "managers": [
     {
       "description": "Container images in Kubernetes manifests",
