@@ -1,26 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "schedule": ["before 6am on monday"],
-  "timezone": "UTC",
-  "dependencyDashboard": false,
-  "managers": [
-    {
-      "description": "Container images in Kubernetes manifests",
-      "fileMatch": ["(^|/)apps/.+\\.ya?ml$", "(^|/)monitoring/.+\\.ya?ml$", "(^|/)system/.+\\.ya?ml$"],
-      "matchStrings": [
-        "image:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s]+)"
-      ],
-      "datasourceTemplate": "docker"
-    }
+  "extends": [
+    "config:recommended",
+    "docker:enableMajor"
   ],
+  "dependencyDashboard": false,
+  "prHourlyLimit": 0,
+  "ignoreTests": true,
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/(^|/)apps/.+\\.ya?ml$/",
+      "/(^|/)monitoring/.+\\.ya?ml$/",
+      "/(^|/)system/.+\\.ya?ml$/"
+    ]
+  },
   "helmv3": {
     "fileMatch": ["(^|/)Chart\\.yaml$"]
   },
   "postUpdateOptions": ["helmUpdateSubChartArchives"],
   "packageRules": [
     {
-      "description": "Group all non-major updates into a single weekly PR",
+      "description": "Use loose versioning for Docker images (handles non-semver tags)",
+      "matchDatasources": ["docker"],
+      "versioning": "loose"
+    },
+    {
+      "description": "Group all non-major updates into a single weekly PR and automerge",
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "groupName": "all non-major updates",
       "automerge": true,
