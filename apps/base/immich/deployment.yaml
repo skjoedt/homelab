@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v2.4.1
+          image: ghcr.io/immich-app/immich-server:v2.7.5
           ports:
             - containerPort: 2283
               name: http-immich
@@ -58,7 +58,7 @@ spec:
               memory: "2Gi"
 
         - name: immich-machine-learning
-          image: ghcr.io/immich-app/immich-machine-learning:v1.141.1
+          image: ghcr.io/immich-app/immich-machine-learning:v2.7.5
           env:
             - name: IMMICH_PORT
               value: "3003"
@@ -76,7 +76,7 @@ spec:
               memory: "4Gi"
 
         - name: redis
-          image: docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571  # yamllint disable-line rule:line-length
+          image: docker.io/valkey/valkey:9.1.0@sha256:4963247afc4cd33c7d3b2d2816b9f7f8eeebab148d29056c2ca4d7cbc966f2d9  # yamllint disable-line rule:line-length
           ports:
             - containerPort: 6379
               name: redis
@@ -89,7 +89,7 @@ spec:
               memory: "500Mi"
 
         - name: postgres
-          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:8d292bdb796aa58bbbaa47fe971c8516f6f57d6a47e7172e62754feb6ed4e7b0  # yamllint disable-line rule:line-length
+          image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
           ports:
             - containerPort: 5432
               name: postgres
@@ -107,7 +107,7 @@ spec:
               value: "--data-checksums"
           volumeMounts:
             - name: postgres-data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
               subPath: immich/postgres
           resources:
             requests:
