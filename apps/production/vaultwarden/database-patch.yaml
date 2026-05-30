@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-db
+  namespace: vaultwarden
+spec:
+  storage:
+    size: 10Gi
+    storageClass: ceph-rbd

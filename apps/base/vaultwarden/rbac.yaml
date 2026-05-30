@@ -1,0 +1,24 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vaultwarden-db
+  namespace: vaultwarden
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vaultwarden-db
+  namespace: vaultwarden
+subjects:
+  - kind: ServiceAccount
+    name: vaultwarden-db
+    namespace: vaultwarden
+roleRef:
+  kind: Role
+  name: vaultwarden-db
+  apiGroup: rbac.authorization.k8s.io
