@@ -6,7 +6,7 @@ metadata:
   namespace: resume
 spec:
   instances: 2
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.4
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4
 
   storage:
     size: 5Gi
