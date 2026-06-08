@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: docs.traefik.me
+    - host: docs.localho.st
       http:
         paths:
           - path: /

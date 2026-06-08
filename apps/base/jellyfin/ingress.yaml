@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: jellyfin.traefik.me
+    - host: jellyfin.localho.st
       http:
         paths:
           - path: /

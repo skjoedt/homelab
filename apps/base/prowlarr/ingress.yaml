@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: prowlarr.traefik.me
+    - host: prowlarr.localho.st
       http:
         paths:
           - path: /

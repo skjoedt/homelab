@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: sonarr.traefik.me
+    - host: sonarr.localho.st
       http:
         paths:
           - path: /

@@ -87,7 +87,7 @@ Ingress routes are defined in each environment under the following endpoints
 
 | Type       | Endpoints          |
 | ---------- | ------------------ |
-| testing    | *.traefik.me       |
+| testing    | *.localho.st       |
 | production | *.fanen.dk         |
 
 # Storage

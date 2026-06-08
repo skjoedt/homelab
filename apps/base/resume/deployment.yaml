@@ -46,7 +46,7 @@ spec:
             - name: TZ
               value: "Europe/Copenhagen"
             - name: APP_URL
-              value: "https://resume.traefik.me"
+              value: "https://resume.localho.st"
             - name: PRINTER_APP_URL
               value: "http://localhost:3000"
             - name: PRINTER_ENDPOINT

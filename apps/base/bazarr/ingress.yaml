@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: bazarr.traefik.me
+    - host: bazarr.localho.st
       http:
         paths:
           - path: /

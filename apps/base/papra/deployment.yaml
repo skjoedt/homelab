@@ -33,7 +33,7 @@ spec:
             - name: TZ
               value: Europe/Copenhagen
             - name: APP_BASE_URL
-              value: https://docs.traefik.me
+              value: https://docs.localho.st
             - name: AUTH_SECRET
               valueFrom:
                 secretKeyRef:

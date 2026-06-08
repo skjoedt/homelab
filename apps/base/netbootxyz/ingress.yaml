@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: netbootxyz.traefik.me
+    - host: netbootxyz.localho.st
       http:
         paths:
         - path: /
@@ -25,7 +25,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: netboot.traefik.me
+    - host: netboot.localho.st
       http:
         paths:
         - path: /

@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: musicseerr.traefik.me
+    - host: musicseerr.localho.st
       http:
         paths:
           - path: /
