@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: wait-for-db
-          image: docker.io/postgres:18.4
+          image: docker.io/postgres:19beta1-trixie
           command:
             - /bin/sh
             - -c
