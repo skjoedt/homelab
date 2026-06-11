@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vaultwarden
+resources:
+  - namespace.yaml
+  - external-secret.yaml
+  - rbac.yaml
+  - database.yaml
+  - object-store.yaml
+  - scheduled-backup.yaml
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml
+  - ingress.yaml
