@@ -35,8 +35,9 @@ spec:
         - |
           name: zigbee
           groups:
-            - paths:
-                - path: /dev/ttyUSB0
+            - usb:
+                - vendor: 10c4
+                  product: ea60
         name: generic-device-plugin
         resources:
           requests:

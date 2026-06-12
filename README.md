@@ -13,7 +13,7 @@ The cluster is not running high availability as I only have two nodes.
 | Intel NUC NUC8i7BEH      | 1   | 223.6G  | -                 | 8 GB  | Intel i7-8559U |
 | Dell Precision Tower7810 | 1   | 512G    | 3x IronWolf 10 TB | 64 GB | Xeon e5-2620   |
 
-Development is on my local macbook using k3d.
+Development is on my local machine using k3d.
 
 # Getting started
 
