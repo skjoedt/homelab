@@ -6,6 +6,6 @@ resources:
   - ../../base/qbittorrent
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: pvc-patch.yaml
   - path: deployment-patch.yaml

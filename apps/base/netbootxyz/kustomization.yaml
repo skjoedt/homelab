@@ -6,7 +6,7 @@ resources:
   - deployment.yaml
   - pvc.yaml
   - service.yaml
-  - ingress.yaml
+  - route.yaml
 
 configMapGenerator:
   - name: netbootxyz-nginx-config

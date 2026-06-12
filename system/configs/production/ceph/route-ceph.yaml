@@ -1,0 +1,66 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ceph-dashboard-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - ceph.fanen.dk
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: ceph-dashboard
+          port: 8443
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ceph-grafana-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - grafana.ceph.fanen.dk
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: ceph-grafana
+          port: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-dashboard
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - name: https
+      port: 8443
+      appProtocol: https
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-grafana
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: 10.0.0.11
+  ports:
+    - name: https
+      port: 3000
+      appProtocol: https

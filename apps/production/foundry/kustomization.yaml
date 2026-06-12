@@ -7,5 +7,5 @@ resources:
   - ../../base/foundry
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: pvc-data-patch.yaml

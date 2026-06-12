@@ -6,4 +6,4 @@ resources:
   - ../../base/alertmanager
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml

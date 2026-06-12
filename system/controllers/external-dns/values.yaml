@@ -1,6 +1,9 @@
 ---
 external-dns:
   provider: aws
+  sources:
+    - service
+    - gateway-httproute
   txtOwnerId: homelab
   env:
     - name: AWS_ACCESS_KEY_ID

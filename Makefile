@@ -17,6 +17,11 @@ check-deps:
 	@which kubectl >/dev/null || (echo "kubectl is required but not installed" && exit 1)
 	@which k3d >/dev/null || (echo "k3d is required but not installed" && exit 1)
 
+check-mkcert:
+	@which mkcert >/dev/null || (echo "mkcert is required but not installed" && exit 1)
+
+dev: dev-up dev-prepare
+
 # Create k3d cluster with branch-specific name
 dev-up: check-deps
 	@if ! k3d cluster list | grep -q "$(BRANCH_NAME_SLUG)"; then \
@@ -27,20 +32,22 @@ dev-up: check-deps
 			--agents 0 \
 			-p "80:80@loadbalancer" \
 			-p "443:443@loadbalancer" \
-			-p "53:53/tcp@loadbalancer" \
 			-p "853:853/tcp@loadbalancer" \
-			-p "53:53/udp@loadbalancer" \
 			--registry-create $(BRANCH_NAME_SLUG)-registry:127.0.0.1:$(REGISTRY_PORT) \
 			--wait; \
 	fi
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 
 # Install CRDs
-dev-prepare:
+dev-prepare: check-deps check-mkcert
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 	@echo "Installing CRDs..."
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
+	@mkdir -p .local/certs
+	mkcert -cert-file .local/certs/localho.st.pem -key-file .local/certs/localho.st-key.pem localho.st "*.localho.st"
+	kubectl -n traefik create secret tls localho-st-tls --cert=.local/certs/localho.st.pem --key=.local/certs/localho.st-key.pem --dry-run=client -o yaml | kubectl apply -f -
 	helm upgrade --install --dependency-update kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
 	helm upgrade --install --dependency-update grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
 	helm upgrade --install --dependency-update loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
@@ -64,6 +71,7 @@ bootstrap-production:
 
 prepare-production: # to be replaced by argocd
 	@echo "Installing CRDs..."
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 	helm upgrade --install external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	@read -p "aws-creds loaded? (y/n): " ans; [ "$$ans" = "y" ]
 	helm upgrade --install --dependency-update kube-vip ./system/controllers/kube-vip --namespace kube-vip --create-namespace -f ./system/controllers/kube-vip/values.yaml

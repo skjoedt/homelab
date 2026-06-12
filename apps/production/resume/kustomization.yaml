@@ -8,6 +8,6 @@ resources:
   - ../../base/resume
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: deployment-patch.yaml
   - path: object-store.yaml

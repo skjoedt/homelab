@@ -1,5 +1,3 @@
-# continue.dev
-.continue/*
 
 # Local .terraform directories
 **/.terraform/*
@@ -48,9 +46,15 @@ terraform.rc
 # Devenv
 .devenv*
 devenv.local.nix
+.local/
 
 # direnv
 .direnv
 
 # pre-commit
 .pre-commit-config.yaml
+
+# LLM tools
+graphify-out/*
+.continue/*
+.opencode/

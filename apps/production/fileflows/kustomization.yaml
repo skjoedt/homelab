@@ -6,5 +6,5 @@ resources:
   - ../../base/fileflows
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: pvc-patch.yaml

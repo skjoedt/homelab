@@ -5,8 +5,8 @@ namespace: home-assistant
 resources:
   - ../../base/home-assistant
 patches:
-  - path: ingress-patch.yaml
-  - path: ingress-patch-z2m.yaml
+  - path: route-patch.yaml
+  - path: route-patch-z2m.yaml
   - path: pvc-config-patch.yaml
   - path: pvc-z2m-patch.yaml
   - path: object-store.yaml

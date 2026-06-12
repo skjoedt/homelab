@@ -6,6 +6,6 @@ resources:
   - ../../base/jellyfin
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: pvc-config-patch.yaml
   - path: pvc-data-patch.yaml

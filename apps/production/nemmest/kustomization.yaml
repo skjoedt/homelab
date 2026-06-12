@@ -8,5 +8,5 @@ resources:
   - ../../base/nemmest
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: object-store.yaml

@@ -79,11 +79,11 @@ Development is on my local machine using k3d.
 | Type       | K8s Distribution | Control Plane | Load Balancer | Deployment |
 | ---------- | ---------------- | ------------- | ------------- | ---------- |
 | testing    | k3d (wrapper)    | localhost     | localhost     | Manual     |
-| production | k3s              | 10.0.0.30     | 10.0.0.50     | ArgoCD     |
+| production | k3s              | 10.0.0.30     | 10.0.0.50     | Manual     |
 
 # Endpoints
 
-Ingress routes are defined in each environment under the following endpoints
+Gateway routes are defined in each environment under the following endpoints
 
 | Type       | Endpoints          |
 | ---------- | ------------------ |

@@ -4,5 +4,5 @@ namespace: arr
 resources:
   - deployment.yaml
   - pvc.yaml
-  - ingress.yaml
+  - route.yaml
   - service.yaml

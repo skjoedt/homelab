@@ -4,7 +4,6 @@ kind: Kustomization
 
 resources:
   - ../../base/traefik
-  - server-transport.yaml
 
 patches:
-  - path: patch-ingress.yaml
+  - path: gateway-patch.yaml

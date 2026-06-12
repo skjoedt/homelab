@@ -5,6 +5,6 @@ resources:
   - namespace.yaml
   - credentials.yaml
   - storageclass.yaml
-  - ingress-ceph.yaml
+  - route-ceph.yaml
   - volumesnapshotclass-rbd.yaml
   - volumesnapshotclass-cephfs.yaml

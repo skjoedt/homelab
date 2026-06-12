@@ -17,5 +17,5 @@ configMapGenerator:
 
 patches:
   - path: service-patch.yaml
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: deployment-patch.yaml

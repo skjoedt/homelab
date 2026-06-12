@@ -23,7 +23,7 @@ recorder:
   commit_interval: 10
 
 # Trust the Traefik reverse proxy running in the cluster.
-# Without this, HA rejects requests forwarded by the ingress controller.
+# Without this, HA rejects requests forwarded by the Gateway controller.
 # https://www.home-assistant.io/integrations/http/#reverse-proxies
 http:
   use_x_forwarded_for: true

@@ -1,41 +1,48 @@
 ---
-globalArguments:
-  - "--global.sendanonymoususage=false"
-  - "--global.checknewversion=false"
+traefik:
+  global:
+    sendAnonymousUsage: false
+    checkNewVersion: false
 
-api: insecure
+  logs:
+    general:
+      level: DEBUG
 
-ports:
-  web:
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
-  websecure:
-    port: 443
-    tls:
+  api:
+    insecure: true
+
+  service:
+    spec:
+      loadBalancerIP: ""
+
+  providers:
+    kubernetesGateway:
       enabled: true
+    kubernetesIngress:
+      enabled: false
+    kubernetesCRD:
+      enabled: false
 
-log:
-  level: DEBUG
-
-ingressClass:
-  enabled: true
-  name: traefik-external
-
-ingressRoute:
-  dashboard:
+  gateway:
     enabled: false
 
-resources:
-  requests:
-    cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 300m
-    memory: 256Mi
+  ports:
+    web:
+      http:
+        redirections: null
 
-additionalArguments:
-  # Disable read timeout to allow large video uploads (e.g. via immich-go)
-  - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=0"
+  ingressClass:
+    enabled: false
+    name: traefik
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+  additionalArguments:
+    # Disable read timeout to allow large video uploads (e.g. via immich-go)
+    - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=0"

@@ -6,7 +6,7 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
+  - route.yaml
   - pvc.yaml
   - pnpg
   - zigbee2mqtt

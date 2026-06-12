@@ -1,49 +1,49 @@
 ---
-globalArguments:
-  - "--global.sendanonymoususage=false"
-  - "--global.checknewversion=false"
-
-service:
-  spec:
-    loadBalancerIP: "10.0.0.50" # production
-
-ports:
-  web:
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
-  websecure:
-    port: 443
-    tls:
-      enabled: true
-
-log:
-  level: DEBUG
-
-ingressClass:
-  enabled: true
-  name: traefik
-
-ingressRoute:
-  dashboard:
-    enabled: false
-
-resources:
-  requests:
-    cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 300m
-    memory: 256Mi
-
 traefik:
+  global:
+    sendAnonymousUsage: false
+    checkNewVersion: false
+
+  service:
+    spec:
+      loadBalancerIP: "10.0.0.50" # production
+
+  api:
+    insecure: true
+
   providers:
+    kubernetesGateway:
+      enabled: true
     kubernetesIngress:
+      enabled: false
       allowExternalNameServices: true
     kubernetesCRD:
+      enabled: false
       allowExternalNameServices: true
+
+  gateway:
+    enabled: false
+
+  ingressClass:
+    enabled: false
+
+  ports:
+    web:
+      http:
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+            permanent: true
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
   additionalArguments:
     - "--serversTransport.insecureSkipVerify=true"
     # Disable read timeout to allow large video uploads (e.g. via immich-go)

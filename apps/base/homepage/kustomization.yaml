@@ -8,7 +8,7 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
+  - route.yaml
 
 configMapGenerator:
   - name: homepage-config

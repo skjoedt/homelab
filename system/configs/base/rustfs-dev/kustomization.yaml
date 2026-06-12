@@ -7,4 +7,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - create-buckets.yaml
-  - ingress.yaml
+  - route.yaml

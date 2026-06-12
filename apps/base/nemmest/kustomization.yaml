@@ -9,7 +9,7 @@ resources:
   - rbac.yaml
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
+  - route.yaml
   - database.yaml
   - scheduled-backup.yaml
   - object-store.yaml

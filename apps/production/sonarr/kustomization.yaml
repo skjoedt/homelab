@@ -6,5 +6,5 @@ resources:
   - ../../base/sonarr
 
 patches:
-  - path: ingress-patch.yaml
+  - path: route-patch.yaml
   - path: pvc-patch.yaml

@@ -10,7 +10,7 @@ resources:
   - deployment.yaml
   - external-secret.yaml
   - service.yaml
-  - ingress.yaml
+  - route.yaml
   - database.yaml
   - scheduled-backup.yaml
   - object-store.yaml

@@ -19,3 +19,4 @@ spec:
   dnsNames:
     - "fanen.dk"
     - "*.fanen.dk"
+    - "*.ceph.fanen.dk"
