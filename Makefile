@@ -27,9 +27,7 @@ dev-up: check-deps
 			--agents 0 \
 			-p "80:80@loadbalancer" \
 			-p "443:443@loadbalancer" \
-			-p "53:53/tcp@loadbalancer" \
 			-p "853:853/tcp@loadbalancer" \
-			-p "53:53/udp@loadbalancer" \
 			--registry-create $(BRANCH_NAME_SLUG)-registry:127.0.0.1:$(REGISTRY_PORT) \
 			--wait; \
 	fi
@@ -39,6 +37,7 @@ dev-up: check-deps
 dev-prepare:
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 	@echo "Installing CRDs..."
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
 	helm upgrade --install --dependency-update kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
