@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - homepage
   - adguard-home
+  - immich
   - jellyfin
   - prowlarr
   - radarr
@@ -24,3 +25,7 @@ resources:
   - musicseerr
   - navidrome
   - hermes-personal
+  - actual
+  - foundry
+  - memos
+  - netbootxyz

@@ -5,6 +5,7 @@ resources:
   - homepage
   - actual
   - adguard-home
+  - immich
   - jellyfin
   - seerr
   - prowlarr
@@ -24,3 +25,6 @@ resources:
   - musicseerr
   - navidrome
   - hermes-personal
+  - foundry
+  - memos
+  - netbootxyz
