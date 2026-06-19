@@ -1,9 +1,6 @@
 .PHONY: *
 .EXPORT_ALL_VARIABLES:
 
-SHELL := /usr/bin/env bash
-.SHELLFLAGS := -eu -o pipefail -c
-
 BRANCH_NAME := $(shell git rev-parse --abbrev-ref HEAD)
 BRANCH_NAME_SLUG := $(subst /,-,$(BRANCH_NAME))
 REGISTRY_PORT := $(shell echo $(BRANCH_NAME) | cksum | cut -d ' ' -f1 | awk '{print 5000 + ($$1 % 1000)}')
@@ -14,19 +11,12 @@ ARGOCD_ROOT ?= ./system/argocd/production
 git-hooks:
 	pre-commit install
 
-check-kubectl:
+check-deps:
 	@which kubectl >/dev/null || (echo "kubectl is required but not installed" && exit 1)
-
-check-k3d:
 	@which k3d >/dev/null || (echo "k3d is required but not installed" && exit 1)
-
-check-helm:
-	@which helm >/dev/null || (echo "helm is required but not installed" && exit 1)
 
 check-mkcert:
 	@which mkcert >/dev/null || (echo "mkcert is required but not installed" && exit 1)
-
-check-deps: check-kubectl check-k3d
 
 dev: dev-up dev-prepare
 
@@ -45,9 +35,9 @@ dev-up: check-deps
 	fi
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 
-dev-prepare: check-deps check-helm check-mkcert
+dev-prepare: check-deps check-mkcert
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
-	@echo "Installing development controllers"
+	@echo "Installing CRDs..."
 	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
 	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
@@ -66,7 +56,7 @@ dev-prepare: check-deps check-helm check-mkcert
 	kubectl apply -k ./system/configs/base
 
 dev-down:
-	@echo "Deleting k3d cluster: $(BRANCH_NAME_SLUG)"
+	@echo "Deleting k3d cluster: $(BRANCH_NAME_SLUG)..."
 	@k3d cluster delete $(BRANCH_NAME_SLUG)
 	@echo "Cluster deleted"
 
@@ -74,38 +64,28 @@ bootstrap-production:
 	@echo "Bootstrapping k3s on production"
 	bash terraform/lxc/bootstrap.sh 10.0.0.21 10.0.0.20 10.0.0.22 10.0.0.23
 
-argocd-install-production: check-kubectl check-helm
+argocd-bootstrap-production:
 	kubectl create namespace external-secrets --dry-run=client -o yaml | kubectl apply -f -
 	helm upgrade --install --dependency-update argocd ./system/controllers/argocd --namespace $(ARGOCD_NAMESPACE) --create-namespace -f ./system/controllers/argocd/values.yaml --wait --timeout 10m
 	kubectl wait --for=condition=established --timeout=120s crd/applications.argoproj.io crd/applicationsets.argoproj.io crd/appprojects.argoproj.io
-
-argocd-apply-root-production: check-kubectl
 	@if [ "$(TARGET_REVISION)" = "main" ]; then \
 		kubectl apply -k $(ARGOCD_ROOT); \
 	else \
 		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/(targetRevision|revision): main/$$1: $$ENV{TARGET_REVISION}/g' | kubectl apply -f -; \
 	fi
-
-argocd-bootstrap-production: argocd-install-production argocd-apply-root-production
 	@echo "ArgoCD is bootstrapped with target revision $(TARGET_REVISION)"
 
 prepare-production: argocd-bootstrap-production
 
-argocd-render-production: check-kubectl
+argocd-render-production:
 	@if [ "$(TARGET_REVISION)" = "main" ]; then \
 		kubectl kustomize $(ARGOCD_ROOT); \
 	else \
 		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/(targetRevision|revision): main/$$1: $$ENV{TARGET_REVISION}/g'; \
 	fi
 
-argocd-status-production: check-kubectl
+argocd-status-production:
 	kubectl -n $(ARGOCD_NAMESPACE) get applications.argoproj.io,applicationsets.argoproj.io
-
-argocd-admin-password: check-kubectl
-	kubectl -n $(ARGOCD_NAMESPACE) get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
-
-argocd-port-forward: check-kubectl
-	kubectl -n $(ARGOCD_NAMESPACE) port-forward svc/argocd-server 8080:80
 
 argocd-test-branch: TARGET_REVISION = $(BRANCH_NAME)
 argocd-test-branch: dev-up argocd-bootstrap-production argocd-status-production

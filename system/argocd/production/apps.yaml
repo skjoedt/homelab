@@ -1,0 +1,101 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-controllers
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/skjoedt/homelab.git
+        revision: main
+        directories:
+          - path: system/controllers/*
+          - path: system/controllers/gateway-api
+            exclude: true
+          - path: system/controllers/generic-device-plugin
+            exclude: true
+          - path: monitoring/controllers/*
+  template:
+    metadata:
+      name: "{{.path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{.path.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: >-
+          {{ if hasPrefix "monitoring/" .path.path }}monitoring{{ else if or
+          (eq .path.basename "cnpg")
+          (eq .path.basename "cnpg-barman-plugin") }}cnpg-system{{ else if
+          eq .path.basename "snapshot-controller" }}kube-system{{ else }}{{
+          .path.basename }}{{ end }}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-roots
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: gateway-api
+            path: system/controllers/gateway-api
+            namespace: default
+          - name: generic-device-plugin
+            path: system/controllers/generic-device-plugin
+            namespace: kube-system
+          - name: system-production
+            path: system/configs/production
+            namespace: default
+          - name: monitoring-production
+            path: monitoring/configs/production
+            namespace: monitoring
+          - name: apps-production
+            path: apps/production
+            namespace: default
+  template:
+    metadata:
+      name: "{{.name}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - SkipDryRunOnMissingResource=true

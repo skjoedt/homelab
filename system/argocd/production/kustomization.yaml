@@ -2,8 +2,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - project.yaml
-  - prerequisite-apps.yaml
-  - system-controller-apps.yaml
-  - monitoring-controller-apps.yaml
-  - environment-apps.yaml
+  - apps.yaml
