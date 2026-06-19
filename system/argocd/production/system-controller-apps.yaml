@@ -14,64 +14,50 @@ spec:
           - name: argocd
             path: system/controllers/argocd
             namespace: argocd
-            wave: "-10"
           - name: external-secrets
             path: system/controllers/external-secrets
             namespace: external-secrets
-            wave: "-9"
           - name: cert-manager
             path: system/controllers/cert-manager
             namespace: cert-manager
-            wave: "-8"
           - name: cnpg
             path: system/controllers/cnpg
             namespace: cnpg-system
-            wave: "-8"
           - name: cnpg-barman-plugin
             path: system/controllers/cnpg-barman-plugin
             namespace: cnpg-system
-            wave: "-8"
           - name: kube-vip
             path: system/controllers/kube-vip
             namespace: kube-vip
-            wave: "-7"
           - name: metallb
             path: system/controllers/metallb
             namespace: metallb
-            wave: "-7"
           - name: ceph-csi-rbd
             path: system/controllers/ceph-csi-rbd
             namespace: ceph-csi-rbd
-            wave: "-7"
           - name: ceph-csi-cephfs
             path: system/controllers/ceph-csi-cephfs
             namespace: ceph-csi-cephfs
-            wave: "-7"
           - name: reflector
             path: system/controllers/reflector
             namespace: reflector
-            wave: "-7"
           - name: snapshot-controller
             path: system/controllers/snapshot-controller
             namespace: kube-system
-            wave: "-7"
           - name: traefik
             path: system/controllers/traefik
             namespace: traefik
-            wave: "-7"
           - name: external-dns
             path: system/controllers/external-dns
             namespace: external-dns
-            wave: "-6"
           - name: velero
             path: system/controllers/velero
             namespace: velero
-            wave: "-6"
   template:
     metadata:
       name: "{{.name}}"
       annotations:
-        argocd.argoproj.io/sync-wave: "{{.wave}}"
+        argocd.argoproj.io/sync-wave: "-7"
     spec:
       project: homelab
       source:
@@ -98,4 +84,3 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
-          - RespectIgnoreDifferences=true

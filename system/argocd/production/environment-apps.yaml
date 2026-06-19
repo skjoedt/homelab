@@ -23,6 +23,10 @@ spec:
             path: apps/production
             namespace: default
             wave: "-2"
+          - name: generic-device-plugin
+            path: system/controllers/generic-device-plugin
+            namespace: kube-system
+            wave: "-2"
   template:
     metadata:
       name: "{{.name}}"
@@ -51,4 +55,3 @@ spec:
           - CreateNamespace=true
           - ServerSideApply=true
           - SkipDryRunOnMissingResource=true
-          - RespectIgnoreDifferences=true

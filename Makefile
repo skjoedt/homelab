@@ -83,7 +83,7 @@ argocd-apply-root-production: check-kubectl
 	@if [ "$(TARGET_REVISION)" = "main" ]; then \
 		kubectl apply -k $(ARGOCD_ROOT); \
 	else \
-		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/targetRevision: main/targetRevision: $$ENV{TARGET_REVISION}/g' | kubectl apply -f -; \
+		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/(targetRevision|revision): main/$$1: $$ENV{TARGET_REVISION}/g' | kubectl apply -f -; \
 	fi
 
 argocd-bootstrap-production: argocd-install-production argocd-apply-root-production
@@ -95,7 +95,7 @@ argocd-render-production: check-kubectl
 	@if [ "$(TARGET_REVISION)" = "main" ]; then \
 		kubectl kustomize $(ARGOCD_ROOT); \
 	else \
-		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/targetRevision: main/targetRevision: $$ENV{TARGET_REVISION}/g'; \
+		TARGET_REVISION="$(TARGET_REVISION)" kubectl kustomize $(ARGOCD_ROOT) | perl -pe 's/(targetRevision|revision): main/$$1: $$ENV{TARGET_REVISION}/g'; \
 	fi
 
 argocd-status-production: check-kubectl

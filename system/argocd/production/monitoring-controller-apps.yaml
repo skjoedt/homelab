@@ -9,42 +9,29 @@ metadata:
 spec:
   goTemplate: true
   generators:
-    - list:
-        elements:
-          - name: kube-prometheus-stack
-            path: monitoring/controllers/kube-prometheus-stack
-            namespace: monitoring
-            wave: "-5"
-          - name: grafana
-            path: monitoring/controllers/grafana
-            namespace: monitoring
-            wave: "-5"
-          - name: loki
-            path: monitoring/controllers/loki
-            namespace: monitoring
-            wave: "-5"
-          - name: alloy
-            path: monitoring/controllers/alloy
-            namespace: monitoring
-            wave: "-5"
+    - git:
+        repoURL: https://github.com/skjoedt/homelab.git
+        revision: main
+        directories:
+          - path: monitoring/controllers/*
   template:
     metadata:
-      name: "{{.name}}"
+      name: "{{.path.basename}}"
       annotations:
-        argocd.argoproj.io/sync-wave: "{{.wave}}"
+        argocd.argoproj.io/sync-wave: "-5"
     spec:
       project: homelab
       source:
         repoURL: https://github.com/skjoedt/homelab.git
         targetRevision: main
-        path: "{{.path}}"
+        path: "{{.path.path}}"
         helm:
-          releaseName: "{{.name}}"
+          releaseName: "{{.path.basename}}"
           valueFiles:
             - values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{.namespace}}"
+        namespace: monitoring
       syncPolicy:
         automated:
           prune: true
@@ -58,4 +45,3 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
-          - RespectIgnoreDifferences=true
