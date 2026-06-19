@@ -39,19 +39,19 @@ dev-prepare: check-deps check-mkcert
 	@kubectl config use-context k3d-$(BRANCH_NAME_SLUG)
 	@echo "Installing CRDs..."
 	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
-	helm upgrade --install --dependency-update external-secrets ./system/controllers/external-secrets --namespace external-secrets --create-namespace -f ./system/controllers/external-secrets/values.yaml
-	helm upgrade --install --dependency-update traefik ./system/controllers/traefik --namespace traefik --create-namespace -f ./system/controllers/traefik/values-dev.yaml
+	helm upgrade --install --dependency-update external-secrets ./controllers/external-secrets/external-secrets --namespace external-secrets --create-namespace -f ./controllers/external-secrets/external-secrets/values.yaml
+	helm upgrade --install --dependency-update traefik ./controllers/traefik/traefik --namespace traefik --create-namespace -f ./controllers/traefik/traefik/values-dev.yaml
 	@mkdir -p .local/certs
 	mkcert -cert-file .local/certs/localho.st.pem -key-file .local/certs/localho.st-key.pem localho.st "*.localho.st"
 	kubectl -n traefik create secret tls localho-st-tls --cert=.local/certs/localho.st.pem --key=.local/certs/localho.st-key.pem --dry-run=client -o yaml | kubectl apply -f -
-	helm upgrade --install --dependency-update kube-prometheus-stack ./monitoring/controllers/kube-prometheus-stack --namespace monitoring --create-namespace -f ./monitoring/controllers/kube-prometheus-stack/values.yaml
-	helm upgrade --install --dependency-update grafana ./monitoring/controllers/grafana --namespace monitoring --create-namespace -f ./monitoring/controllers/grafana/values.yaml
-	helm upgrade --install --dependency-update loki ./monitoring/controllers/loki --namespace monitoring --create-namespace -f ./monitoring/controllers/loki/values.yaml
-	helm upgrade --install --dependency-update alloy ./monitoring/controllers/alloy --namespace monitoring --create-namespace -f ./monitoring/controllers/alloy/values.yaml
-	helm upgrade --install --dependency-update cert-manager ./system/controllers/cert-manager --namespace cert-manager --create-namespace -f ./system/controllers/cert-manager/values.yaml
-	helm upgrade --install --dependency-update cnpg ./system/controllers/cnpg --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg/values.yaml
-	helm upgrade --install --dependency-update cnpg-barman-plugin ./system/controllers/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./system/controllers/cnpg-barman-plugin/values.yaml
-	helm upgrade --install --dependency-update reflector ./system/controllers/reflector --namespace reflector --create-namespace -f ./system/controllers/reflector/values.yaml
+	helm upgrade --install --dependency-update kube-prometheus-stack ./controllers/monitoring/kube-prometheus-stack --namespace monitoring --create-namespace -f ./controllers/monitoring/kube-prometheus-stack/values.yaml
+	helm upgrade --install --dependency-update grafana ./controllers/monitoring/grafana --namespace monitoring --create-namespace -f ./controllers/monitoring/grafana/values.yaml
+	helm upgrade --install --dependency-update loki ./controllers/monitoring/loki --namespace monitoring --create-namespace -f ./controllers/monitoring/loki/values.yaml
+	helm upgrade --install --dependency-update alloy ./controllers/monitoring/alloy --namespace monitoring --create-namespace -f ./controllers/monitoring/alloy/values.yaml
+	helm upgrade --install --dependency-update cert-manager ./controllers/cert-manager/cert-manager --namespace cert-manager --create-namespace -f ./controllers/cert-manager/cert-manager/values.yaml
+	helm upgrade --install --dependency-update cnpg ./controllers/cnpg-system/cnpg --namespace cnpg-system --create-namespace -f ./controllers/cnpg-system/cnpg/values.yaml
+	helm upgrade --install --dependency-update cnpg-barman-plugin ./controllers/cnpg-system/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./controllers/cnpg-system/cnpg-barman-plugin/values.yaml
+	helm upgrade --install --dependency-update reflector ./controllers/reflector/reflector --namespace reflector --create-namespace -f ./controllers/reflector/reflector/values.yaml
 	kubectl apply -k ./monitoring/configs/base
 	kubectl apply -k ./system/configs/base
 
@@ -66,7 +66,7 @@ bootstrap-production:
 
 argocd-bootstrap-production:
 	kubectl create namespace external-secrets --dry-run=client -o yaml | kubectl apply -f -
-	helm upgrade --install --dependency-update argocd ./system/controllers/argocd --namespace $(ARGOCD_NAMESPACE) --create-namespace -f ./system/controllers/argocd/values.yaml --wait --timeout 10m
+	helm upgrade --install --dependency-update argocd ./controllers/argocd/argocd --namespace $(ARGOCD_NAMESPACE) --create-namespace -f ./controllers/argocd/argocd/values.yaml --wait --timeout 10m
 	kubectl wait --for=condition=established --timeout=120s crd/applications.argoproj.io crd/applicationsets.argoproj.io crd/appprojects.argoproj.io
 	@if [ "$(TARGET_REVISION)" = "main" ]; then \
 		kubectl apply -k $(ARGOCD_ROOT); \

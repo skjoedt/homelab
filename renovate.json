@@ -10,6 +10,7 @@
   "kubernetes": {
     "managerFilePatterns": [
       "/(^|/)apps/.+\\.ya?ml$/",
+      "/(^|/)controllers/.+\\.ya?ml$/",
       "/(^|/)monitoring/.+\\.ya?ml$/",
       "/(^|/)system/.+\\.ya?ml$/"
     ]
