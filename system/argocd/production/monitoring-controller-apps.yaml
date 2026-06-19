@@ -1,0 +1,61 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-monitoring-controllers
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: kube-prometheus-stack
+            path: monitoring/controllers/kube-prometheus-stack
+            namespace: monitoring
+            wave: "-5"
+          - name: grafana
+            path: monitoring/controllers/grafana
+            namespace: monitoring
+            wave: "-5"
+          - name: loki
+            path: monitoring/controllers/loki
+            namespace: monitoring
+            wave: "-5"
+          - name: alloy
+            path: monitoring/controllers/alloy
+            namespace: monitoring
+            wave: "-5"
+  template:
+    metadata:
+      name: "{{.name}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{.wave}}"
+    spec:
+      project: homelab
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{.path}}"
+        helm:
+          releaseName: "{{.name}}"
+          valueFiles:
+            - values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true

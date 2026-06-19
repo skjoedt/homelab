@@ -1,0 +1,49 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-system-kustomize-controllers
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-9"
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: gateway-api
+            path: system/controllers/gateway-api
+            namespace: default
+            wave: "-9"
+          - name: generic-device-plugin
+            path: system/controllers/generic-device-plugin
+            namespace: kube-system
+            wave: "-6"
+  template:
+    metadata:
+      name: "{{.name}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{.wave}}"
+    spec:
+      project: homelab
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{.path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
