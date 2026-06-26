@@ -3,8 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base/grafana
+  - ../../_base/system/traefik
 
 patches:
-  - path: route-patch.yaml
-  - path: pvc-patch.yaml
+  - path: gateway-patch.yaml

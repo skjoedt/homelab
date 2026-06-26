@@ -51,12 +51,97 @@ spec:
   goTemplateOptions:
     - missingkey=error
   generators:
+    - git:
+        repoURL: https://github.com/skjoedt/homelab.git
+        revision: main
+        directories:
+          - path: configs/*/*
+          - path: configs/_base/*
+            exclude: true
+          - path: configs/_dev/*
+            exclude: true
+          - path: configs/cluster/*
+            exclude: true
+  template:
+    metadata:
+      name: "config-{{ index .path.segments 1 }}-{{ .path.basename }}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{ .path.path }}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{ index .path.segments 1 }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - SkipDryRunOnMissingResource=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-cluster-configs
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    - git:
+        repoURL: https://github.com/skjoedt/homelab.git
+        revision: main
+        directories:
+          - path: configs/cluster/*
+  template:
+    metadata:
+      name: "config-cluster-{{ .path.basename }}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/skjoedt/homelab.git
+        targetRevision: main
+        path: "{{ .path.path }}"
+      destination:
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - SkipDryRunOnMissingResource=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
     - list:
         elements:
-          - name: system-configs
-            path: system/configs/production
-          - name: monitoring-configs
-            path: monitoring/configs/production
           - name: apps
             path: apps/production
   template:

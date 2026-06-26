@@ -55,7 +55,7 @@ Development is on my local machine using k3d.
 
 `make argocd-bootstrap-production` installs ArgoCD and applies `system/argocd/production`. After that, ArgoCD tracks `https://github.com/skjoedt/homelab.git` at `main`.
 
-The root uses two ApplicationSets: one wildcard for controllers under `controllers/<namespace>/<app>`, and one small list for Kustomize roots.
+The root uses ApplicationSets for controllers under `controllers/<namespace>/<app>`, namespaced configs under `configs/<namespace>/<config>`, cluster-wide configs under `configs/cluster/<config>`, and apps under `apps/production`.
 
 ```bash
 make argocd-render-production
@@ -74,15 +74,13 @@ make argocd-test-branch
 │   └── production
 ├── controllers
 │   └── <namespace>
-├── monitoring
-│   ├── configs
-│   │   ├── base
-│   │   └── production
+├── configs
+│   ├── <namespace>
+│   ├── cluster
+│   ├── _base
+│   └── _dev
 ├── system
-    ├── argocd
-    ├── configs
-    │   ├── base
-    │   └── production
+│   └── argocd
 └── terraform
 ```
 
