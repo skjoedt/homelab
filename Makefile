@@ -52,8 +52,8 @@ dev-prepare: check-deps check-mkcert
 	helm upgrade --install --dependency-update cnpg ./controllers/cnpg-system/cnpg --namespace cnpg-system --create-namespace -f ./controllers/cnpg-system/cnpg/values.yaml
 	helm upgrade --install --dependency-update cnpg-barman-plugin ./controllers/cnpg-system/cnpg-barman-plugin --namespace cnpg-system --create-namespace -f ./controllers/cnpg-system/cnpg-barman-plugin/values.yaml
 	helm upgrade --install --dependency-update reflector ./controllers/reflector/reflector --namespace reflector --create-namespace -f ./controllers/reflector/reflector/values.yaml
-	kubectl apply -k ./configs/_dev/monitoring
-	kubectl apply -k ./configs/_dev/system
+	kubectl apply -k ./monitoring/configs/base
+	kubectl apply -k ./system/configs/base
 
 dev-down:
 	@echo "Deleting k3d cluster: $(BRANCH_NAME_SLUG)..."
