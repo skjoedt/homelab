@@ -41,6 +41,8 @@ Everything needed for family onboarding
   - [ ] Alert notifications, e.g. nfty
   - [ ] Alert rules on container errors
 - [ ] SSO
+  - [ ] Authentik, kanidm
+  - [ ] Plugin for Jellyfin and Seerr
 - [x] Expose services to the internet securely with Wireguard
 - [ ] Ceph exposure
   - [x] Connect ceph dashboard to traefik
