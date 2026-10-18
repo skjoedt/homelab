@@ -82,6 +82,10 @@
         href: https://adguard.fanen.dk
         description: Network-wide adblocker
         icon: adguard-home.svg  
+    - Hermes:
+        href: https://hermes-dashboard.fanen.dk
+        description: AI agents
+        icon: hermes.svg
 - Monitoring:
     - Grafana:
         href: https://grafana.fanen.dk
