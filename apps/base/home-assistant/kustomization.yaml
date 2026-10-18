@@ -17,5 +17,3 @@ configMapGenerator:
   - name: ha-config
     files:
       - configs/configuration.yaml
-    options:
-      disableNameSuffixHash: true
