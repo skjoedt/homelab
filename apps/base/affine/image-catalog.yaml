@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: affine-pgvector
+  namespace: affine
+spec:
+  images:
+    - major: 16
+      image: docker.io/pgvector/pgvector:0.8.7-pg16@sha256:7b822b0aac60967beb1ea5e576b8602c94c300a157d187f385ae3e0da199b90a  # yamllint disable-line rule:line-length

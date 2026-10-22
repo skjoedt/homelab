@@ -1,0 +1,141 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affine
+  namespace: affine
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: affine
+  template:
+    metadata:
+      labels:
+        app: affine
+        app.kubernetes.io/name: affine
+        app.kubernetes.io/instance: affine
+    spec:
+      initContainers:
+        - name: configure
+          image: ghcr.io/toeverything/affine:0.27.4
+          command:
+            - sh
+            - -c
+            - >-
+              mkdir -p /root/.affine/config &&
+              cp /config/config.json /root/.affine/config/config.json
+          volumeMounts:
+            - name: affine-config
+              mountPath: /config
+              readOnly: true
+            - name: affine-data
+              mountPath: /root/.affine
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+        - name: wait-for-database
+          image: docker.io/postgres:18.4
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -d "$DATABASE_URL"; do
+                echo "Waiting for database..."
+                sleep 2
+              done
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: affine-db-app
+                  key: uri
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+        - name: wait-for-redis
+          image: docker.io/redis:7.4.7
+          command:
+            - sh
+            - -c
+            - |
+              until redis-cli -h affine-redis --raw incr ping; do
+                echo "Waiting for Redis..."
+                sleep 2
+              done
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+        - name: migrate
+          image: ghcr.io/toeverything/affine:0.27.4
+          command:
+            - sh
+            - -c
+            - node ./scripts/self-host-predeploy.js
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: affine-db-app
+                  key: uri
+            - name: REDIS_SERVER_HOST
+              value: affine-redis
+            - name: AFFINE_INDEXER_ENABLED
+              value: "false"
+          volumeMounts:
+            - name: affine-data
+              mountPath: /root/.affine
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+      containers:
+        - name: affine
+          image: ghcr.io/toeverything/affine:0.27.4
+          ports:
+            - containerPort: 3010
+              name: http-affine
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: affine-db-app
+                  key: uri
+            - name: REDIS_SERVER_HOST
+              value: affine-redis
+            - name: AFFINE_INDEXER_ENABLED
+              value: "false"
+          volumeMounts:
+            - name: affine-data
+              mountPath: /root/.affine
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+      volumes:
+        - name: affine-data
+          persistentVolumeClaim:
+            claimName: affine-data-pvc
+        - name: affine-config
+          configMap:
+            name: affine-config

@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - homepage
   - adguard-home
+  - affine
   - immich
   - jellyfin
   - prowlarr

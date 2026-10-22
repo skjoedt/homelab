@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: affine-config
+  namespace: affine
+data:
+  config.json: |
+    {
+      "server": {
+        "name": "AFFiNE Self-hosted",
+        "externalUrl": "https://notes.fanen.dk"
+      }
+    }

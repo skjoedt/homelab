@@ -1,0 +1,26 @@
+---
+# Grants the CNPG cluster service account permission to read the reflected
+# backup credentials in this namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: affine-db-secret-reader
+  namespace: affine
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: affine-db-secret-reader
+  namespace: affine
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: affine-db-secret-reader
+subjects:
+  - kind: ServiceAccount
+    name: affine-db
+    namespace: affine

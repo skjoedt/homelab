@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - homepage
   - actual
+  - affine
   - adguard-home
   - immich
   - jellyfin

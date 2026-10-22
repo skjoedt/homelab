@@ -1,0 +1,44 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: affine-db
+  namespace: affine
+spec:
+  instances: 2
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: affine-pgvector
+    major: 16
+  postgresUID: 999
+  postgresGID: 999
+
+  storage:
+    size: 5Gi
+    storageClass: local-path
+
+  bootstrap:
+    initdb:
+      database: affine
+      owner: affine
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vector;
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: affine-db-backup
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
