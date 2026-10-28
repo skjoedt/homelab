@@ -1,0 +1,29 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: affine-db-backup-check
+  namespace: affine
+spec:
+  schedule: "0 1 * * *"
+  timeZone: Etc/UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 7200
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 86400
+      template:
+        spec:
+          serviceAccountName: affine-db-backup-checker
+          restartPolicy: Never
+          containers:
+            - name: check
+              image: rancher/kubectl:v1.31.2
+              args:
+                - wait
+                - --for=condition=LastBackupSucceeded
+                - --timeout=90m
+                - cluster.postgresql.cnpg.io/affine-db

@@ -1,0 +1,80 @@
+# CNPG backup and storage health alerts for the Affine database.
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cnpg-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: cnpg.affine
+      rules:
+        - alert: CNPGWALArchiveFailure
+          expr: >-
+            increase(
+              cnpg_pg_stat_archiver_failed_count{namespace="affine"}[15m]
+            ) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Affine WAL archiving is failing
+            description: >-
+              PostgreSQL has failed to archive WAL in the last 15 minutes.
+        - alert: CNPGBackupHealthCheckFailed
+          expr: >-
+            max by (namespace, job_name) (
+              kube_job_status_failed{
+                namespace="affine",job_name=~"affine-db-backup-check-.*"
+              }
+            ) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Affine database backup health check failed
+            description: >-
+              The daily check did not observe LastBackupSucceeded=True within 90
+              minutes of the scheduled backup.
+        - alert: CNPGDatabaseStorageLow
+          expr: >-
+            min by (namespace, persistentvolumeclaim) (
+              kubelet_volume_stats_available_bytes{
+                namespace="affine",persistentvolumeclaim=~"affine-db-.*"
+              }
+            )
+            /
+            min by (namespace, persistentvolumeclaim) (
+              kubelet_volume_stats_capacity_bytes{
+                namespace="affine",persistentvolumeclaim=~"affine-db-.*"
+              }
+            ) < 0.20
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Affine database storage is below 20 percent free
+            description: >-
+              PVC {{ $labels.persistentvolumeclaim }} has less than 20 percent
+              free space.
+        - alert: CNPGDatabaseStorageCritical
+          expr: >-
+            min by (namespace, persistentvolumeclaim) (
+              kubelet_volume_stats_available_bytes{
+                namespace="affine",persistentvolumeclaim=~"affine-db-.*"
+              }
+            )
+            /
+            min by (namespace, persistentvolumeclaim) (
+              kubelet_volume_stats_capacity_bytes{
+                namespace="affine",persistentvolumeclaim=~"affine-db-.*"
+              }
+            ) < 0.10
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Affine database storage is below 10 percent free
+            description: >-
+              PVC {{ $labels.persistentvolumeclaim }} has less than 10 percent
+              free space.

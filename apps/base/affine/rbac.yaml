@@ -24,3 +24,33 @@ subjects:
   - kind: ServiceAccount
     name: affine-db
     namespace: affine
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: affine-db-backup-checker
+  namespace: affine
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: affine-db-backup-checker
+  namespace: affine
+rules:
+  - apiGroups: ["postgresql.cnpg.io"]
+    resources: ["clusters"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: affine-db-backup-checker
+  namespace: affine
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: affine-db-backup-checker
+subjects:
+  - kind: ServiceAccount
+    name: affine-db-backup-checker
+    namespace: affine

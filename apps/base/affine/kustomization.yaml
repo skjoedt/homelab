@@ -7,8 +7,10 @@ namespace: affine
 resources:
   - namespace.yaml
   - rbac.yaml
+  - backup-check.yaml
   - image-catalog.yaml
   - database.yaml
+  - monitoring.yaml
   - object-store.yaml
   - scheduled-backup.yaml
   - pvc.yaml
