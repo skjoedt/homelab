@@ -9,6 +9,8 @@ ceph-csi-rbd:
     name: csi-rbd-secret
   provisioner:
     replicaCount: 1
+    # RBD snapshot operations have exceeded the chart's 60s default.
+    timeout: 5m
   nodeplugin: {}
   storageClass:
     create: false

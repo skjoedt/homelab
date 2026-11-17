@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: qui
-          image: ghcr.io/autobrr/qui:v1.15.0
+          image: ghcr.io/autobrr/qui:v1.35.0@sha256:a5b2f5faf6388cce257137c88e4b189458fd799cf9119ed476c980e5a69341b2
           ports:
             - containerPort: 7476
               name: http

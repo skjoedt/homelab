@@ -8,6 +8,8 @@ ceph-csi-cephfs:
     name: csi-cephfs-secret
   provisioner:
     replicaCount: 1
+    # Keep CephFS controller operations aligned with the RBD snapshot deadline.
+    timeout: 5m
   nodeplugin: {}
   storageClass:
     create: false
