@@ -48,37 +48,6 @@
       "description": "Major updates open a PR for manual review",
       "matchUpdateTypes": ["major"],
       "automerge": false
-    },
-    {
-      "description": "Never automatically merge media-stack image updates",
-      "matchPackageNames": [
-        "jellyfin/jellyfin",
-        "ghcr.io/seerr-team/seerr",
-        "lscr.io/linuxserver/radarr",
-        "lscr.io/linuxserver/sonarr",
-        "lscr.io/linuxserver/prowlarr",
-        "lscr.io/linuxserver/bazarr",
-        "lscr.io/linuxserver/lidarr",
-        "lscr.io/linuxserver/qbittorrent",
-        "qmcgaw/gluetun",
-        "ghcr.io/flaresolverr/flaresolverr",
-        "deluan/navidrome",
-        "automaticrippingmachine/automatic-ripping-machine",
-        "revenz/fileflows",
-        "ghcr.io/habirabbu/musicseerr",
-        "ghcr.io/autobrr/qui"
-      ],
-      "automerge": false
-    },
-    {
-      "description": "Limit Bazarr to reviewed release tags",
-      "matchPackageNames": ["lscr.io/linuxserver/bazarr"],
-      "allowedVersions": "/^v?1\\.\\d+\\.\\d+-ls\\d+$/"
-    },
-    {
-      "description": "Limit Lidarr to the reviewed v3 release line",
-      "matchPackageNames": ["lscr.io/linuxserver/lidarr"],
-      "allowedVersions": "/^3\\.\\d+\\.\\d+\\.\\d+-ls\\d+$/"
     }
   ]
 }
